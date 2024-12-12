@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+       
+       
+        <link rel="stylesheet" href="css/styles.css">
+
+        <!-- <script type="mta-project/public/js/submitForm.js"></script>-->
+        <title>Register</title>
+
+        <script>
+            function checkForm(){
+                let ogPassword = document.getElementById("ogPassword");
+                let confPassword = document.getElementById("confPassword");
+                let uname= document.getElementById("uname");
+                let email = document.getElementById("email");
+
+                const myFormElements = [ogPassword , confPassword , uname, email];
+
+
+             //   checkUser(uname);
+               // checkEmail(email);
+               // checkSamePassword(ogPassword, confPassword, myFormElements);
+                
+
+            }
+
+            function checkUser(uname){
+                
+                let mensajeId = document.getElementById("mensajeUser");
+                if(uname.value == " " || uname.value == null) 
+                {
+                    console.log("entre");
+                    mostrarMensaje(mensajeId, "Favor de Ingresar un nombre de usuario");
+                }
+
+            }
+
+            function checkEmail(email){
+                
+                let mensajeId = document.getElementById("mensajeEmail");
+                if(email.value == " ")
+                {
+                    mostrarMensaje(mensajeId, "Favor de Ingresar Email");
+                }
+                else if(email.innerHTML != '/^[^\s@]+@[^\s@]+\.[^\s@]+$/'){
+                    mostrarMensaje(mensajeId, "Email invalido. Favor de ingresar Email de nuevo");
+                }
+
+            }
+
+            function checkSamePassword(e, ogPassword, confPassword, myForm){
+                //e.preventDefault();
+
+                if(ogPassword.value  == confPassword.value){
+                    
+                    resetForm(myForm);
+                    
+                }else{
+                   
+                    let mensajeId = document.getElementById("mensajePswd");
+                    mostrarMensaje(mensajeId, "Contrasenas no coinciden");
+                    alert("enterPSWNIP");
+                }
+                
+            }
+
+            function mostrarMensaje(mensajeId, mensaje){
+                mensajeId.style.color = "red";
+                mensajeId.innerHTML = mensaje;
+                mensajeId.classList.add("middle");
+
+            }
+            function resetForm(myForm){             
+                for(let x in myForm){
+                    x.value = "";
+                }
+
+             }
+        
+        </script>
+    </head>
+
+    <body>
+    
+        <div class = "box">
+            <form id="loginForm" class = "formContainer">
+
+                <h1 class = "middle">Sign Up</h1>
+                
+                <label>Nombre de Usuario </label>
+                <input id = "uname" type = "text" placeholder = "Nombre de usuario" required></input>
+                <p id = "mensajeUser" > </p>
+
+                <label>Email </label>
+                <input id = "email" type = "email" placeholder = "Email" required></input>
+                <p id = "mensajeEmail" > </p>
+
+                <label>Password</label>
+                <input id="ogPassword" type = "password" placeholder = "Contraseña" required></input>
+                
+
+                <label>Confirmacion Password</label>
+                <input id = "confPassword" type = "password" placeholder = "Confirmacion de contraseña" required></input>
+                <p id = "mensajePswd" > </p>
+
+                <button id = "thank-you-modal-button" type = "button" onclick = "checkForm()" class = "btnSubmit">Sign Up</button>
+                
+                
+                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
+                </form>
+        </div>
+   
+    </body>
+</html>
