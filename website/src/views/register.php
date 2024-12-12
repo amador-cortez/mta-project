@@ -1,55 +1,48 @@
-<!DCOTYPE html>
+<?php
+
+
+?>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Register Form -MTA</title>
        
-       
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="css/styles.css">
 
-        <script type="public/js/submitForm.js"></script>
-        <title>Register</title>
+        <!-- <script type="..public/js/submitForm.js"></script>-->
 
-        <script>
-            function checkSamePassword(){
-                let ogPassword = document.getElementByID("ogPassword");
-                let confPassword = document.getElementByID("confPassword");
-
-                if(!(ogPassword.value  == confPassword.value)){
-                    
-                }
-            }
-
-            function createErrorMsg(){
-
-            }
-        
-        </script>
+        <script src="../../../public/js/checkForms.js"></script>
     </head>
 
     <body>
     
         <div class = "box">
-            <form id="registerForm" class = "formContainer">
+            <form id="loginForm" class = "formContainer">
 
-                <h1 class = "middle">Sign in to MTA</h1>
+                <h1 class = "middle">Sign Up</h1>
                 
                 <label>Nombre de Usuario </label>
-                <input type = "text" placeholder = "Nombre de usuario" required></input>
+                <input id = "uname" type = "text" placeholder = "Nombre de usuario" required></input>
+                <p id = "mensajeUser" > </p>
 
                 <label>Email </label>
-                <input type = "email" placeholder = "Email" required></input>
+                <input id = "email" type = "email" placeholder = "Email" required></input>
+                <p id = "mensajeEmail" > </p>
 
                 <label>Password</label>
                 <input id="ogPassword" type = "password" placeholder = "Contraseña" required></input>
+                
 
                 <label>Confirmacion Password</label>
                 <input id = "confPassword" type = "password" placeholder = "Confirmacion de contraseña" required></input>
+                <p id = "mensajePswd" > </p>
 
-                <button id = "submitBtn" type="submit">Sign Up</button>
+                <button id = "thank-you-modal-button" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
                 
-                <p>¿Ya tienes Cuenta?</p><a href = "login.php" class = "middle">Log In</a>
+                
+                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
                 </form>
         </div>
    
