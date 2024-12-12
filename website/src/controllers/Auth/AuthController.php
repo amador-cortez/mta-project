@@ -36,7 +36,7 @@ class AuthController
                     echo "Passwords don't match"
                 }
                 
-            }else{
+            }else{ 
                 
             }
         }
