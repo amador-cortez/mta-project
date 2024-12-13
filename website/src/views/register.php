@@ -9,11 +9,78 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register Form -MTA</title>
        
-        <link rel="stylesheet" href="css/styles.css">
+        <!--<link rel="stylesheet" href="css/styles.css">
 
-        <!-- <script type="..public/js/submitForm.js"></script>-->
+        <script type="../../../public/js/submitForm.js"></script>-->
 
         <script src="../../../public/js/checkForms.js"></script>
+
+        <style>
+            body{
+            font-family: Arial, 'Arial Narrow', sans-serif;
+            }
+
+
+            input[type = "text"],input[type = "password"], input[type = "email"]{
+            
+            width: 90%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: whitesmoke;
+            
+            }
+            /*LOGIN AND REGISTER*/
+
+            .btnSubmit{
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 2px solid #457b9d;
+            display: block;
+            margin: auto;
+            
+            }
+            .btnSubmit:hover{
+            background-color: #457b9d;
+            border: 2px solid #f1f1f1;
+
+            }
+            .box{
+            box-sizing:  border-box;
+            display: grid;
+            margin-top: 3%;
+            place-items: center; 
+            }
+
+            .formContainer{
+            margin: 300;
+            width: 300px;
+            padding: 40px;
+            background-color: white;
+            
+            border-radius: 15px;
+            border: 2px solid #f1f1f1;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); 
+            }
+            .box a{
+            text-decoration: none;
+
+            }
+            .box a:hover{
+            color: #457b9d;
+            }
+
+            .middle{
+            text-align: center;
+            }
+
+            .hiddenMsg{
+            display: none;
+            }
+
+
+        </style>
     </head>
 
     <body>
@@ -39,10 +106,10 @@
                 <input id = "confPassword" type = "password" placeholder = "Confirmacion de contraseña" required></input>
                 <p id = "mensajePswd" > </p>
 
-                <button id = "thank-you-modal-button" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
+                <button id = "registerButton" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
                 
                 
-                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
+                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.html" > Log In</a></p>
                 </form>
         </div>
    

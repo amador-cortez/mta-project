@@ -1,7 +1,8 @@
 body{
-    background-color: white;
+   
     font-family: Arial, 'Arial Narrow', sans-serif;
 }
+
 
 input[type = "text"],input[type = "password"], input[type = "email"]{
     
@@ -10,51 +11,48 @@ input[type = "text"],input[type = "password"], input[type = "email"]{
     margin: 5px 0 22px 0;
     display: inline-block;
     border: none;
-    background: white;
-
+    background: whitesmoke;
     
 }
-input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"] :focus{
-    border-color: cadetblue;
-    
-    
-}
+/*LOGIN AND REGISTER*/
 
 .btnSubmit{
     padding: 15px 30px;
     border-radius: 15px;
-    border: 2px solid cadetblue;
-
-
+    border: 2px solid #457b9d;
+    display: block;
+    margin: auto;
+    
 }
 .btnSubmit:hover{
-    background-color: cadetblue;
+    background-color: #457b9d;
     border: 2px solid #f1f1f1;
+
 }
 .box{
     box-sizing:  border-box;
     display: grid;
-    margin-top: 150px;
-    place-items: center;
-    
-    
+    margin-top: 3%;
+    place-items: center; 
 }
 
 .formContainer{
     margin: 300;
     width: 300px;
     padding: 40px;
-    background-color: whitesmoke;
-    
+    background-color: white;
     
     border-radius: 15px;
     border: 2px solid #f1f1f1;
-   
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); 
-    
+}
+.box a{
+    text-decoration: none;
 
 }
-
+.box a:hover{
+    color: #457b9d;
+}
 
 .middle{
     text-align: center;
@@ -62,5 +60,65 @@ input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"]
 
 .hiddenMsg{
     display: none;
+}
+
+/*DASHBOARD*/
+
+.sidebar{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    background-color: white;
+    overflow:auto;
+    top:0;
+
+}
+.sidebar a,img{
+    text-decoration: none;
+    display: flex;
+    padding: 20px 10px;
+    margin: 5px 10px;
+    color: #457b9d;
+
+}
+.sidebar a:hover{
+    background-color: #457b9d;
+    border-radius: 5px;
+    color: white;
+}
+.sidebar a:hover:active{
+    background-color: #a8dadc;
+
+}
+
+.main-content{
+    margin-left: 230px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    border: 2px solid #f1f1f1;
+    box-shadow: 5px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.card-service{
+    margin-left: 10px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    border: 2px solid #f1f1f1;
+    box-shadow: 5px 5px 1px rgba(0, 0, 0, 0.2);
+    
+
+}
+.name-left, 
+.actions-right{
+    display: inline-block;
+
+}
+.actions-right{
+    float: right;
+
 }
 
