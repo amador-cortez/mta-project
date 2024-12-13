@@ -4,7 +4,7 @@ body{
 }
 
 input[type = "text"],input[type = "password"], input[type = "email"]{
-    
+
     width: 90%;
     padding: 15px;
     margin: 5px 0 22px 0;
@@ -12,12 +12,12 @@ input[type = "text"],input[type = "password"], input[type = "email"]{
     border: none;
     background: white;
 
-    
+
 }
 input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"] :focus{
     border-color: cadetblue;
-    
-    
+
+
 }
 
 .btnSubmit{
@@ -36,8 +36,8 @@ input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"]
     display: grid;
     margin-top: 150px;
     place-items: center;
-    
-    
+
+
 }
 
 .formContainer{
@@ -45,13 +45,13 @@ input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"]
     width: 300px;
     padding: 40px;
     background-color: whitesmoke;
-    
-    
+
+
     border-radius: 15px;
     border: 2px solid #f1f1f1;
-   
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); 
-    
+
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+
 
 }
 

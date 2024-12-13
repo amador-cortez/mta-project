@@ -1,11 +1,11 @@
 <?php
 
-namespace Pluralis\Website\Controllers\Auth;
+namespace App\Controllers\Auth;
 
 class AuthController
 {
     
-    function register(){
+   public function login(){
         if (!empty($_POST["register"])){
             if(!empty($_POST["email"]) and !empty($_POST["name"]) and !empty($_POST["last_name"]) and !empty($_POST["password"]) and !empty($_POST["password_confirm"])){
                 $sql ="INSERT INTO users (email, name, last_name, password) VALUES (:email, :name, :last_name, :password)";
@@ -23,20 +23,18 @@ class AuthController
                 $name = sanitizeInput($_POST["name"]);
                 $stmt -> bindParam(':name', $_POST['name']);
 
-                $last_name = sanitizeInput($:PORT["last_name"]);
+                $last_name = sanitizeInput($_POST["last_name"]);
                 $stmt -> bindParam('last_name', $_POST['last_name']);
 
                 $password = sanitizeInput($_POST["password"]);
                 $password_confirm = sanitizeInput($_POST["password_confirm"]);
 
                 if ($_POST['password'] == $_POST['password_confirm']){
-                    $password = password_hash($_PORT['password'],PASSWORD_BCRYPT);
+                    $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
                     $stmt -> bindParam(':password', $_POST['password']);                    
                 }else{
-                    echo "Passwords don't match"
+                    echo "Passwords don't match";
                 }
-                
-            }else{ 
                 
             }
         }
@@ -52,7 +50,7 @@ class AuthController
                 $password = sanitizeInput($_PORT["password"]);
 
                 if(!filter_var($email, FILTER_VALIDATE_EMAIL)=== false){
-                    echo "invalid email format"
+                    echo "invalid email format";
                 }
 
                 $records-> bindParam(':email', $_POST['email']); # vincula un parámetro al nombre de variable especificado
@@ -64,7 +62,7 @@ class AuthController
                     redirect_to('');
 
                 }else{
-                    echo 'credentials do not match'
+                    echo 'credentials do not match';
                 }
         }
 
