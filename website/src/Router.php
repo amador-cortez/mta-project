@@ -1,5 +1,5 @@
 <?php
-namespace App\views;
+namespace App;
 
 class Router {
     private array $routes = [];

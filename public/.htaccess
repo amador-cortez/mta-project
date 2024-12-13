@@ -1,0 +1,12 @@
+# Activar el motor de reescritura
+RewriteEngine On
+
+# Establecer la base de la reescritura al directorio actual
+RewriteBase /
+
+# Condición: Si el archivo o directorio existe, no hacer nada
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Regla: Redirigir todas las solicitudes no existentes a index.php
+RewriteRule ^ index.php [L]

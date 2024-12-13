@@ -4,8 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "App\\Config\\": "config/"
+            "App\\": "website/",
+            "App\\Config\\": "website/config/"
         }
     },
     "minimum-stability": "dev",
