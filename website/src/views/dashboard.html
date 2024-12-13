@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="stylesheet" href="css/styles.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script>
+        
+    </script>
+    <style>
+        :root {
+            --blue-color: #457b9d;
+        }
+        body{
+   
+            font-family: Arial, 'Arial Narrow', sans-serif;
+        }
+        a{
+            text-decoration: none;
+        }
+        .distribution{
+            display: flex;
+
+        }
+        /*Side Bar*/
+        
+        .sidebar{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            background-color: white;
+            overflow:auto;
+            top:0;
+            
+            box-shadow:2px 2px 1px rgba(0, 0, 0, 0.1);
+
+        }
+        .sidebar a,img{
+            text-decoration: none;
+            display: flex;
+            padding: 20px 10px;
+            margin: 5px 10px;
+            color: #457b9d;
+
+        }
+        .sidebar a:hover{
+            background-color: #457b9d;
+            border-radius: 5px;
+            color: white;
+        }
+        .sidebar a:hover:active{
+            background-color: #a8dadc;
+
+        }
+
+        /*General*/
+
+        .middle{
+            text-align: center;
+        }
+
+        .hiddenMsg{
+            display: none;
+            }
+
+        .left, 
+        .right{
+            display: inline-block;
+
+        }
+        .right{
+            float: right;
+            /*flex: 1;*/
+        }
+
+        .main-content, .statistics{
+            display: inline-block;
+        }
+        
+
+        .over, .under{
+            display: block;
+        }
+
+
+        /*Main content*/
+        .header{
+            display: inline-block;
+        }
+
+        .btnNew{
+            padding: 15px 40px;
+            border-radius: 15px;
+            background-color: #457b9d;
+            border: none;
+            color:white;
+            display: block;
+            margin: auto;
+            
+            
+            }
+            .btnNew:hover{
+                opacity: 0.8;
+
+            }
+
+        
+        .main-content,.lateral-cards,.card-service, .split-two{
+            padding: 20px;
+            margin: 10px;
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid #f1f1f1;
+
+        }
+
+        .main-content{
+            flex:1;
+            margin-left: 230px;
+        }
+        
+        
+        .card-service, .split-two{
+            margin: 0px;
+            border-radius: 0;
+        }
+
+        .split-two{
+            border: none;
+        }
+
+        /*Action bar*/
+        .search{
+            background-color: whitesmoke;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .selector{
+            padding: 10px;
+            text-size-adjust: 16px;
+            background-color: white;
+            border-radius: 0.25em;
+            border: 1px solid #caced1;
+  
+        }
+        .selector:hover{
+            background-color: #eee;
+        }
+        .selector::before{
+            border-bottom: 0.25em solid var(--blue-color);
+        }
+        .selector::after{
+            border-top: 0.25em solid var(--blue-color);
+        }
+
+        
+    </style>
+    <title>Monitoreo</title>
+    </head>
+    <body >
+
+        <div class="sidebar">
+            <!--<img src = "#" alt = "Logo-Opcional"></img>-->
+            <h1 class="middle" style="color: #457b9d; ">MTA</h1>
+            <a href = "dashboard.html">Monitoreo</a>
+            <a href = "index.html">Cerrar Sesion</a>
+        </div>
+
+        <div class="distribution">
+            <div class = "main-content left">
+
+                <div class = "split-two">
+                    <h1 class="left">Monitoreo.</h1>
+                    <a href = "agregarMonitor.html" id = "new-monitor" class="right btnNew"><i class="fa-solid fa-plus"></i>Nuevo Monitor</a>
+                </div >
+
+                <!--ACTION BAR-->
+                <div class = "split-two">
+                    <div class ="left">
+                        <input type="checkbox" id = "select-all-services">0/2</input>
+
+                    </div>
+                    <div class ="right">
+                        <input type="text" id = "search-url" class = "search" placeholder = "Buscar por nombre or url"></input>
+                        <select id = "order-by" name = "order-by" class="selector">
+                            <option value="down-first" selected>Caidas primero</option>  
+                            <option value="up-first" >Funcionando primero</option> 
+                            <option value="paused-first">Pausadas primero</option>      
+                            <option value="a-z">A - Z</option>   
+                            <option value="newest first">Mas reciente primero</option>   
+                        </select>
+                        <button type="button" id ="filter-services">Filtrar</button>
+                        <!--
+                        <input type="checkbox" id = "filter-up" >Funcionando</input>
+                        <input type="checkbox" id = "filter-down" >Caidas</input>
+                        <input type="checkbox" id = "filter-paused" >Pausadas</input>
+                        <input type="checkbox" id = "filter-not-started" >Sin empezar</input>
+                        -->
+                    </div>
+                </div>
+
+                <!--MONITORING URLS-->
+                <div id="services" style="margin-top: 30px;">
+
+                    <!--SERVICE 1-->
+                    <div class = "card-service">
+                        <div class=" left">
+                            <div class="split-two">
+                                
+                                <input type="checkbox" id = "select-sevice1" name = "select-sevice1" class="hiddenMsg left" ></input><label id = "status-sevice1" for = "select-sevice1" style="margin-right: 50px;">Activo</label> 
+                                
+                                <div class="right">
+                                    <p id ="service-name1">Nombre servicio</p>
+                                    <div class = "under">
+                                        <p id ="domain-type1" class="left" >Dominio </p><p id = "last-date-check1" class="right">Última comprobación (fecha y hora).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
+                            <button id ="actions1" class="right">...</button>
+                        </div>
+                    </div>
+
+                    <!--SERVICE 2-->
+                    <div class = "card-service">
+                        <div class=" left">
+                            <div class="split-two">
+                                <div class="left">
+                                    <p id ="status" style="margin-right: 20px;">Activo</p>
+                                </div>
+                                <div class="right">
+                                    <input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> 
+                                    <div class = "under">
+                                        <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
+                            <button id ="actions1" class="right">...</button>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+
+            <!--STATISTICS-->
+            <div class="right">
+        
+                <div class="lateral-cards middle">
+                    <h2>Estado Actual</h2>
+                    
+                    <h3 class = "over" id = "number-services-down">0</h3>
+                    <p class = "under">Caida</p>
+        
+                    <h3 class = "over" id = "number-services-up">2</h3>
+                    <p class = "under">Caida</p>
+        
+                    <h3 class = "over" id = "number-services-paused">0</h3>
+                    <p class = "under">Caida</p>
+        
+                    <p class="middle" id = number-used-monitors>Usando 2 de 50 monitores </p>
+        
+                </div>
+        
+                <div class="lateral-cards middle">
+                    <h2>Last Hours</h2>
+                    <div class = "grid-four">
+                        <h3 class = "over" id = "porcentage-uptime">0</h3>
+                        <p class = "under">Porcentaje de funcionamiento</p>
+        
+                        <h3 class = "over" id = "number-incidents">0</h3>
+                        <p class = "under">Incidentes</p>
+        
+                        <h3 class = "over" id = "no-incident-days">1 d</h3>
+                        <p class = "under">Dias sin incidentes</p>
+                    </div>
+                </div>
+        
+            </div>
+
+        </div>
+    
+        
+    </body>
+</html>
