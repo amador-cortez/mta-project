@@ -11,10 +11,10 @@ class Database
 
     public function __construct()
     {
-        $this->host ='db';     ///$host;
+        $this->host ='localhost';     ///$host;
         $this->user = 'root';      /// $user;
-        $this->password = 'rootpassword'; ///$password;
-        $this->database = 'mta_db';
+        $this->password = ''; ///$password;
+        $this->database = 'users';
 
         $this->connect();
     }
