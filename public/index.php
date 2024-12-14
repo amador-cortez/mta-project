@@ -14,9 +14,20 @@ use App\Router;
 $router = new Router();
 
 // Pages routes
-$router->addRoute('GET', '/', [new UserController(),'index']);
-$router->addRoute('GET', '/register', [new UserController(),'create']);
-$router->addRoute('GET', '/login', [new AuthController(),'login']);
+
+
+if(isset($_SESSION['user_id'])) {
+    $router->addRoute('GET', '/', [new UserController(),'index']);
+}else{
+
+    $router->addRoute('GET', '/save', [new UserController(),'store']);
+    $router->addRoute('GET', '/register', [new UserController(),'create']);
+    $router->addRoute('GET', '/login', [new AuthController(),'login']);
+
+
+}
+
+
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
