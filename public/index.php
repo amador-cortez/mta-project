@@ -15,6 +15,9 @@ $router = new Router();
 
 // Pages routes
 
+
+
+
 ##si el usuario esta loggeado entrara ala primera sesion de la ruta protegida
 if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/', [new UserController(),'index']);

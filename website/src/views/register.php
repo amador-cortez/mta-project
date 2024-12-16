@@ -87,7 +87,7 @@
 
                 <h1 class = "middle">Sign Up</h1>
                 
-                <label>Nombre de Usuario </label>
+                <label>Nombre de Usuhhhhhhhhario </label>
                 <input id = "uname" type = "text" placeholder = "Nombre de usuario" required></input>
                 <p id = "mensajeUser" > </p>
 
@@ -132,9 +132,9 @@
             
 
             save({
-                name:uname,
-                email:email,
-                password:ogPassword
+                name:uname.value,
+                email:email.value,
+                password:ogPassword.value
             })
         //    resetForm(myFormElements);
     
@@ -145,6 +145,8 @@
     
     async function save(data) {
     try {
+
+        console.log("test")
         // Make the POST request
         const response = await fetch("http://mta-project.local/register", {
             method: 'POST',

@@ -11,27 +11,17 @@ class UsersModel
     public string $created_at;
     public string $updated_at;
 
-    public string $url;
-    public string $state;
-    public string $timedown;
-    public string $timeup;
-    public string $monitor_interval;
+
 
     private $connection;
 
-    public function __construct($username, $password, $email, $url, $state, $monitor_interval)
+    public function __construct($username, $password, $email)
     {
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
         $this->created_at = date('Y-m-d H:i:s');
         $this->updated_at = date('Y-m-d H:i:s');
-
-        $this->url = $url;
-        $this->state = $state;
-        $this->timedown = date('H:i:s');
-        $this->timeup = date('H:i:s');
-        $this->monitor_interval = $monitor_interval;
 
         $this->connection = new Database();
     }
@@ -41,6 +31,7 @@ class UsersModel
     {
         $con = $this->connection;
 
+        
         $sql = $con->prepare('INSERT INTO users (username, password, email, created_at, updated_at) VALUES (:username, :password, :email, :created_at, :updated_at)',[
            'username' => $this->username,
            'password' => $this->password,
