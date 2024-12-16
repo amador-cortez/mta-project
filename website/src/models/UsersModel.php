@@ -16,9 +16,6 @@ class UsersModel
     public string $timedown;
     public string $timeup;
     public string $monitor_interval;
-    public string $created_at;
-    public string $update_at;
-
 
     private $connection;
 
@@ -35,13 +32,8 @@ class UsersModel
         $this->timedown = date('H:i:s');
         $this->timeup = date('H:i:s');
         $this->monitor_interval = $monitor_interval;
-        $this->created_at = date('Y-m-d H:i:s');
-        $this->update_at = date('Y-m-d H:i:s');
-
-
 
         $this->connection = new Database();
-
     }
 
 
@@ -49,7 +41,7 @@ class UsersModel
     {
         $con = $this->connection;
 
-        $sql = $con->query('INSERT INTO users (username, password, email, created_at, updated_at) VALUES (:username, :password, :email, :created_at, :updated_at)',[
+        $sql = $con->prepare('INSERT INTO users (username, password, email, created_at, updated_at) VALUES (:username, :password, :email, :created_at, :updated_at)',[
            'username' => $this->username,
            'password' => $this->password,
             'email' =>$this->email,
@@ -61,18 +53,38 @@ class UsersModel
         return $sql;
     }
 
-    public function add(){
-        $con = $this->connection; 
+    public function store(){
+        $con = $this->connection;
 
-        $sql = $con->query()
+        $sql = $con->prepare('INSERT INTO monitors (url, monitor_interval) VALUES (:url, :monitor_interval)',[
+           'url' => $this->url,
+           'monitor_interval' => $this->monitor_interval,
+
+        ]);
+
+
+        return $sql;
+    }
+
+    public function show($id){
+        $con = $this->connection;
+
+        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
 
     }
 
-    public function update(){
+    public function update($id){
+        $con = $this->connection;
+
+        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
 
     }
 
-    public function delete(){
+    public function delete($id){
+        $con = $this->connection;
+
+        $sql = $con->prepare("DELETE from monitors WHERE id=:id");
+
 
     }
 }

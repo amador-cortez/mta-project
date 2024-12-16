@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\UsersModel;
 
 /*Crear formularios para agregar, editar y eliminar URLs.
 
@@ -20,7 +21,7 @@ timedown updated_at
 
 timeup timestamp
 
-monitor_interval int
+monitor_interval int /5, 10 0 15 min
 
 created_at
 
@@ -28,6 +29,10 @@ updated_at
 
 vista-> manda informacion a controladores en donde se hace las validaciones y una vez pasando eso ->lo manda a modelo, 
 donde aqui ya seria la insercion a la base de datps*/
+
+
+#Aqui se manda la solicitud generada por el usuario por medio del url,  y por medion del controlador se interactua con el modelo 
+#en donde el modelo es por donde se estara manipulando la base de datos 
 
 class SiteController
 {
@@ -40,53 +45,109 @@ class SiteController
     public function create()
     {
         #agregar
-        if (!empty($_POST)){
-          $urlError = null 
-          
+        if (!empty($_POST)){          
           $url = $_POST['url'];
           $url = filter_var($url, FILTER_SANITIZE_URL);
+          $monitor_interval= intval($monitor_interval, FILTER_SANITIZE_URL);
 
 
           if (filter_var($url, FILTER_VALIDATE_URL)){
+              $user = new UsersModel();
+              $resutl = $user->create($url, $monitor_interval);
+
               echo("$url , is valid");
-              store($rul);
+
           }else{
             $urlError="URL is nor a valid URL. Try again";
           }
         }
     }
 
+
     public function store($url)
     {
-        date_default_timezone_get("America/New_York");
-        $timeup = date("h:i:sa");
-        $created_at = date("Y-m-d");
-
-        $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO users (url, timeup, created_at) values(?,?,?)";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($url, $timeup, $created_at));
-        Database::disconnect();
+        if (!empty($_POST)){          
+            $url = $_POST['url'];
+            $url = filter_var($url, FILTER_SANITIZE_URL);
+            $monitor_interval= intval($monitor_interval, FILTER_SANITIZE_URL);
+    
+    
+            if (filter_var($url, FILTER_VALIDATE_URL)){
+                $user = new UsersModel();
+                $resutl = $user->store($url, $monitor_interval);
+    
+                
+                if($result){
+                    echo("$url , is valid");
+                }
+                else{
+                    $urlError="URL is nor a valid URL. Try again";
+                }
+    
+            }else{
+                $urlError="URL is nor a valid URL. Try again";
+            }
+        }else{
+            echo "No se recibieron datos";
+        }
     }
 
-    public function show()
+    public function show($id)
     {
+        $user = new UsersModel();
+        $result = $user->show($id);
+
+        if($url){
+            echo ($url);
+        }else{
+            echo "No se encontro la URL";
+        }
+
 
     }
 
-    public function edit()
+    public function edit($id)
     {
-        #editar
+        $user = new UsersModel();
+        $result = $user->edit($id);
     }
-    public function update()
+    public function update($id)
     {
-        #comprobacion
-    }
+        if (!empty($_POST)){          
+            $url = $_POST['url'];
+            $url = filter_var($url, FILTER_SANITIZE_URL);
+            $monitor_interval= intval($monitor_interval, FILTER_SANITIZE_URL);
+    
+    
+            if (filter_var($url, FILTER_VALIDATE_URL)){
+                $user = new UsersModel();
+                $resutl = $user->store($url, $monitor_interval);
+    
+                
+                if($result){
+                    echo("$url , is valid");
+                }
+                else{
+                    $urlError="URL is nor a valid URL. Try again";
+                }
+    
+            }else{
+                $urlError="URL is nor a valid URL. Try again";
+            }
+        }else{
+            echo "No se recibieron datos";
+        }    }
 
-    public function delete()
+    public function delete($id)
     {
-        #emilinar 
+        $user = new UsersModel();
+        $result = $user->delete($id);
+
+        if($url){
+            echo ($url);
+        }else{
+            echo "No se encontro la URL";
+        }
     }
 
 }
