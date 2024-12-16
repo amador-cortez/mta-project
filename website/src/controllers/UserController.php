@@ -28,45 +28,29 @@ class UserController
         echo "User Delete $id";
     }
 
+
+    public function sanitizeInput($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
     public function store(){
 
-       $user = new UsersModel('amador','1234567','cortez.amador@gmail.com');
+
+
+        $email = $this->sanitizeInput($_POST["email"]);
+        $password = password_hash($this->sanitizeInput($_POST["password"]),PASSWORD_BCRYPT);
+        $username = $this->sanitizeInput($_POST["username"]);
+
+        if($email == "" || $password == "" || $username == ""){
+
+            echo "error";
+        }
+
+        $user = new UsersModel(username: $username,password: $password,email: $email);
 
         $user->create();
-
-//        if (!empty($_POST["register"])){
-//            if(!empty($_POST["email"]) and !empty($_POST["name"]) and !empty($_POST["last_name"]) and !empty($_POST["password"]) and !empty($_POST["password_confirm"])){
-//                $sql ="INSERT INTO users (email, name, last_name, password) VALUES (:email, :name, :last_name, :password)";
-//                $stmt = $conn->prepare($sql);
-//
-//                $email = sanitizeInput($_POST["email"]);
-//                $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-//
-//                if(!filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-//                    $stmt -> bindParam(':email', $_POST["email"]);
-//                }else{
-//                    echo "Is not a valid email address";
-//                }
-//
-//                $name = sanitizeInput($_POST["name"]);
-//                $stmt -> bindParam(':name', $_POST['name']);
-//
-//                $last_name = sanitizeInput($_POST["last_name"]);
-//                $stmt -> bindParam('last_name', $_POST['last_name']);
-//
-//                $password = sanitizeInput($_POST["password"]);
-//                $password_confirm = sanitizeInput($_POST["password_confirm"]);
-//
-//                if ($_POST['password'] == $_POST['password_confirm']){
-//                    $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
-//                    $stmt -> bindParam(':password', $_POST['password']);
-//                }else{
-//                    echo "Passwords don't match";
-//                }
-//
-//            }
-//        }
-
 
     }
 }

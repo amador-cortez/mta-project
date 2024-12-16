@@ -20,8 +20,8 @@ if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/', [new UserController(),'index']);
 }else{
 
-    $router->addRoute('GET', '/save', [new UserController(),'store']);
     $router->addRoute('GET', '/register', [new UserController(),'create']);
+    $router->addRoute('POST', '/register', [new UserController(),'store']);
     $router->addRoute('GET', '/login', [new AuthController(),'login']);
 
 
