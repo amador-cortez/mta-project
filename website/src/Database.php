@@ -14,7 +14,7 @@ class Database
         $this->host ='localhost';     ///$host;
         $this->user = 'root';      /// $user;
         $this->password = ''; ///$password;
-        $this->database = 'users';
+        $this->database = 'mta-project';
 
         $this->connect();
     }

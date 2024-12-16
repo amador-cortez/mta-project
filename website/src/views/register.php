@@ -129,10 +129,62 @@
         correctPswd = checkSamePassword(ogPassword, confPassword, mensajeIdPswd);
 
         if(correctEmail && correctUser && correctPswd){
-            resetForm(myFormElements);
+            
+
+            save({
+                name:uname,
+                email:email,
+                password:ogPassword
+            })
+        //    resetForm(myFormElements);
+    
         }
 
     }
+
+    
+    async function save(data) {
+    try {
+        // Make the POST request
+        const response = await fetch("http://mta-project.local/register", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Adjust if `data` is not JSON
+            },
+            body: JSON.stringify(data) // Convert `data` to JSON
+        });
+
+        // Check if the response is okay
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        }
+
+        // Parse the response as text and then JSON
+        const responseText = await response.text();
+        let responseData;
+        try {
+            responseData = JSON.parse(responseText);
+        } catch (error) {
+            throw new Error(`Failed to parse JSON. Response: ${responseText}`);
+        }
+
+        // Check for a successful response
+        if (responseData.success === true) {
+            if (typeof sendToCRM === "function") {
+                sendToCRM(data); // Assuming `data` is needed for CRM
+            } else {
+                console.warn("sendToCRM function is not defined");
+            }
+        } else {
+            console.warn("Operation was not successful:", responseData);
+        }
+    } catch (error) {
+        console.error('An error occurred:', error.message);
+    }
+}
+
+
+
 
     function checkFormLogin(){
         let ogPassword = document.getElementById("ogPassword");

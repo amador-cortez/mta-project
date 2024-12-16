@@ -30,40 +30,29 @@ class UserController
 
     public function store(){
 
-        $user = new UsersModel('amador','1234567','cortez.amador@gmail.com');
-        
-        $user->create();
+        if (!empty($_POST["register"])){
+            if(!empty($_POST["email"]) and !empty($_POST["name"]) and !empty($_POST["password"]) and !empty($_POST["password_confirm"])){
 
-//        if (!empty($_POST["register"])){
-//            if(!empty($_POST["email"]) and !empty($_POST["name"]) and !empty($_POST["last_name"]) and !empty($_POST["password"]) and !empty($_POST["password_confirm"])){
-//
-//                $email = sanitizeInput($_POST["email"]);
-//                $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-//
-//                if(!filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-//                    $stmt -> bindParam(':email', $_POST["email"]);
-//                }else{
-//                    echo "Is not a valid email address";
-//                }
-//
-//                $name = sanitizeInput($_POST["name"]);
-//                $stmt -> bindParam(':name', $_POST['name']);
-//
-//                $last_name = sanitizeInput($_POST["last_name"]);
-//                $stmt -> bindParam('last_name', $_POST['last_name']);
-//
-//                $password = sanitizeInput($_POST["password"]);
-//                $password_confirm = sanitizeInput($_POST["password_confirm"]);
-//
-//                if ($_POST['password'] == $_POST['password_confirm']){
-//                    $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
-//                    $stmt -> bindParam(':password', $_POST['password']);
-//                }else{
-//                    echo "Passwords don't match";
-//                }
-//
-//            }
-//        }
+                $email = sanitizeInput($_POST["email"]);
+                $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+                $name = sanitizeInput($_POST["name"]);
+
+
+                $password = sanitizeInput($_POST["password"]);
+                $password_confirm = sanitizeInput($_POST["password_confirm"]);
+
+                if ($_POST['password'] == $_POST['password_confirm']){
+                    $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
+                }else{
+                    echo "Passwords don't match";
+                }
+
+                $user = new UsersModel($name, $password, $email);
+                $user->create();
+
+            }
+        }
 
 
     }
