@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="css/styles.css">-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="../../../public/js/scripts.js"></script>
 
-    <script>
-        
-    </script>
+
     <style>
         :root {
             --blue-color: #457b9d;
@@ -85,12 +84,9 @@
         .over, .under{
             display: block;
         }
-
+        ul{list-style: none;}
 
         /*Main content*/
-        .header{
-            display: inline-block;
-        }
 
         .btnNew{
             padding: 15px 40px;
@@ -105,7 +101,6 @@
             }
             .btnNew:hover{
                 opacity: 0.8;
-
             }
 
         
@@ -115,7 +110,6 @@
             background-color: white;
             border-radius: 15px;
             border: 2px solid #f1f1f1;
-
         }
 
         .main-content{
@@ -124,7 +118,7 @@
         }
         
         
-        .card-service, .split-two{
+        .split-two{
             margin: 0px;
             border-radius: 0;
         }
@@ -132,24 +126,106 @@
         .split-two{
             border: none;
         }
-
-        /*Action bar*/
-        .search{
+        .card-service:hover{
             background-color: whitesmoke;
-            color: white;
+        }
+        
+        .card-service i{
+            top: 50%;
+            right: 10%;
+            color: #222;
+            cursor: pointer;
+            margin: 10px 5px;
+            padding: 5px 10px;
+        }
+
+
+
+        /*ACTION BAR*/
+
+        .rows{
+            display: flex;
+            flex-direction: row;
+        }
+
+        /*Search*/
+
+        /*.wrapper{
+            height: 450px;
+            width: 350px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-radius: 15px;
+        }
+        
+        .wrapper ul{
+            width: 100%;
+        }
+
+        .wrapper ul li{
+            list-style: none;
+            padding: 5px 0;
+            border-radius: 8px;
+            background-color: whitesmoke;
+            color: #222;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .wrapper ul li:hover{
+            background-color: white;
+
+        }
+
+        .wrapper ul lit:last-child{
+            margin: 10px 0 0 0;
+        }
+*/
+
+        .search{
+           /* position:relative;*/
+            width: 100%;
+        }
+
+        .search input{
+            background-color: whitesmoke;
+            color: black;
             padding: 16px;
             font-size: 16px;
-            border: none;
+            border-radius: 0.25em;
+            border: 1px solid #caced1;
             cursor: pointer;
         }
+        
+        .search i{
+           /* position: absolute;*/
+            top: 50%;
+            right: 10%;
+            color: #222;
+            transform: translateY(-50%);
+            
+        }
+        
+        .search .fa-x{
+            font-size: 18px;
+            display: none;
+        }
+
+        /*Select box*/
         .selector{
-            padding: 10px;
-            text-size-adjust: 16px;
+            padding: 16px;
+            font-size: 16px;
             background-color: white;
             border-radius: 0.25em;
             border: 1px solid #caced1;
   
         }
+       
+
+        
         .selector:hover{
             background-color: #eee;
         }
@@ -159,6 +235,23 @@
         .selector::after{
             border-top: 0.25em solid var(--blue-color);
         }
+
+        .select-checkBox{
+            padding: 10px;
+        }
+
+        .filter{
+            padding: 16px;
+            font-size: 16px;
+
+        }
+
+         /*SERVICES*/
+         .card-service i:hover{
+            color: var(--blue-color);
+         }
+
+
 
         
     </style>
@@ -184,19 +277,31 @@
                 <!--ACTION BAR-->
                 <div class = "split-two">
                     <div class ="left">
-                        <input type="checkbox" id = "select-all-services">0/2</input>
+                        <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services">0 / 2</label>
 
                     </div>
-                    <div class ="right">
-                        <input type="text" id = "search-url" class = "search" placeholder = "Buscar por nombre or url"></input>
-                        <select id = "order-by" name = "order-by" class="selector">
-                            <option value="down-first" selected>Caidas primero</option>  
-                            <option value="up-first" >Funcionando primero</option> 
-                            <option value="paused-first">Pausadas primero</option>      
-                            <option value="a-z">A - Z</option>   
-                            <option value="newest first">Mas reciente primero</option>   
-                        </select>
-                        <button type="button" id ="filter-services">Filtrar</button>
+                    
+                    <div class ="right rows">
+
+                        <div class = "search">
+                            <input type="text" id = "search-url-bar" placeholder = "Buscar por nombre or url"></input>
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i class="fa-solid fa-x"></i>
+                        </div>
+                       
+                        <div>
+                            <select id = "order-by" name = "order-by" class="selector">
+                                <option value="down-first" selected>Caidas primero</option>  
+                                <option value="up-first" >Funcionando primero</option> 
+                                <option value="paused-first">Pausadas primero</option>      
+                                <option value="a-z">A - Z</option>   
+                                <option value="newest first">Mas reciente primero</option>   
+                            </select>
+                        </div>
+                        <div class="filter">
+                            <button type="button" id ="filter-services" onclick="showFilters()"><i class="fa-solid fa-filter"></i>Filtrar</button>
+                        </div>
+                        
                         <!--
                         <input type="checkbox" id = "filter-up" >Funcionando</input>
                         <input type="checkbox" id = "filter-down" >Caidas</input>
@@ -207,35 +312,42 @@
                 </div>
 
                 <!--MONITORING URLS-->
-                <div id="services" style="margin-top: 30px;">
+                <ul id="service-list" style="margin-top: 30px;">
 
                     <!--SERVICE 1-->
-                    <div class = "card-service">
+                    
+                    <li class = "card-service" id = "first-service" name = "first-service">
                         <div class=" left">
-                            <div class="split-two">
+                            <div class="rows">
+                                <div class="left">
+                                    
+                                    <input type="checkbox" id = "select-sevice1" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()"><label id = "status-sevice1" for = "select-sevice1" style="margin-right: 50px;">Activo</label> 
                                 
-                                <input type="checkbox" id = "select-sevice1" name = "select-sevice1" class="hiddenMsg left" ></input><label id = "status-sevice1" for = "select-sevice1" style="margin-right: 50px;">Activo</label> 
-                                
+                                </div>
                                 <div class="right">
-                                    <p id ="service-name1">Nombre servicio</p>
+                                    <input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio 1</input> 
                                     <div class = "under">
-                                        <p id ="domain-type1" class="left" >Dominio </p><p id = "last-date-check1" class="right">Última comprobación (fecha y hora).</p>
+                                        <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="right">
+                        <div class="right rows">
                             <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
-                            <button id ="actions1" class="right">...</button>
+                            <i class="fa-regular fa-pen-to-square fa-2x" for ="first-service"></i>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService( 'first-service')" ></i>
                         </div>
-                    </div>
+                    </li>
 
                     <!--SERVICE 2-->
-                    <div class = "card-service">
+                    <li class = "card-service" id = "second-service">
                         <div class=" left">
-                            <div class="split-two">
+                            <div class=" rows">
                                 <div class="left">
-                                    <p id ="status" style="margin-right: 20px;">Activo</p>
+                                    
+                                    <input type="checkbox" id = "select-sevice2" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
+                                    <label id = "status-sevice2" for = "select-sevice2" style="margin-right: 50px;">Activo</label> 
+                                
                                 </div>
                                 <div class="right">
                                     <input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> 
@@ -245,13 +357,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="right">
+                        <div class="right rows">
                             <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
-                            <button id ="actions1" class="right">...</button>
+                            <i class="fa-regular fa-pen-to-square fa-2x" for ="second-service"></i>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" for ="second-service"></i>
                         </div>
-                    </div>
+                    </li>
 
-                </div>
+                </ul>
                 
             </div>
 

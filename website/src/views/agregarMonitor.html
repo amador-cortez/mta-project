@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="css/styles.css">-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="../../../public/js/scripts.js"></script>
 
     
     <style>
@@ -82,6 +83,16 @@
             display: block;
         }
 
+        .search{
+            background-color: whitesmoke;
+            color: black;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: 0.25em;
+            border: 1px solid #caced1;
+            cursor: pointer;
+            
+        }
 
         /*Main content*/
         .header{
@@ -155,19 +166,21 @@
             <div class = "main-content left">
                 
                 
-                <a href = "dashboard.html" id = "regresr-dashboard" class="btnRegresar">Regresar</a>
-                <form id = "agregar-monitoreo" class = "formCenter">
+                <a href = "dashboard.html" id = "return-dashboard" class="btnRegresar"><i class="fa-solid fa-arrow-left"></i> Regresar</a>
+                <form id = "add-monitor" class = "formCenter">
                     <h1 class=" middle">Agregar URL a monitorear.</h1>
                 
-                    <h2>Ingresar URL:</h2>
-                    <input type="text" id = "new-url" placeholder = "Url a monitorear"></input>
+                    <h2>Ingresar URL:</h2><p id = "valid-url"></p>
+                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search"></input>
+                    
                     
                     <h2>Definir la frecuencia de las comprobaciones:</h2>
-                    <input type = "radio" id = "min5" name = "time" value="5"><label for = "min5"> 5 min</label><br>
+                    <p id = "valid-frequency"></p>
+                    <input type = "radio" id = "min5" name = "time" value="5"><label for = "min5" checked > 5 min</label><br>
                     <input type = "radio" id = "min10" name = "time" value="10"><label for = "min10"> 10 min</label><br>
                     <input type = "radio" id = "min15" name = "time" value="15"><label for = "min15"> 15 min</label><br>
 
-                    <button id = "btn-agregar-url" type = "button" class="btnNew ">Agregar</button>
+                    <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="addURL()">Agregar</button>
                 
                 </form>
             </div>
