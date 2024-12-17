@@ -21,6 +21,7 @@
             display: flex;
 
         }
+        i{cursor: pointer;}
         /*Side Bar*/
         
         .sidebar{
@@ -151,9 +152,9 @@
         }
         
     </style>
-    <title>Monitoreo</title>
+    <title>Editar Monitoreo</title>
     </head>
-    <body >
+    <body onload="fillForm()" >
 
         <div class="sidebar">
             <!--<img src = "#" alt = "Logo-Opcional"></img>-->
@@ -166,22 +167,22 @@
             <div class = "main-content left">
                 
                 
-                <a href = "dashboard.html" id = "return-dashboard" class="btnRegresar"><i class="fa-solid fa-arrow-left"></i> Regresar</a>
+                <a href = "dashboard.html" id = "return-dashboard" class="btnRegresar" onclick="confirm('Seguro que quiere dejar de editar?')"><i class="fa-solid fa-arrow-left"></i> Regresar</a>
                 <form id = "add-monitor" class = "formCenter">
-                    <h1 class=" middle">Agregar URL a monitorear.</h1>
+                    <h1 class=" middle">Editar servicio de monitoreo.</h1>
                 
-                    <h2>Ingresar URL:</h2><p id = "valid-url"></p>
-                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search"></input>
+                    <h2>Modificar URL:</h2><p id = "valid-url"></p>
+                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search"></input><i class="fa-solid fa-x" onclick="resetURL()"></i>
                     
                     
-                    <h2>Definir la frecuencia de las comprobaciones:</h2>
+                    <h2>Modificar frecuencia de las comprobaciones:</h2>
                     <p id = "valid-frequency"></p>
                     <input type = "radio" id = "min5" name = "time" value="5"><label for = "min5" checked > 5 min</label><br>
                     <input type = "radio" id = "min10" name = "time" value="10"><label for = "min10"> 10 min</label><br>
                     <input type = "radio" id = "min15" name = "time" value="15"><label for = "min15"> 15 min</label><br>
 
-                    <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="addURL()">Agregar</button>
-                    
+                    <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="updateURL()">Guardar Cambios</button>
+                
                 </form>
             </div>
         

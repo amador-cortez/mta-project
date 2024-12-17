@@ -2,12 +2,12 @@ const checkBoxEle=document.getElementsByName('select-service');
 const checkAllServices = document.getElementById("select-all-services");
 const checkedBoxesLabel = document.getElementById('select-all-services-label');
 
-const searchBar = document.getElementById("search-url-bar");
+//const searchBar = document.getElementById("search-url-bar");
 const lists = document.querySelectorAll('#url-lists li');
 const searchIcon = document.querySelector('.fa-magnifying-glass');
 const xIcon = document.querySelector('.fa-xmark');
 
-
+/*
 function updateSearchDisplay (){
     const searchTerm = searchBar.value.trim().toLowerCase();
     xIcon.style.display = searchTerm ? 'block':'none';
@@ -18,14 +18,89 @@ function updateSearchDisplay (){
         item.style.display = service.includes(searchTerm) ? 'block':'none';});
 }
 
-/*
+
 searchBar.addEventListener('input', updateSearchDisplay());
 xIcon.addEventListener('click', ()=> {
     searchBar.value = '';
     updateSearchDisplay();
 });*/
 
+//DASHBOARD
 
+//search
+let serviceData = "";
+const urlsContainer = document.querySelector(".service-list");
+
+fetch(
+    "https://gist.githubusercontent.com/jemimaabu/564beec0a30dbd7d63a90a153d2bc80b/raw/0b7e25ba0ebee6dbba216cfcfbae72d460a60f26/tutorial-levels"
+  ).then(async (response) => {
+    serviceData = await response.json();
+    serviceData.map((url) => createMonitor(url));
+  });
+
+  const createMonitor = (serviceData) => {
+    //const {urlName, link, date} = serviceData;
+    const {link} = serviceData;
+    const service = document.createElement("LI");
+
+    service.className("card-service");
+    service.innerHTML = '<div class=" left"> <div class="rows"> <div class="left"> '+
+    '<input type="checkbox" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">'+
+    '<label  style="margin-right: 50px;">Activo</label> </div> ' +
+     '<div class="right">'+
+        '<h3> Nombre servicio #</h3> '+
+        '<div class = "under">'+
+            '<p id ="domain-type" >Dominio</p><p id = "last-date-check">Última comprobación (fecha y hora).</p>'+
+       ' </div> </div> </div> </div> ' + 
+    '<div class="right rows">'+
+    '<p id = "check-time-frecuency" class="left">Frecuencia de las comprobaciones</p>'+
+    '<a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>'+
+    '<i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i> </div> ';
+
+    urlsContainer.append(service);
+  }
+
+  //searh listener
+const searchBar = document.getElementById("search-url-bar");
+
+let debounceTimer;
+const debounce = (callback, time) =>{
+    window.clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(callback, time);
+};
+/*
+searchBar.addEventListener("input",
+    (event) => {
+        const query = event.target.value;
+        debounce() => handleSearchPsts(query),500)
+    }.false
+);*/
+const search = () => {
+    const searchBar = document.getElementById("search-url-bar");
+    const serviceListName = document.getElementById("service-list");
+    const services = document.querySelectorAll('.card-service');
+    const sname = serviceListName.getElementsByTagName("h3");
+
+    for(let i = 0; i< sname.length; i++){
+        let match = services[i].getElementsByTagName('h3')[0];
+       
+        if(match){
+            let textValue = match.textContent || match.innerHTML;
+
+            if(textValue.toUpperCase().indexOf(searchBar) > -1){
+                services[i].style.display = "";
+            }else {
+                services[i].style.display = none;
+            }
+        }
+    }
+
+}
+function resetSearch(){
+    document.getElementById("search-url-bar").value = "";
+}
+
+//cHECKBOXES
 
 function updateCheckedLabel(checkBox){
     
@@ -57,16 +132,104 @@ function selectAllServices(){
 
 }
 
+//EDIT AND DELETE SERVICES
+
+function editSelectedService(){
+
+    const services = document.querySelectorAll('#service-list li');
+    console.log(services);
+    tab = [] , indexed;
+
+    for(let i = 0; i<services.length; i++){
+        tab.push(services[i].innerHTML);
+    }
+    let index;
+    for(let i = 0; i<services.length; i++){
+        services[i].onclick = function(){
+            index = tab.indexOf(this.innerHTML);
+            console.log("INDEX = " + index);
+           // this.
+            
+        };
+    }
+}
+
+function deleteSelectedService(){
+    const services = document.querySelectorAll('#service-list li');
+    console.log(services);
+    tab = [] , indexedDB;
+
+    for(let i = 0; i<services.length; i++){
+        tab.push(services[i].innerHTML);
+    }
+    let index;
+    for(let i = 0; i<services.length; i++){
+        services[i].onclick = function(){
+            index = tab.indexOf(this.innerHTML);
+            console.log("INDEX = " + index);
+            var confirmDelete = confirm("Seguro que quiere eleiminar este servicio de monitoreo?");
+            if(confirmDelete){
+                
+                this.classList.remove("card-service");
+                this.innerHTML = " ";
+                this.parentNode.removeChild(this);
+                console.log(services);
+                
+            }
+            
+        };
+    }
+    
+ }
+
+
+
+
+//ADD NEW MONITOR
+
 function addURL(){
     const url = document.getElementById('new-url');
     const frequency = document.querySelector('input[name="time"]:checked'); 
     
     if(validateURLForm(url, frequency)){
 
-
+        alert("Se ha agregado exitosamente!");
     }
 
    
+}
+
+//EDIT MONITOR
+
+function fillForm(){
+    const url = document.getElementById('new-url');
+    const frequency = document.querySelector('input[name="time"]'); 
+
+    //Modificar url y frequency, obetener valores de la base de datos primero
+    //y mostrar en formulario prellnado
+    const urlOriginal = "URL DE LA BASE DE DATOS";
+    const frequencyOriginal = 5;
+
+
+    url.value = urlOriginal;
+    document.getElementById("min"+frequencyOriginal).checked =true;
+
+}
+
+function resetURL(){
+    const url = document.getElementById('new-url');
+    url.value = ""
+
+}
+function updateURL(){
+    const url = document.getElementById('new-url');
+    const frequency = document.querySelector('input[name="time"]:checked'); 
+    
+    if(validateURLForm(url, frequency)){
+        //Actualizar la base de datos
+        alert("Los cambios se hah guardado exitosamente!");
+        fillForm();
+    }
 }
 
 function validateURLForm(url, frequency){
@@ -106,7 +269,7 @@ function checkURL(url , validMessage){
         '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
         '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
 
-    if(urlPattern.test(url) || url == " " || url == null){
+    if(urlPattern.test(url) || url == "" || url == null){
         
         validMessage.innerHTML = "URL Valido."
         validMessage.style.color = "green";
@@ -120,23 +283,4 @@ function checkURL(url , validMessage){
 
         return false;
     } 
-}
-
-function deleteSelectedService(SelecterdService){
-
-   //const services = document.getElementById("#service-list");
-    const services = document.querySelectorAll('.card-service');
-    console.log(services) ;
-    for(let i = 0; i<services.length; i++){
-        if(services[i].id == SelecterdService){
-            services[i].innerHTML = "";
-            
-        }
-    }
-   //let nodeChild = document.getElementById(SelecterdService);
-   //services.removeChild(nodeChild);
-   console.log(services) ;
-   //document.querySelector("#service-list ul li.selected").remove();
-   // const selectedService = 
-   // console.log(selectedService.value) ;
 }

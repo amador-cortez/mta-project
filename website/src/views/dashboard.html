@@ -211,7 +211,7 @@
         
         .search .fa-x{
             font-size: 18px;
-            display: none;
+            cursor: pointer;
         }
 
         /*Select box*/
@@ -250,7 +250,18 @@
          .card-service i:hover{
             color: var(--blue-color);
          }
-
+         .service-list-css{
+            margin: 30px 30px 0 0;
+            
+            width: 100%;
+            padding: 20px;
+            overflow-y: scroll;
+            
+         }
+         .service-list-css ::-webkit-scrollbar{
+            display: none;
+         }
+         
 
 
         
@@ -284,9 +295,9 @@
                     <div class ="right rows">
 
                         <div class = "search">
-                            <input type="text" id = "search-url-bar" placeholder = "Buscar por nombre or url"></input>
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <i class="fa-solid fa-x"></i>
+                            <input type="search" id = "search-url-bar" placeholder = "Buscar por nombre or url" ><i class="fa-solid fa-magnifying-glass"></i></input>
+                            
+                            <i class="fa-solid fa-x" onclick="resetSearch()"></i>
                         </div>
                        
                         <div>
@@ -312,11 +323,11 @@
                 </div>
 
                 <!--MONITORING URLS-->
-                <ul id="service-list" style="margin-top: 30px;">
+                <ul id="service-list" class = "service-list-css">
 
                     <!--SERVICE 1-->
                     
-                    <li class = "card-service" id = "first-service" name = "first-service">
+                    <li class = "card-service" id = "service1">
                         <div class=" left">
                             <div class="rows">
                                 <div class="left">
@@ -325,7 +336,7 @@
                                 
                                 </div>
                                 <div class="right">
-                                    <input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio 1</input> 
+                                    <h3 id = "select-sevice1"> Nombre servicio 1</h3> 
                                     <div class = "under">
                                         <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
                                     </div>
@@ -334,13 +345,14 @@
                         </div>
                         <div class="right rows">
                             <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
-                            <i class="fa-regular fa-pen-to-square fa-2x" for ="first-service"></i>
-                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService( 'first-service')" ></i>
+                            
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
                         </div>
                     </li>
 
                     <!--SERVICE 2-->
-                    <li class = "card-service" id = "second-service">
+                    <li class = "card-service" id = "service2">
                         <div class=" left">
                             <div class=" rows">
                                 <div class="left">
@@ -350,7 +362,8 @@
                                 
                                 </div>
                                 <div class="right">
-                                    <input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> 
+                                    <!--<input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> -->
+                                    <h3 id = "select-sevice2"> Nombre servicio 2</h3> 
                                     <div class = "under">
                                         <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
                                     </div>
@@ -359,7 +372,7 @@
                         </div>
                         <div class="right rows">
                             <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
-                            <i class="fa-regular fa-pen-to-square fa-2x" for ="second-service"></i>
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>
                             <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" for ="second-service"></i>
                         </div>
                     </li>
@@ -378,10 +391,10 @@
                     <p class = "under">Caida</p>
         
                     <h3 class = "over" id = "number-services-up">2</h3>
-                    <p class = "under">Caida</p>
+                    <p class = "under">Funcionando</p>
         
                     <h3 class = "over" id = "number-services-paused">0</h3>
-                    <p class = "under">Caida</p>
+                    <p class = "under">Pausados</p>
         
                     <p class="middle" id = number-used-monitors>Usando 2 de 50 monitores </p>
         
