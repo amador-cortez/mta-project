@@ -1,6 +1,6 @@
 <?php
 
-#
+
 require_once __DIR__ . '/../website/src/autoload.php';
 
 require_once __DIR__ . '/../website/src/Router.php';
@@ -16,17 +16,13 @@ $router = new Router();
 // Pages routes
 
 
-
-
-##si el usuario esta loggeado entrara ala primera sesion de la ruta protegida
 if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/', [new UserController(),'index']);
 }else{
-#si no hay sesion entrara aca, 
-    $router->addRoute('GET', '/save', [new UserController(),'store']);
+
     $router->addRoute('GET', '/register', [new UserController(),'create']);
+    $router->addRoute('POST', '/register', [new UserController(),'store']);
     $router->addRoute('GET', '/login', [new AuthController(),'login']);
-    $router->addRoute('POST', '/register', [new UserController(), 'store']);
     #$router->addRoute('GET', '/send', [new AlertController(), 'send'])
 
     #Route::get('/send', '\App\Http\Controllers\HomeController@send')->name('home.send');

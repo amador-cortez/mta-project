@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UsersModel;
 use function App\Controllers\Auth\sanitizeInput;
-#desde las vistas se manda la informacion a esta session, una vez validada se manda al modelo para hacer los cambios e la base de datos
+
 class UserController
 {
 
@@ -55,5 +55,23 @@ class UserController
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
+    }
+    public function store(){
+
+
+
+        $email = $this->sanitizeInput($_POST["email"]);
+        $password = password_hash($this->sanitizeInput($_POST["password"]),PASSWORD_BCRYPT);
+        $username = $this->sanitizeInput($_POST["username"]);
+
+        if($email == "" || $password == "" || $username == ""){
+
+            echo "error";
+        }
+
+        $user = new UsersModel(username: $username,password: $password,email: $email);
+
+        $user->create();
+
     }
 }
