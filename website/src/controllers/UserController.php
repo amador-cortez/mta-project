@@ -47,9 +47,6 @@ class UserController
                 $user->create();
 
             }
-        
-
-
 
     }
 

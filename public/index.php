@@ -27,6 +27,9 @@ if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/register', [new UserController(),'create']);
     $router->addRoute('GET', '/login', [new AuthController(),'login']);
     $router->addRoute('POST', '/register', [new UserController(), 'store']);
+    #$router->addRoute('GET', '/send', [new AlertController(), 'send'])
+
+    #Route::get('/send', '\App\Http\Controllers\HomeController@send')->name('home.send');
 
 
 }

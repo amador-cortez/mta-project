@@ -45,36 +45,19 @@ class UsersModel
     }
 
     public function store(){
-        $con = $this->connection;
 
-        $sql = $con->prepare('INSERT INTO monitors (url, monitor_interval) VALUES (:url, :monitor_interval)',[
-           'url' => $this->url,
-           'monitor_interval' => $this->monitor_interval,
-
-        ]);
-
-
-        return $sql;
     }
 
     public function show($id){
-        $con = $this->connection;
 
-        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
 
     }
 
     public function update($id){
-        $con = $this->connection;
-
-        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
 
     }
 
     public function delete($id){
-        $con = $this->connection;
-
-        $sql = $con->prepare("DELETE from monitors WHERE id=:id");
 
 
     }
