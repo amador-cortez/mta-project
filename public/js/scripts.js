@@ -1,13 +1,13 @@
 const checkBoxEle=document.getElementsByName('select-service');
 const checkAllServices = document.getElementById("select-all-services");
 const checkedBoxesLabel = document.getElementById('select-all-services-label');
-
+/*
 checkAllServices.addEventListener("load", () =>{
     updateCheckedLabel();
 });
 checkAllServices.addEventListener("change", () =>{
     updateCheckedLabel();
-});
+});*/
 
 //const searchBar = document.getElementById("search-url-bar");
 const lists = document.querySelectorAll('#url-lists li');
@@ -19,6 +19,7 @@ const xIcon = document.querySelector('.fa-xmark');
 
 const search = () => {
     const searchBar = document.getElementById("search-url-bar").value.toUpperCase();
+    console.log("enteres today");
     const serviceListName = document.getElementById("service-list");
     const services = document.querySelectorAll('.card-service');
     const sname = serviceListName.getElementsByTagName("h3");
@@ -206,33 +207,56 @@ const resetServiceList = () => {
 }
 
 
-const createMonitor = (serviceData) => {
-    console.log("enterde create monitor");
+const createMonitor = (url, frequency,active) => {
+    console.log("entered create monitor");
     //const {urlName, link, date} = serviceData;
-    const {link, domainName} = serviceData;
-    //const domainName = getDomainName(link);
+    //const {link, domainName} = serviceData;
+    const domainName = getDomainName(url);
+    let activo;
+    if(active) {activo = "Activo"}else{
+        activo = "Inactivo"
+    }
 
-    const service = document.createElement("LI");
-
-    service.className = "card-service";
-    service.innerHTML = '<div class=" left"> <div class="rows"> <div class="left"> '+
-    '<input type="checkbox" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">'+
-    '<label  style="margin-right: 50px;">Activo</label> </div> ' +
-     '<div class="right">'+
-        '<h3> '+domainName+' #</h3> '+
-        '<div class = "under">'+
-            '<p id = "last-date-check">Última comprobación (fecha y hora).</p>'+
-       ' </div> </div> </div> </div> ' + 
-    '<div class="right rows">'+
-    '<p id = "check-time-frecuency" class="left">Frecuencia de las comprobaciones</p>'+
-    '<a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>'+
-    '<i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i> </div> ';
-
-    urlsContainer.append(service);
-    console.log(urlsContainer.lastChild);
+    const service  = `<li class = "card-service" >
+                        <div class=" left">
+                            <div class=" rows">
+                                <div class="left">
+                                    
+                                    <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
+                                    <label  for = "select-sevice2" style="margin-right: 50px;">${activo}</label> 
+                                
+                                </div>
+                                <div class="right">
+                                    <h3> ${domainName}</h3> 
+                                    <div class = "under">
+                                        <p>Última comprobación (fecha y hora).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right rows">
+                            <p  class="left">${frequency} min </p>
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" ></i></a>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
+                        </div>
+                    </li>`;
+    console.log(service);
+    return service;
+    
+    //urlsContainer.append(service);
+    //console.log(urlsContainer.lastChild);
   }
 
+  function getDomainName(url){
+    try {
+        const urlObject = new URL(url);
+        return urlObject.hostname;
+    } catch (error) {
+        console.error("Invalid URL:", error);
+        return null;
+    }
 
+  }
 
 //DASHBOARD
 
@@ -333,7 +357,9 @@ function addURL(){
     const frequency = document.querySelector('input[name="time"]:checked'); 
     
     if(validateURLForm(url, frequency)){
-
+        const serviceList = document.getElementById('service-list');
+        createMonitor(url, frequency,true);
+        //serviceList.innerHTML+=createMonitor(url,frecuency);
         alert("Se ha agregado exitosamente!");
     }
 
