@@ -148,12 +148,12 @@
 
         console.log("test")
         // Make the POST request
-        const response = await fetch("http://mta-project.local/register", {
+        const response = await fetch("http://localhost:8080/register", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json' // Adjust if `data` is not JSON
+                'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
             },
-            body: JSON.stringify(data) // Convert `data` to JSON
+            body:  new URLSearchParams(data) // Convert `data` to JSON
         });
 
         // Check if the response is okay

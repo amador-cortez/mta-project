@@ -15,7 +15,6 @@ $router = new Router();
 
 // Pages routes
 
-
 if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/', [new UserController(),'index']);
 }else{

@@ -1,75 +1,32 @@
 <?php
 namespace App;
 
+use PDO;
+use PDOException;
+
 class Database
 {
-    private $host;
-    private $user;
-    private $password;
-    private $database;
+    private $host = 'db';
+    private $db = 'mta_db';
+    private $user = 'root';
+    private $pass = 'rootpassword';
+    private $charset = 'utf8mb4';
+
     private $pdo;
 
     public function __construct()
     {
-        $this->host ='localhost';     ///$host;
-        $this->user = 'root';      /// $user;
-        $this->password = ''; ///$password;
-        $this->database = 'mta-project';
-
-        $this->connect();
-    }
-
-    private function connect()
-    {
-        $dsn = "mysql:host={$this->host};dbname={$this->database};charset=utf8mb4";
-
         try {
-            $this->pdo = new \PDO($dsn, $this->user, $this->password);
-            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            echo "Database connected";
-        } catch (\PDOException $e) {
-            die("Connection failed: " . $e->getMessage());
+            $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
+            $this->pdo = new PDO($dsn, $this->user, $this->pass);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
         }
     }
 
-    public function query($sql, $params = [])
+    public function getConnection()
     {
-        try {
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($params);
-
-            return $stmt;
-        } catch (\PDOException $e) {
-            die("Query failed: " . $e->getMessage());
-        }
-    }
-
-    public function fetchAll($sql, $params = [])
-    {
-        $stmt = $this->query($sql, $params);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function fetchOne($sql, $params = [])
-    {
-        $stmt = $this->query($sql, $params);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    public function execute($sql, $params = [])
-    {
-        $stmt = $this->query($sql, $params);
-        return $stmt->rowCount();
-    }
-
-    public function lastInsertId()
-    {
-        return $this->pdo->lastInsertId();
-    }
-
-    public function close()
-    {
-        $this->pdo = null;
+        return $this->pdo;
     }
 }
-

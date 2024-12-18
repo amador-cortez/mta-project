@@ -29,11 +29,14 @@ class UsersModel
 
     public  function create()
     {
-        $con = $this->connection;
+        $pdo = $this->connection->getConnection();
 
-        
-        $sql = $con->prepare('INSERT INTO users (username, password, email, created_at, updated_at) VALUES (:username, :password, :email, :created_at, :updated_at)',[
-           'username' => $this->username,
+        // Prepara la consulta SQL
+        $stmt = $pdo->prepare('INSERT INTO users (username, password, email, created_at, updated_at) 
+                           VALUES (:username, :password, :email, :created_at, :updated_at)');
+
+        $stmt->execute(
+            ['username' => $this->username,
            'password' => $this->password,
             'email' =>$this->email,
             'created_at' =>$this->created_at,
@@ -41,7 +44,8 @@ class UsersModel
         ]);
 
 
-        return $sql;
+
+        return $stmt->rowCount();
     }
 
     public function store(){
