@@ -1,6 +1,6 @@
 <?php
 namespace App;
-
+#clase de ruteo, busca haber si alguna ruta existe, y si existe te manda al metodo del controlador.
 class Router {
     private array $routes = [];
 

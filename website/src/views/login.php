@@ -1,6 +1,3 @@
-<?php
-
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -8,13 +5,147 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login Form -MTA</title>
        
-        <link rel="stylesheet" href="css/styles.css">
+        <!-- <link rel="stylesheet" href="css/styles.css">
 
-        <!-- <script type="..public/js/submitForm.js"></script>-->
+        <script type="..public/js/submitForm.js"></script>-->
 
         <script src="../../../public/js/checkForms.js"></script>
-    </head>
+        <style>
+            body{
+            font-family: Arial, 'Arial Narrow', sans-serif;
+            }
 
+
+            input[type = "text"],input[type = "password"], input[type = "email"]{
+            
+            width: 90%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: whitesmoke;
+            
+            }
+            /*LOGIN AND REGISTER*/
+
+            .btnSubmit{
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 2px solid #457b9d;
+            display: block;
+            margin: auto;
+            
+            }
+            .btnSubmit:hover{
+            background-color: #457b9d;
+            border: 2px solid #f1f1f1;
+
+            }
+            .box{
+            box-sizing:  border-box;
+            display: grid;
+            margin-top: 3%;
+            place-items: center; 
+            }
+
+            .formContainer{
+            margin: 300;
+            width: 300px;
+            padding: 40px;
+            background-color: white;
+            
+            border-radius: 15px;
+            border: 2px solid #f1f1f1;
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); 
+            }
+            .box a{
+            text-decoration: none;
+
+            }
+            .box a:hover{
+            color: #457b9d;
+            }
+
+            .middle{
+            text-align: center;
+            }
+
+            .hiddenMsg{
+            display: none;
+            }
+
+
+        </style>
+    </head>
+    <style>
+        body{
+            background-color: white;
+            font-family: Arial, 'Arial Narrow', sans-serif;
+        }
+
+        input[type = "text"],input[type = "password"], input[type = "email"]{
+
+            width: 90%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: white;
+
+
+        }
+        input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"] :focus{
+            border-color: cadetblue;
+
+
+        }
+
+        .btnSubmit{
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 2px solid cadetblue;
+
+
+        }
+        .btnSubmit:hover{
+            background-color: cadetblue;
+            border: 2px solid #f1f1f1;
+        }
+        .box{
+            box-sizing:  border-box;
+            display: grid;
+            margin-top: 150px;
+            place-items: center;
+
+
+        }
+
+        .formContainer{
+            margin: 300;
+            width: 300px;
+            padding: 40px;
+            background-color: whitesmoke;
+
+
+            border-radius: 15px;
+            border: 2px solid #f1f1f1;
+
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+
+
+        }
+
+
+        .middle{
+            text-align: center;
+        }
+
+        .hiddenMsg{
+            display: none;
+        }
+
+
+    </style>
     <body>
     
         <div class = "box">
@@ -33,7 +164,7 @@
                 <button id = "btnSubmitLogin" type = "button" onclick = "checkFormLogin()" class = "btnSubmit">Sign In</button>
 
                 <br><p class = "middle">¿Perdiste tu contraseña? <a href = "#" class = "middle">Recupera la contrasena</a></p>
-                <br><p class = "middle"> ¿No tienes Cuenta?<a href = "register.php"> Resgistrate</a></p>
+                <p class = "middle"> ¿No tienes Cuenta?<a href = "index.html"> Resgistrate</a></p>
                 
                 </form>
         </div>

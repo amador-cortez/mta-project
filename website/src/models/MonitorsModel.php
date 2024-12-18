@@ -3,33 +3,69 @@ namespace App\Models;
 
 use App\Database;
 
-use App\Controller\MonitorsController
-use App\Notification\AlertsController
-
 class MonitorsModel{
 
-    protected $monitor_controller;
+    public string $url;
+    public string $state;
+    public string $timedown;
+    public string $timeup;
+    public string $monitor_interval;
+    public string $created_at;
+    public string $update_at;
 
-    public public function __construct($monitor_controller) {
-        $this->monitor_controller = $monitor_controller;
-    }
+    private $connection;
 
-    public function monitor($url)
+    public function __construct($url, $state, $monitor_interval)
     {
-        if ($url==NULL) return "No url register";
+        $this->url = $url;
+        $this->state = $state;
+        $this->timedown = date('Y-m-d H:i:s');
+        $this->timeup = date ('Y-m-d H:i:s');
+        $this->monitor_interval= $monitor_interva;
+        $this->created_at = date("Y-m-d H:i:s");
+        $this->update_at = date("Y-m-d H:i:s");
+
+        $this->connection = new Database();
     }
 
-    foreach ($url as $inspect){
-        $x = $inspect['url'];
-        $interval = $inspect['monitor_interval'];
+    public function create(){
 
-        $result = $this->MonitorController->monitor($x, $interval);
+    }
 
-        if ($result == True){
-            continue;
-        }else{
-            $alert = new AlertsController();
-            $alert->send($url);
-        }
+    public function store(){
+        $con = $this->connection;
+
+        $sql = $con->prepare('INSERT INTO monitors (url, monitor_interval) VALUES (:url, :monitor_interval)',[
+           'url' => $this->url,
+           'monitor_interval' => $this->monitor_interval,
+
+        ]);
+
+
+        return $sql;
+    }
+
+    public function show($id){
+        $con = $this->connection;
+
+        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
+
+    }
+
+    public function update($id){
+        $con = $this->connection;
+
+        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
+
+    }
+
+    public function delete($id){
+        $con = $this->connection;
+
+        $sql = $con->prepare("DELETE from monitors WHERE id=:id");
+
+
     }
 }
+
+?>
