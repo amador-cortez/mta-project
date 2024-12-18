@@ -150,40 +150,8 @@
 
         /*Search*/
 
-        /*.wrapper{
-            height: 450px;
-            width: 350px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            border-radius: 15px;
-        }
         
-        .wrapper ul{
-            width: 100%;
-        }
-
-        .wrapper ul li{
-            list-style: none;
-            padding: 5px 0;
-            border-radius: 8px;
-            background-color: whitesmoke;
-            color: #222;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: .3s;
-        }
-
-        .wrapper ul li:hover{
-            background-color: white;
-
-        }
-
-        .wrapper ul lit:last-child{
-            margin: 10px 0 0 0;
-        }
-*/
+       
 
         .search{
            /* position:relative;*/
@@ -205,13 +173,16 @@
             top: 50%;
             right: 10%;
             color: #222;
-            transform: translateY(-50%);
+            transform: translateY(-100%);
             
         }
         
         .search .fa-x{
             font-size: 18px;
             cursor: pointer;
+        }
+        .search-display {
+            text-align: center;
         }
 
         /*Select box*/
@@ -239,12 +210,108 @@
         .select-checkBox{
             padding: 10px;
         }
-
-        .filter{
-            padding: 16px;
-            font-size: 16px;
+        /*Filter*/
+        .container{
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+            margin: 0 auto 30px;
 
         }
+        .select-btn{
+            display: flex;
+            
+            align-items: center;
+            height: 50px;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: white;
+            box-shadow: 0 5px 10 px rgba(0, 0, 0, 0.1);
+
+        }
+        .select-btn .btn-text{
+            font-size: 16px ;
+            font-weight: 400;
+            color: #333;
+        }
+        .select-btn .arrow-dwn{
+            display: flex;
+            height: 21px;
+            width: 21px;
+            color:white;
+            font-size: 13px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            transition: 3s;
+        }
+        .select-btn.open .arrow-dwn{
+            transform: rotate(-180deg);
+        }
+        .select-btn.select-btn.open ~ .list-items{
+            opacity:0 ;
+        }
+        .list-items{
+            position: absolute;
+            max-width: 320px;
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 15px;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: white;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-items .item{
+            display: flex;
+            align-items: center;
+            list-style: none;
+            height: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            padding: 0 15px;
+            border-radius: 8px;
+        }
+
+        .list-items .item:hover{
+            background-color: whitesmoke;
+        }
+        .item .item-text{
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+        }
+
+        .item .checkbox{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 16px;
+            width: 16px;
+            border-radius: 4px;
+            margin-right: 12px;
+            border: 1.5px solid #c0c0c0;
+            transition: all 0.3s ease-in-out;
+        }
+        .item.checked .checkbox{
+            background-color: var(--blue-color);
+            border-color: #4070f4;
+        }
+        .item.checked .check-icon{
+            transform: scale(1);
+        }
+        .checkbox .check-icon{
+            color: white;
+            font-size: 11px;
+            transform: scale(0);
+            transition: all 0.2s ease-in-out;
+        }
+
+        /*Reference https://www.youtube.com/watch?v=Jekshc4_bnI*/
+
 
          /*SERVICES*/
          .card-service i:hover{
@@ -252,7 +319,6 @@
          }
          .service-list-css{
             margin: 30px 30px 0 0;
-            
             width: 100%;
             padding: 20px;
             overflow-y: scroll;
@@ -277,7 +343,7 @@
             <a href = "index.html">Cerrar Sesion</a>
         </div>
 
-        <div class="distribution">
+        <main class="distribution">
             <div class = "main-content left">
 
                 <div class = "split-two">
@@ -287,30 +353,59 @@
 
                 <!--ACTION BAR-->
                 <div class = "split-two">
-                    <div class ="left">
-                        <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services">0 / 2</label>
+                    <div class ="left" onload="updateCheckedLabel()">
+                        <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services">0 / 3</label>
 
                     </div>
                     
                     <div class ="right rows">
 
-                        <div class = "search">
-                            <input type="search" id = "search-url-bar" placeholder = "Buscar por nombre or url" ><i class="fa-solid fa-magnifying-glass"></i></input>
+                        <form class = "search">
+                            <input type="text" id = "search-url-bar" placeholder = "Buscar por nombre or url"  onkeyup="search()"/>
+                            <!--<i class="fa-solid fa-magnifying-glass"></i></input>-->
                             
                             <i class="fa-solid fa-x" onclick="resetSearch()"></i>
-                        </div>
+                        </form>
                        
                         <div>
-                            <select id = "order-by" name = "order-by" class="selector">
+                            <select id = "order-by" name = "order-by" class="selector" onchange="orderBy()">
+                                <option value="active-first" selected>Activos primero</option>  
+                                <option value="inactive-first" >Inactivos primero</option>
+                                <option value="a-z">A - Z</option>   
+                                <option value="z-a">Z - A</option>  
+
+                                <!--
                                 <option value="down-first" selected>Caidas primero</option>  
                                 <option value="up-first" >Funcionando primero</option> 
                                 <option value="paused-first">Pausadas primero</option>      
-                                <option value="a-z">A - Z</option>   
+                                <option value="a-z">A-Z</option>   
                                 <option value="newest first">Mas reciente primero</option>   
+                                -->
                             </select>
                         </div>
-                        <div class="filter">
-                            <button type="button" id ="filter-services" onclick="showFilters()"><i class="fa-solid fa-filter"></i>Filtrar</button>
+                        <div class="container">
+                            <div class="select-btn open" onclick="openFilters()">
+                                <span class = "btn-text">Seleccionar Filtro</span>
+                                <span class = "arrow-dwn">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>                            
+                            </div>
+                            
+                            <ul class="list-items">
+                                <li class = "item">
+                                    <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
+                                    <span class="item-text">Activos</span>
+                                </li>
+                                <li class = "item">
+                                    <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
+                                    <span class="item-text">Inactivos</span>
+                                </li>
+                                <li class = "item">
+                                    <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
+                                    <span class="item-text">Seleccionar Todo</span>
+                                </li>
+                                
+                            </ul>
                         </div>
                         
                         <!--
@@ -321,32 +416,35 @@
                         -->
                     </div>
                 </div>
-
+                <div class = "search-display">
+                </div>
+                
                 <!--MONITORING URLS-->
                 <ul id="service-list" class = "service-list-css">
 
                     <!--SERVICE 1-->
                     
-                    <li class = "card-service" id = "service1">
+                    <li class = "card-service" >
                         <div class=" left">
-                            <div class="rows">
+                            <div class=" rows">
                                 <div class="left">
                                     
-                                    <input type="checkbox" id = "select-sevice1" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()"><label id = "status-sevice1" for = "select-sevice1" style="margin-right: 50px;">Activo</label> 
+                                    <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
+                                    <label  for = "select-sevice2" style="margin-right: 50px;">Activo</label> 
                                 
                                 </div>
                                 <div class="right">
-                                    <h3 id = "select-sevice1"> Nombre servicio 1</h3> 
+                                    <!--<input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> -->
+                                    <h3> Nombre servicio 1</h3> 
                                     <div class = "under">
-                                        <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
+                                        <p>Última comprobación (fecha y hora).</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="right rows">
-                            <p id = "check-time-frecuency1" class="left">Frecuencia de las comprobaciones</p>
-                            
-                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>
+                            <p  class="left">Frecuencia de las comprobaciones</p>
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" ></i></a>
                             <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
                         </div>
                     </li>
@@ -365,7 +463,7 @@
                                     <!--<input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> -->
                                     <h3 id = "select-sevice2"> Nombre servicio 2</h3> 
                                     <div class = "under">
-                                        <p id ="domain-type1" >Dominio</p><p id = "last-date-check1">Última comprobación (fecha y hora).</p>
+                                        <p id = "last-date-check1">Última comprobación (fecha y hora).</p>
                                     </div>
                                 </div>
                             </div>
@@ -377,7 +475,35 @@
                         </div>
                     </li>
 
+                    <!--SERVICE 3-->
+                    <li class = "card-service" >
+                        <div class=" left">
+                            <div class=" rows">
+                                <div class="left">
+                                    
+                                    <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
+                                    <label  for = "select-sevice2" style="margin-right: 50px;">Inactivo</label> 
+                                
+                                </div>
+                                <div class="right">
+                                    <!--<input type="checkbox" id = "select-sevice1" class="hiddenMsg"> Nombre servicio</input> -->
+                                    <h3> Nombre servicio 3</h3> 
+                                    <div class = "under">
+                                        <p>Última comprobación (fecha y hora).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right rows">
+                            <p  class="left">Frecuencia de las comprobaciones</p>
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" ></i></a>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
+                        </div>
+                    </li>
+
                 </ul>
+
+                
                 
             </div>
 
@@ -416,7 +542,7 @@
         
             </div>
 
-        </div>
+        </main>
     
         
     </body>
