@@ -1,11 +1,11 @@
 {
-    "name": "pluralis/website",
+    "name": "f11/mta",
     "description": "Standar php website",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Pluralis\\Website\\": "src/",
-            "Pluralis\\Website\\Config\\": "config/"
+            "App\\": "website/",
+            "App\\Config\\": "website/config/"
         }
     },
     "minimum-stability": "dev",

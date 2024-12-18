@@ -1,7 +1,3 @@
-<?php
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,80 +5,81 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register Form -MTA</title>
        
-        <!--<link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/styles.css">
 
-        <script type="../../../public/js/submitForm.js"></script>-->
+        <!-- <script type="..public/js/submitForm.js"></script>-->
 
         <script src="../../../public/js/checkForms.js"></script>
 
-        <style>
-            body{
+    </head>
+    <style>
+        body{
+            background-color: white;
             font-family: Arial, 'Arial Narrow', sans-serif;
-            }
+        }
 
+        input[type = "text"],input[type = "password"], input[type = "email"]{
 
-            input[type = "text"],input[type = "password"], input[type = "email"]{
-            
             width: 90%;
             padding: 15px;
             margin: 5px 0 22px 0;
             display: inline-block;
             border: none;
-            background: whitesmoke;
-            
-            }
-            /*LOGIN AND REGISTER*/
+            background: white;
 
-            .btnSubmit{
+
+        }
+        input[type = "text"]:focus,input[type = "password"]:focus, input[type = "email"] :focus{
+            border-color: cadetblue;
+
+
+        }
+
+        .btnSubmit{
             padding: 15px 30px;
             border-radius: 15px;
-            border: 2px solid #457b9d;
-            display: block;
-            margin: auto;
-            
-            }
-            .btnSubmit:hover{
-            background-color: #457b9d;
-            border: 2px solid #f1f1f1;
+            border: 2px solid cadetblue;
 
-            }
-            .box{
+
+        }
+        .btnSubmit:hover{
+            background-color: cadetblue;
+            border: 2px solid #f1f1f1;
+        }
+        .box{
             box-sizing:  border-box;
             display: grid;
-            margin-top: 3%;
-            place-items: center; 
-            }
+            margin-top: 150px;
+            place-items: center;
 
-            .formContainer{
+
+        }
+
+        .formContainer{
             margin: 300;
             width: 300px;
             padding: 40px;
-            background-color: white;
-            
+            background-color: whitesmoke;
+
+
             border-radius: 15px;
             border: 2px solid #f1f1f1;
-            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2); 
-            }
-            .box a{
-            text-decoration: none;
 
-            }
-            .box a:hover{
-            color: #457b9d;
-            }
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
 
-            .middle{
+
+        }
+
+
+        .middle{
             text-align: center;
-            }
+        }
 
-            .hiddenMsg{
+        .hiddenMsg{
             display: none;
-            }
+        }
 
-
-        </style>
-    </head>
-
+    </style>
     <body>
     
         <div class = "box">
@@ -106,12 +103,146 @@
                 <input id = "confPassword" type = "password" placeholder = "Confirmacion de contraseña" required></input>
                 <p id = "mensajePswd" > </p>
 
-                <button id = "registerButton" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
+                <button id = "thank-you-modal-button" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
                 
                 
-                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.html" > Log In</a></p>
+                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
                 </form>
         </div>
    
     </body>
+<script>
+    function checkFormRegister(){
+        let ogPassword = document.getElementById("ogPassword");
+        let confPassword = document.getElementById("confPassword");
+        let uname= document.getElementById("uname");
+        let email = document.getElementById("email");
+
+        let mensajeIdUser = document.getElementById("mensajeUser");
+        let mensajeIdEmail = document.getElementById("mensajeEmail");
+        let mensajeIdPswd = document.getElementById("mensajePswd");
+
+        const myFormElements = [ogPassword , confPassword , uname, email, mensajeIdUser,mensajeIdEmail, mensajeIdPswd];
+
+        correctUser = checkUser(uname, mensajeIdUser);
+        correctEmail = checkEmail(email, mensajeIdEmail);
+        correctPswd = checkSamePassword(ogPassword, confPassword, mensajeIdPswd);
+
+        if(correctEmail && correctUser && correctPswd){
+            resetForm(myFormElements);
+        }
+
+    }
+
+    function checkFormLogin(){
+        let ogPassword = document.getElementById("ogPassword");
+        let email = document.getElementById("email");
+
+        let mensajeIdEmail = document.getElementById("mensajeEmail");
+        let mensajeIdPswd = document.getElementById("mensajePswd");
+
+        const myFormElements = [ogPassword, email, mensajeIdEmail, mensajeIdPswd];
+
+        correctEmail = checkEmail(email, mensajeIdEmail);
+        correctPswd = checkPassword(ogPassword, mensajeIdPswd);
+
+        if(correctEmail && correctPswd){
+            resetForm(myFormElements);
+        }
+
+    }
+
+    function checkUser(uname, mensajeId){
+        if(uname.value == "" || uname.value == null)
+        {
+            mostrarMensaje(mensajeId, "Favor de Ingresar un nombre de usuario");
+            return false;
+        }else if(uname.length>255){
+            mostrarMensaje(mensajeId, "Nombre de usuario excede la longitud permitida");
+            return false;
+        }
+        else{
+            mensajeId.innerHTML = "";
+            return true;
+        }
+
+    }
+
+    function checkEmail(email, mensajeId){
+        let validEmail =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(email.value == "" || email.value == null)
+        {
+            mostrarMensaje(mensajeId, "Favor de Ingresar Email");
+            return false;
+        }
+        else if(!validEmail.test(email.value) ){
+            mostrarMensaje(mensajeId, "Email invalido. Favor de ingresar Email de nuevo");
+            return false;
+        }else {
+            mensajeId.innerHTML  = "";
+            return true;}
+
+    }
+
+    function checkPassword(ogPassword, mensajeId){
+        const levels = {
+            1: "Very Weak",
+            2: "Weak",
+            3: "Medium",
+            4: "Strong",
+        };
+        const check = [/[a-z]/,/[A-Z]/,/\d/,/[@.#$!%^&*.?]/]
+        if (ogPassword.value == "" || ogPassword.value == null){
+            mostrarMensaje(mensajeId, "Favor de ingresar contrasena");
+            return false;
+        }
+        /*
+        else if(ogPassword.length <8){
+            mostrarMensaje(mensajeId, "Favor de ingresar 8 caracteres minimo");
+            return false;
+        }else if(!check.test(ogPassword)){
+            let score = check.reduce((i, exp) => acc + exp.test(ogPassword),0);
+            mostrarMensaje(mensajeId, "Favor de ingresar 8 caracteres minimo");
+            return false;
+        }*/
+
+
+        else {
+            mensajeId.innerHTML = "";
+            return true;
+        }
+    }
+
+    function checkSamePassword(ogPassword, confPassword, mensajeId){
+        //e.preventDefault();
+        if (ogPassword.value == "" || ogPassword.value == null || confPassword.value == "" || confPassword.value == null){
+            mostrarMensaje(mensajeId, "Favor de ingresar y confirmar contrasena");
+            return false;
+        }
+        else if(ogPassword.value != confPassword.value){
+            mostrarMensaje(mensajeId, "Contrasenas no coinciden");
+            return false;
+        }else{
+            console.log("passwords match");
+            mensajeId.innerHTML  = "";
+            return true;
+        }
+
+    }
+
+    function mostrarMensaje(mensajeId, mensaje){
+        mensajeId.style.color = "red";
+        mensajeId.innerHTML = mensaje;
+        mensajeId.classList.add("middle");
+
+    }
+    function resetForm(myForm){
+        console.log(myForm)
+        for(let x = 0; x<myForm.length;x++){
+            myForm[x].value = "";
+        }
+    }
+
+</script>
 </html>
+
