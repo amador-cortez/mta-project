@@ -14,9 +14,23 @@ use App\Router;
 $router = new Router();
 
 // Pages routes
-$router->addRoute('GET', '/', [new UserController(),'index']);
-$router->addRoute('GET', '/register', [new UserController(),'create']);
-$router->addRoute('GET', '/login', [new AuthController(),'login']);
+
+
+if(isset($_SESSION['user_id'])) {
+    $router->addRoute('GET', '/', [new UserController(),'index']);
+}else{
+
+    $router->addRoute('GET', '/register', [new UserController(),'create']);
+    $router->addRoute('POST', '/register', [new UserController(),'store']);
+    $router->addRoute('GET', '/login', [new AuthController(),'login']);
+    #$router->addRoute('GET', '/send', [new AlertController(), 'send'])
+
+    #Route::get('/send', '\App\Http\Controllers\HomeController@send')->name('home.send');
+
+
+}
+
+
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 

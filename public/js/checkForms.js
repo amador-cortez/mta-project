@@ -1,3 +1,5 @@
+const dashboard = "dashboard.html";
+
 function checkFormRegister(){
     let ogPassword = document.getElementById("ogPassword");
     let confPassword = document.getElementById("confPassword");
@@ -16,7 +18,9 @@ function checkFormRegister(){
 
     if(correctEmail && correctUser && correctPswd){
         resetForm(myFormElements);
+        location.href = dashboard;
     }
+    
 
 }
 
@@ -34,6 +38,7 @@ function checkFormLogin(){
 
     if(correctEmail && correctPswd){
         resetForm(myFormElements);
+        location.href = dashboard;
     }
 
 }
@@ -71,7 +76,7 @@ function checkEmail(email, mensajeId){
 }
 
 function checkPassword(ogPassword, mensajeId){
-    const levels = {
+    let levels = {
         1: "Very Weak",
         2: "Weak",
         3: "Medium",
