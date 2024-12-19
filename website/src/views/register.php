@@ -148,7 +148,7 @@
 
         console.log("test")
         // Make the POST request
-        const response = await fetch("http://localhost:8080/register", {
+        const response = await fetch("http://mta-project.local/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
@@ -165,20 +165,21 @@
         const responseText = await response.text();
         let responseData;
         try {
-            responseData = JSON.parse(responseText);
+            responseData = responseText;
+            console.log(JSON.parse(responseData));
         } catch (error) {
             throw new Error(`Failed to parse JSON. Response: ${responseText}`);
         }
 
         // Check for a successful response
-        if (responseData.success === true) {
+        if (responseData.status === "success") {
             if (typeof sendToCRM === "function") {
-                sendToCRM(data); // Assuming `data` is needed for CRM
+                
             } else {
-                console.warn("sendToCRM function is not defined");
+               
             }
         } else {
-            console.warn("Operation was not successful:", responseData);
+            
         }
     } catch (error) {
         console.error('An error occurred:', error.message);
@@ -186,6 +187,7 @@
 }
 
 
+//ruta para crear url controlador de site y metodo donde se guarda 
 
 
     function checkFormLogin(){

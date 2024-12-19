@@ -6,12 +6,13 @@ use PDOException;
 
 class Database
 {
-    private $host = 'db';
-    private $db = 'mta_db';
+    private $host = 'localhost';
+    private $db = 'mta-project';
     private $user = 'root';
-    private $pass = 'rootpassword';
+    private $pass = '';
     private $charset = 'utf8mb4';
 
+    
     private $pdo;
 
     public function __construct()

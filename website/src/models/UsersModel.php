@@ -31,7 +31,6 @@ class UsersModel
     {
         $pdo = $this->connection->getConnection();
 
-        // Prepara la consulta SQL
         $stmt = $pdo->prepare('INSERT INTO users (username, password, email, created_at, updated_at) 
                            VALUES (:username, :password, :email, :created_at, :updated_at)');
 
@@ -47,6 +46,7 @@ class UsersModel
 
         return $stmt->rowCount();
     }
+
 
     public function store(){
 
