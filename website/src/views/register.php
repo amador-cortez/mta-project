@@ -78,6 +78,24 @@
         .hiddenMsg{
             display: none;
         }
+        .container{
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+            margin: 0 auto 30px;
+
+        }
+        .list-items{
+            position: absolute;
+            max-width: 320px;
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 15px;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: white;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
 
     </style>
     <body>
@@ -108,6 +126,7 @@
                 
                 <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
                 </form>
+                
         </div>
    
     </body>

@@ -19,6 +19,7 @@ function checkFormRegister(){
     if(correctEmail && correctUser && correctPswd){
         resetForm(myFormElements);
         location.href = dashboard;
+        alert("Registro exitoso!");
     }
     
 

@@ -173,60 +173,6 @@
 
 <script>
 
- /*   
- Email Required
-    async function save(data) {
-    try {
-        console.log("Enviando datos:", data);  // Asegúrate de ver los datos que se están enviando
-
-        // Hacer la solicitud POST
-        const response = await fetch("http://mta-project.local/login", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'  // Especificamos que estamos enviando JSON
-            },
-            body: JSON.stringify(data)  // Convertimos los datos a JSON
-        });
-
-        // Verificamos si la respuesta es correcta
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
-        }
-
-        // Parseamos la respuesta como JSON
-        const responseData = await response.json();
-        console.log("estoy aqui");
-
-        // Verificamos si la respuesta tiene éxito
-        if (responseData.success === true) {
-            console.log("Autenticación exitosa");
-            // Aquí puedes llamar a sendToCRM o hacer cualquier otra cosa
-        } else {
-            console.log("siempre llego aqui");
-            console.warn("Error de autenticación:", responseData.message);
-        }
-    } catch (error) {
-        console.error('Ocurrió un error:', error.message);
-    }
-}
-
-function checkFormLogin() {
-    let email = document.getElementById("email").value;
-    let ogPassword = document.getElementById("ogPassword").value;
-
-    // Verificar si los campos están vacíos antes de enviar la solicitud
-    if (email === "" || ogPassword === "") {
-        alert("Por favor, ingrese su email y contraseña.");
-        return;  // Detener la ejecución si faltan datos
-    }
-
-    // Enviar los datos a la función save para ser procesados
-    save({
-        email: email,
-        password: ogPassword
-    });
-}
-*/
 
 /*OG*/
     
@@ -274,6 +220,7 @@ function checkFormLogin() {
 
             // Check for a successful response
             if (responseData.status === "success") {
+            
                 console.log("lo que quieras");
             } else {
                 console.log("pon otra cosa");

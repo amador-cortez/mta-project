@@ -14,6 +14,16 @@ const lists = document.querySelectorAll('#url-lists li');
 const searchIcon = document.querySelector('.fa-magnifying-glass');
 const xIcon = document.querySelector('.fa-xmark');
 
+window.addEventListener("load",function(event){
+    console.log("I have loaded");
+    
+    const serviceList = document.getElementById("service-list");
+    serviceList.innerHTML +=createMonitor("https://app.slack.com/client/T0850L44FPS/D08491Z34CV",15,false);
+    serviceList.innerHTML +=createMonitor("https://w3collective.com/get-domain-name-url-javascript/",5,true);
+    serviceList.innerHTML +=createMonitor("https://app.slack.com/client/T0850L44FPS/D08491Z34CV",10,false);
+    
+    console.log(serviceList)
+})
 
 //Search
 
@@ -145,17 +155,30 @@ function openFilters(){
     items = document.querySelectorAll(".item");
     items.forEach(item => {
         item.addEventListener("click", () =>{
-            item.classList.toggle("checked");
+            let a = item.classList.toggle("checked");
     
             let checked = document.querySelectorAll(".checked"),
             btnText = document.querySelector(".btn-text"),
             itemText = item.querySelector(".item-text");
-            if(checked && checked.length >0){
-                btnText.innerText = `${itemText.innerHTML}`;
-                FilterBy(itemText.innerHTML);
+            if(checked ){
+                if(checked.length >= (items.length-1))
+                {
+                    resetServiceList();
+                    
+                }else{
+                    if(a)
+                    {//autorefresh
+                        
+                        btnText.innerText = `${itemText.innerHTML}`;
+                        FilterBy(itemText.innerHTML);
+                    }
+                }
+                
             }
         })
     });
+    
+
     
 }
 
@@ -240,7 +263,6 @@ const createMonitor = (url, frequency,active) => {
                             <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
                         </div>
                     </li>`;
-    console.log(service);
     return service;
     
     //urlsContainer.append(service);
@@ -249,7 +271,7 @@ const createMonitor = (url, frequency,active) => {
 
   function getDomainName(url){
     try {
-        const urlObject = new URL(url);
+        let urlObject =(new URL(url)) ;
         return urlObject.hostname;
     } catch (error) {
         console.error("Invalid URL:", error);
@@ -334,19 +356,16 @@ function deleteSelectedService(){
             console.log("INDEX = " + index);
             var confirmDelete = confirm("Seguro que quiere eleiminar este servicio de monitoreo?");
             if(confirmDelete){
-                
                 this.classList.remove("card-service");
                 this.innerHTML = " ";
                 this.parentNode.removeChild(this);
-                console.log(services);
-                
+                console.log(services);  
             }
             
         };
     }
     
  }
-
 
 
 
@@ -357,9 +376,10 @@ function addURL(){
     const frequency = document.querySelector('input[name="time"]:checked'); 
     
     if(validateURLForm(url, frequency)){
+        console.log(frequency.value);
         const serviceList = document.getElementById('service-list');
-        createMonitor(url, frequency,true);
-        //serviceList.innerHTML+=createMonitor(url,frecuency);
+        //createMonitor(url, frequency,true);
+        //serviceList.innerHTML+=createMonitor(url,frecuency, status);
         alert("Se ha agregado exitosamente!");
     }
 
@@ -398,6 +418,7 @@ function updateURL(){
         fillForm();
     }
 }
+//AGREGAR URL
 
 function validateURLForm(url, frequency){
     const validMessage = document.getElementById('valid-url');
@@ -436,7 +457,7 @@ function checkURL(url , validMessage){
         '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
         '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
 
-    if(urlPattern.test(url) || url == "" || url == null){
+    if(urlPattern.test(url)){
         
         validMessage.innerHTML = "URL Valido."
         validMessage.style.color = "green";
@@ -450,4 +471,19 @@ function checkURL(url , validMessage){
 
         return false;
     } 
+}
+
+async function urlExists(url){
+    try{
+        const response = await fetch(url);
+        if(!response.ok){
+            console.log("URL Does not exist");
+            return false;
+        }
+        return true;
+    }catch(error){
+        console.log("Error checkign URL");
+        return false;
+    }
+
 }
