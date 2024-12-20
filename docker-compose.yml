@@ -1,0 +1,41 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./apache-config.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=mtauser
+      - DB_PASSWORD=mtapassword
+      - DB_NAME=mta_db
+    networks:
+      - mta-network
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=mta_db
+      - MYSQL_USER=mtauser
+      - MYSQL_PASSWORD=mtapassword
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d/database_schema.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - mta-network
+
+volumes:
+  dbdata:
+
+networks:
+  mta-network:
+    driver: bridge
