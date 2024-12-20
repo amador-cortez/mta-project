@@ -274,7 +274,8 @@ function checkFormLogin() {
 
             // Check for a successful response
             if (responseData.status === "success") {
-                console.log("lo que quieras");
+                window.location.href = "http://mta-project.local/login";
+
             } else {
                 console.log("pon otra cosa");
 

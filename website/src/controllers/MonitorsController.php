@@ -2,12 +2,18 @@
 
 namespace App\Controllers;
 use App\Models\MonitorsModel;
+use function App\Controllers\Auth\sanitizeInput;
 
 class MonitorsController
 {
     public function index()
     {
-        echo "Inicio";
+        include __DIR__ . '/../views/dashboard.php';
+    }
+
+    public function addMonitor()
+    {
+        include __DIR__ . '/../views/addMonitor.php';
     }
 
     public function create()
@@ -24,43 +30,44 @@ class MonitorsController
               $resutl = $user->create($url, $monitor_interval);
 
               echo("$url , is valid");
-
-          }else{
-            $urlError="URL is nor a valid URL. Try again";
           }
+
+
         }
     }
 
 
-    public function store($url)
-    {
-        if (!empty($_POST)){          
-            $url = $_POST['url'];
-            $url = filter_var($url, FILTER_SANITIZE_URL);
-            $monitor_interval= intval($monitor_interval, FILTER_SANITIZE_URL);
+    public function addURL()
+    {  
+       // echo('kskskks');
+        //echo(implode("\n",$_POST));
+        if (!empty($_POST['url']) && !empty($_POST['monitor_interval'])) {
+           // var_dump($_POST);
+        
+          
+            
+            $url = $_POST['url']; // Asegúrate de que sea una cadena
+            $monitor_interval = $_POST['monitor_interval'];
+            $state = 1;
+            $user_id = 1;
     
-    
-            if (filter_var($url, FILTER_VALIDATE_URL)){
-                $user = new UsersModel();
-                $resutl = $user->store($url, $monitor_interval);
-    
-                
-                if($result){
-                    echo("$url , is valid");
-                }
-                else{
-                    $urlError="URL is nor a valid URL. Try again";
-                }
-    
-            }else{
-                $urlError="URL is nor a valid URL. Try again";
+            // Verifica si la URL es válida antes de almacenarla
+            if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                echo json_encode(["status" => "error", "message" => "Invalid URL"]);
+                return;
             }
-        }else{
-            echo "No se recibieron datos";
+    
+            // Almacenar la URL
+            $monitorModel = new MonitorsModel($url, $state, $monitor_interval, $user_id);
+            $monitorModel->store();
+            echo json_encode(["status" => "success"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Missing data"]);
         }
     }
+    
 
-    public function show($id)
+    public function show()
     {
         $user = new UsersModel();
         $result = $user->show($id);
@@ -74,12 +81,12 @@ class MonitorsController
 
     }
 
-    public function edit($id)
+    public function edit()
     {
         $user = new UsersModel();
         $result = $user->edit($id);
     }
-    public function update($id)
+    public function update()
     {
         if (!empty($_POST)){          
             $url = $_POST['url'];
@@ -104,9 +111,10 @@ class MonitorsController
             }
         }else{
             echo "No se recibieron datos";
-        }    }
+        }    
+    }
 
-    public function delete($id)
+    public function delete()
     {
         $user = new UsersModel();
         $result = $user->delete($id);
@@ -117,4 +125,12 @@ class MonitorsController
             echo "No se encontro la URL";
         }
     }
+
+    public function sanitizeInput($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
 }

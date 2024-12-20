@@ -2,12 +2,6 @@ const checkBoxEle=document.getElementsByName('select-service');
 const checkAllServices = document.getElementById("select-all-services");
 const checkedBoxesLabel = document.getElementById('select-all-services-label');
 
-checkAllServices.addEventListener("load", () =>{
-    updateCheckedLabel();
-});
-checkAllServices.addEventListener("change", () =>{
-    updateCheckedLabel();
-});
 
 //const searchBar = document.getElementById("search-url-bar");
 const lists = document.querySelectorAll('#url-lists li');

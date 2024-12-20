@@ -1,49 +1,71 @@
-<?php 
+<?php  
 namespace App\Models;
 
 use App\Database;
 
-class MonitorsModel{
+class MonitorsModel {
 
     public string $url;
     public string $state;
+    public string $user_id;
     public string $timedown;
     public string $timeup;
     public string $monitor_interval;
     public string $created_at;
-    public string $update_at;
+    public string $updated_at;
 
     private $connection;
 
-    public function __construct($url, $state, $monitor_interval)
-    {
+    public function __construct($url, $state, $monitor_interval, $user_id) {
         $this->url = $url;
         $this->state = $state;
-        $this->timedown = date('Y-m-d H:i:s');
-        $this->timeup = date ('Y-m-d H:i:s');
-        $this->monitor_interval= $monitor_interva;
-        $this->created_at = date("Y-m-d H:i:s");
-        $this->update_at = date("Y-m-d H:i:s");
+        $this->timedown = date('Y-m-d H:i:s'); // Fecha y hora actual (cuando se cae la página)
+        $this->timeup = date('Y-m-d H:i:s');   // Fecha y hora actual (última comprobación)
+        $this->monitor_interval = $monitor_interval;
+        $this->created_at = date('Y-m-d H:i:s'); // Fecha de creación
+        $this->updated_at = date('Y-m-d H:i:s'); // Fecha de actualización
+        $this->user_id = $user_id;
 
+        // Inicializa la conexión a la base de datos
         $this->connection = new Database();
     }
 
-    public function create(){
-
+    public function create() {
+        // Método vacío por ahora (implementa si es necesario)
     }
 
-    public function store(){
-        $con = $this->connection;
+    public function store() {
+        try {
+            $pdo = $this->connection->getConnection();
 
-        $sql = $con->prepare('INSERT INTO monitors (url, monitor_interval) VALUES (:url, :monitor_interval)',[
-           'url' => $this->url,
-           'monitor_interval' => $this->monitor_interval,
+            // Consulta SQL corregida
+            $stmt = $pdo->prepare(
+                'INSERT INTO monitors (url, state, user_id, timedown, timeup, monitor_interval, created_at, updated_at) 
+                VALUES (:url, :state, :user_id, :timedown, :timeup, :monitor_interval, :created_at, :updated_at)'
+            );
 
-        ]);
+            // Ejecutar la consulta con los datos
+            $stmt->execute([
+                'url' => $this->url,
+                'state' => $this->state,
+                'user_id' => $this->user_id,
+                'timedown' => $this->timedown,
+                'timeup' => $this->timeup,
+                'monitor_interval' => $this->monitor_interval,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at
+            ]);
 
+            // Devuelve la cantidad de filas afectadas
+            return $stmt->rowCount();
 
-        return $sql;
+        } catch (\PDOException $e) {
+            // Manejo de errores
+            echo "Error al insertar en la base de datos: " . $e->getMessage();
+            return false;
+        }
     }
+
 
     public function show($id){
         $con = $this->connection;
@@ -67,5 +89,6 @@ class MonitorsModel{
 
     }
 }
+
 
 ?>
