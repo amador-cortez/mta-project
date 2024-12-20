@@ -78,6 +78,24 @@
         .hiddenMsg{
             display: none;
         }
+        .container{
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+            margin: 0 auto 30px;
+
+        }
+        .list-items{
+            position: absolute;
+            max-width: 320px;
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 15px;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: white;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
 
     </style>
     <body>
@@ -87,7 +105,7 @@
 
                 <h1 class = "middle">Sign Up</h1>
                 
-                <label>Nombre de Usuario </label>
+                <label>Nombre de Usuhhhhhhhhario </label>
                 <input id = "uname" type = "text" placeholder = "Nombre de usuario" required></input>
                 <p id = "mensajeUser" > </p>
 
@@ -108,6 +126,7 @@
                 
                 <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
                 </form>
+                
         </div>
    
     </body>
@@ -129,10 +148,66 @@
         correctPswd = checkSamePassword(ogPassword, confPassword, mensajeIdPswd);
 
         if(correctEmail && correctUser && correctPswd){
-            resetForm(myFormElements);
+            
+
+            save({
+                name:uname.value,
+                email:email.value,
+                password:ogPassword.value
+            })
+        //    resetForm(myFormElements);
+    
         }
 
     }
+
+    
+    async function save(data) {
+    try {
+
+        console.log("test")
+        // Make the POST request
+        const response = await fetch("http://mta-project.local/register", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
+            },
+            body:  new URLSearchParams(data) // Convert `data` to JSON
+        });
+
+        // Check if the response is okay
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        }
+
+        // Parse the response as text and then JSON
+        const responseText = await response.text();
+        let responseData;
+        try {
+            responseData = responseText;
+            console.log(JSON.parse(responseData));
+        } catch (error) {
+            throw new Error(`Failed to parse JSON. Response: ${responseText}`);
+        }
+
+        // Check for a successful response
+        if (responseData.status === "success") {
+            if (typeof sendToCRM === "function") {
+                
+            } else {
+               
+            }
+        } else {
+            
+        }
+    } catch (error) {
+        console.error('An error occurred:', error.message);
+    }
+}
+
+
+//ruta para crear url controlador de site y metodo donde se guarda 
+
 
     function checkFormLogin(){
         let ogPassword = document.getElementById("ogPassword");

@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\UsersModel;
+use function App\Controllers\Auth\sanitizeInput;
+
 class UserController
 {
 
@@ -27,5 +30,27 @@ class UserController
 
     public function store(){
 
+        if(!empty($_POST["email"]) && !empty($_POST["name"]) && !empty($_POST["password"])){
+                $email = $this->sanitizeInput($_POST["email"]);
+                $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+                $name = $this->sanitizeInput($_POST["name"]);
+                $password = $this->sanitizeInput($_POST["password"]);
+                $user = new UsersModel($name, $password, $email);
+
+                $user->create();
+
+                echo json_encode(["status" => "success"]);
+        }
+
     }
+
+
+    public function sanitizeInput($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
+
 }
