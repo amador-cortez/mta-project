@@ -192,13 +192,8 @@
 
         // Check for a successful response
         if (responseData.status === "success") {
-            if (typeof sendToCRM === "function") {
-                
-            } else {
-               
-            }
         } else {
-            
+
         }
     } catch (error) {
         console.error('An error occurred:', error.message);
