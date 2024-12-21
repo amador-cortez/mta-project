@@ -219,7 +219,7 @@
 
             //console.log(data);
             // Make the POST request
-            const response = await fetch("http://mta-project.local/monitor", {
+            const response = await fetch("http://localhost:8080/monitor", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
@@ -267,7 +267,7 @@
                 url: url.value,
                 monitor_interval : frequencyValue
             })
-           // alert("Se ha agregado exitosamente!");
+           alert("Se ha agregado exitosamente!");
         }
     }
 

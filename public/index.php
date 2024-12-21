@@ -16,9 +16,9 @@ $router = new Router();
 
 // Pages routes
 
-if(isset($_SESSION['user_id'])) {
+//if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/', [new UserController(),'index']);
-}else{
+//}else{
 
     $router->addRoute('GET', '/register', [new UserController(),'create']);
     $router->addRoute('POST', '/register', [new UserController(),'store']);
@@ -29,15 +29,19 @@ if(isset($_SESSION['user_id'])) {
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
 
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
+    $router->addRoute('GET', '/MonitorsControllers', [new MonitorsController(), 'show']);
+
 
     $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);
     $router->addRoute('POST', '/monitor', [new MonitorsController(), 'addURL']);
+
+    #$router->addRoute('GET')
     #$router->addRoute('GET', '/send', [new AlertController(), 'send'])
 
     #Route::get('/send', '\App\Http\Controllers\HomeController@send')->name('home.send');
 
 
-}
+//}
 
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

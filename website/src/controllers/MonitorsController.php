@@ -69,11 +69,13 @@ class MonitorsController
 
     public function show()
     {
-        $user = new UsersModel();
+        $user = new MonitorsModel();
         $result = $user->show($id);
 
         if($url){
             echo ($url);
+            echo $result;
+
         }else{
             echo "No se encontro la URL";
         }
