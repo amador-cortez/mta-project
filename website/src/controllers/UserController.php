@@ -9,6 +9,7 @@ class UserController
 {
 
     public function index(){
+        include __DIR__ . '/../views/dashboard.php';
 
     }
 
@@ -30,16 +31,21 @@ class UserController
 
     public function store(){
 
-        if(!empty($_POST["email"]) && !empty($_POST["name"]) && !empty($_POST["password"])){
+        if(!empty($_POST["email"]) && !empty($_POST["full_name"]) && !empty($_POST["password"])){
                 $email = $this->sanitizeInput($_POST["email"]);
                 $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-                $name = $this->sanitizeInput($_POST["name"]);
+                $full_name = $this->sanitizeInput($_POST["full_name"]);
                 $password = $this->sanitizeInput($_POST["password"]);
-                $user = new UsersModel($name, $password, $email);
+                //echo json_encode("asiii");
+                $is_active=1;
+                $user = new UsersModel($full_name, $password, $email, $is_active);
 
                 $user->create();
 
                 echo json_encode(["status" => "success"]);
+
+      
+
         }
 
     }

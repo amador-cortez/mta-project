@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register Form -MTA</title>
        
-        <link rel="stylesheet" href="css/styles.css">
+        <!-- <link rel="stylesheet" href="css/styles.css">-->
 
         <!-- <script type="..public/js/submitForm.js"></script>-->
 
-        <script src="../../../public/js/checkForms.js"></script>
+        <!-- <script src="../../../public/js/checkForms.js"></script>-->
 
     </head>
     <style>
@@ -112,6 +112,11 @@
    
     </body>
 <script>
+
+    function redireccionarLogin(){
+                window.location.href = "login";
+            }
+
     function checkFormRegister(){
         let ogPassword = document.getElementById("ogPassword");
         let confPassword = document.getElementById("confPassword");
@@ -127,16 +132,20 @@
         correctUser = checkUser(uname, mensajeIdUser);
         correctEmail = checkEmail(email, mensajeIdEmail);
         correctPswd = checkSamePassword(ogPassword, confPassword, mensajeIdPswd);
+        console.log(uname.value);
+        console.log(email.value);
+        console.log(ogPassword.value);
 
         if(correctEmail && correctUser && correctPswd){
             
 
             save({
-                name:uname.value,
+                full_name:uname.value,
                 email:email.value,
                 password:ogPassword.value
             })
         //    resetForm(myFormElements);
+        
     
         }
 
@@ -148,7 +157,7 @@
 
         console.log("test")
         // Make the POST request
-        const response = await fetch("http://mta-project.local/register", {
+        const response = await fetch("http://localhost:8080/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
@@ -168,18 +177,21 @@
             responseData = responseText;
             console.log(JSON.parse(responseData));
         } catch (error) {
-            throw new Error(`Failed to parse JSON. Response: ${responseText}`);
         }
 
         // Check for a successful response
         if (responseData.status === "success") {
-        } else {
+            window.location.href = "login"; 
 
+            console.log("FINAL");
+        } else {
+            
         }
     } catch (error) {
         console.error('An error occurred:', error.message);
     }
 }
+
 
 
 //ruta para crear url controlador de site y metodo donde se guarda 
@@ -199,6 +211,7 @@
 
         if(correctEmail && correctPswd){
             resetForm(myFormElements);
+            redireccionarLogin();
         }
 
     }

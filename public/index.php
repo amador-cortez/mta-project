@@ -16,9 +16,9 @@ $router = new Router();
 
 // Pages routes
 
-if(isset($_SESSION['user_id'])) {
-    $router->addRoute('GET', '/', [new UserController(),'index']);
-}else{
+//if(isset($_SESSION['user_id'])) {
+    $router->addRoute('GET', '/', [new AuthController(),'login']);
+//}else{
 
     $router->addRoute('GET', '/register', [new UserController(),'create']);
     $router->addRoute('POST', '/register', [new UserController(),'store']);
@@ -37,7 +37,7 @@ if(isset($_SESSION['user_id'])) {
     #Route::get('/send', '\App\Http\Controllers\HomeController@send')->name('home.send');
 
 
-}
+//}
 
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

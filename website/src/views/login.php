@@ -229,6 +229,10 @@ function checkFormLogin() {
 */
 
 /*OG*/
+
+function redireccionarDahboard(){
+        window.location.href = "dashboard";
+    }ß
     
     function checkFormLogin(){
         let email = document.getElementById("email").value;
@@ -249,7 +253,7 @@ function checkFormLogin() {
 
             console.log("test")
             // Make the POST request
-            const response = await fetch("http://mta-project.local/login", {
+            const response = await fetch("http://localhost:8080/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
@@ -274,7 +278,7 @@ function checkFormLogin() {
 
             // Check for a successful response
             if (responseData.status === "success") {
-                window.location.href = "http://mta-project.local/login";
+                redireccionarDahboard();
 
             } else {
                 console.log("pon otra cosa");
