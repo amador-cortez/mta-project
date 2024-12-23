@@ -43,9 +43,6 @@ class UserController
                 $user->create();
 
                 echo json_encode(["status" => "success"]);
-
-      
-
         }
 
     }

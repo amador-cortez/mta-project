@@ -106,7 +106,7 @@
                 <button id = "thank-you-modal-button" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
                 
                 
-                <p class = "middle">¿Ya tienes Cuenta? <a href = "login.php" > Log In</a></p>
+                <p class = "middle">¿Ya tienes Cuenta? <a href = "/login" > Log In</a></p>
                 </form>
         </div>
    
@@ -180,12 +180,11 @@
         }
 
         // Check for a successful response
-        if (responseData.status === "success") {
-            window.location.href = "login"; 
+        if (JSON.parse(responseData).status =="success") {
 
-            console.log("FINAL");
+            redireccionarLogin(); 
         } else {
-            
+             
         }
     } catch (error) {
         console.error('An error occurred:', error.message);

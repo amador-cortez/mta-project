@@ -39,17 +39,14 @@ class MonitorsController
 
     public function addURL()
     {  
-       // echo('kskskks');
-        //echo(implode("\n",$_POST));
+
         if (!empty($_POST['url']) && !empty($_POST['monitor_interval'])) {
-           // var_dump($_POST);
-        
-          
+              
             
-            $url = $_POST['url']; // Asegúrate de que sea una cadena
+            $url = $_POST['url']; 
             $monitor_interval = $_POST['monitor_interval'];
             $state = 1;
-            $user_id = 1;
+            $user_id = $_SESSION['id'];
     
             // Verifica si la URL es válida antes de almacenarla
             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
@@ -131,6 +128,20 @@ class MonitorsController
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
+    }
+
+    public function monitor($url, $monitor_interval){
+        if ($url==NULL) return false;
+        $ch= curl_init($url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $monitor_interval);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $monitor_interval);
+        curl_setopt($ch, CURL_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return $httpcode >= 200 && $httpcode <300;
+
     }
 
 }
