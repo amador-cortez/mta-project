@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!--<script src="../../../public/js/scripts.js"></script>-->
+    <script src="../../../public/js/scripts.js"></script>
 
 
     <style>
@@ -74,8 +74,6 @@
         .right{
             float: right;
             /*flex: 1;*/
-            
-            margin-right: 10px;
         }
 
         .main-content, .statistics{
@@ -356,7 +354,7 @@
             <!--<img src = "#" alt = "Logo-Opcional"></img>-->
             <h1 class="middle" style="color: #457b9d; ">MTA</h1>
             <a href = "dashboard.html">Monitoreo</a>
-            <a href = "login.html">Cerrar Sesion</a>
+            <a href = "/logout">Cerrar Sesion</a>
         </div>
 
         <main class="distribution">
@@ -484,47 +482,35 @@
     
         
     </body>
+
+
     <script>
 
-        const checkBoxEle=document.getElementsByName('select-service');
-        const checkAllServices = document.getElementById("select-all-services");
-        const checkedBoxesLabel = document.getElementById('select-all-services-label');
-        /*
-        checkAllServices.addEventListener("load", () =>{
-            updateCheckedLabel();
-        });
-        checkAllServices.addEventListener("change", () =>{
-            updateCheckedLabel();
-        });*/
+    function redireccionarMonitor(){
+        window.location.href = "monitor";
+    }
 
-        //const searchBar = document.getElementById("search-url-bar");
-        //const lists = document.querySelectorAll('#url-lists li');
-        //const searchIcon = document.querySelector('.fa-magnifying-glass');
-       // const xIcon = document.querySelector('.fa-xmark');
-        
-       const serviceList = document.getElementById("service-list");
-        window.addEventListener("load",function(event){
-            console.log("I have loaded");
-            
-            readAllMonitors();
-            
+        window.addEventListener("load", function(event){
+            console.log('holaaaaaaaaaaaaaaaaaa')
         })
-        function redireccionarMonitor(){
-            window.location.href = "monitor";
-        }
-        async function readAllMonitors() {
+
+
+        async function read(data) {
         try {
 
-            //console.log(data);
+            console.log("test")
             // Make the POST request
-            console.log("he llegado aqui");
-            const response = await fetch("/api/monitors");
-            console.log("quiero llegar aqui");
-
+            const response = await fetch("http://mta-project.local/dashboard", {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
+                },
+                body:  new URLSearchParams(data) // Convert `data` to JSON
+            });
 
             // Check if the response is okay
             if (!response.ok) {
-                throw new Error(`DB Error! Status: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
             }
 
             // Parse the response as text and then JSON

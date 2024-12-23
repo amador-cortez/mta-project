@@ -19,7 +19,7 @@ class Router {
 
         // Si no se encuentra una ruta, retorna un error 404
         http_response_code(404);
-        echo json_encode(['error' => 'Ruta no encontrada']);
+        echo json_encode(['errorrr' => 'Ruta no encontrada']);
     }
 }
 ?>

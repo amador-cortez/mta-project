@@ -10,18 +10,20 @@ class UsersModel
     public string $email;
     public string $created_at;
     public string $updated_at;
+    public string $is_active;
 
 
 
     private $connection;
 
-    public function __construct($username, $password, $email)
+    public function __construct($username, $password, $email, $is_active)
     {
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
         $this->created_at = date('Y-m-d H:i:s');
         $this->updated_at = date('Y-m-d H:i:s');
+        $this->is_active = $is_active;
 
         $this->connection = new Database();
     }
@@ -31,15 +33,16 @@ class UsersModel
     {
         $pdo = $this->connection->getConnection();
 
-        $stmt = $pdo->prepare('INSERT INTO users (username, password, email, created_at, updated_at) 
-                           VALUES (:username, :password, :email, :created_at, :updated_at)');
+        $stmt = $pdo->prepare('INSERT INTO users (full_name, password, email, created_at, updated_at, is_active) 
+                           VALUES (:full_name, :password, :email, :created_at, :updated_at, :is_active)');
 
         $stmt->execute(
-            ['username' => $this->username,
+            ['full_name' => $this->username,
            'password' => $this->password,
             'email' =>$this->email,
             'created_at' =>$this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'is_active' => $this->is_active
         ]);
 
 
