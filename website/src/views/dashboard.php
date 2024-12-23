@@ -437,11 +437,9 @@
                 
                 <!--MONITORING URLS-->
                 <div class = "scroll-div">
-                <ul id="service-list" class = "service-list-css">
+                    <ul id="service-list" class = "service-list-css">                    
 
-                    
-
-                </ul>
+                    </ul>
 
                 </div>
                 
@@ -503,34 +501,30 @@
         //const lists = document.querySelectorAll('#url-lists li');
         //const searchIcon = document.querySelector('.fa-magnifying-glass');
        // const xIcon = document.querySelector('.fa-xmark');
-
+        
+       const serviceList = document.getElementById("service-list");
         window.addEventListener("load",function(event){
             console.log("I have loaded");
             
-
-            const serviceList = document.getElementById("service-list");
-            serviceList.innerHTML +=createMonitor("https://app.slack.com/client/T0850L44FPS/D08491Z34CV",15,0);
-            //serviceList.innerHTML +=createMonitor("https://w3collective.com/get-domain-name-url-javascript/",5,1);
-            //serviceList.innerHTML +=createMonitor("https://www.geeksforgeeks.org/how-to-automatic-refresh-a-web-page-in-fixed-time/",10,0);
-            updateCheckedLabel();
-            read();
+            readAllMonitors();
+            
         })
         function redireccionarMonitor(){
             window.location.href = "monitor";
         }
-        async function read() {
+        async function readAllMonitors() {
         try {
 
             //console.log(data);
             // Make the POST request
-            const response = await fetch("http://localhost:8080/MonitorsControllers", {
-                method: 'GET'
-            });
+            console.log("he llegado aqui");
+            const response = await fetch("/api/monitors");
+            console.log("quiero llegar aqui");
 
 
             // Check if the response is okay
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                throw new Error(`DB Error! Status: ${response.status} - ${response.statusText}`);
             }
 
             // Parse the response as text and then JSON
@@ -538,21 +532,38 @@
             console.log(response);
             let responseData;
             try {
-                responseData = responseText;
-                console.log(JSON.parse(responseData));
+                responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
+                console.log(responseData);
+                //console.log(JSON.parse(responseData));
             } catch (error) {
-                throw new Error(`Failed to parse JSON. Response: ${responseText}`);
+                throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
             }
 
             // Check for a successful response
-            if (responseData.status === "success") {
-                console.log("AHOLALALAL");
+            console.log("ahora voy aca");
+            if (responseData.status === "No monitors found") {
+                console.log("No motitors found");
             } else {
-                console.log("pon otra cosa");
+                console.log("he entrado aqui 5");
+                console.log(responseData);
+                console.log(typeof responseData);
+                console.log(responseData.length);
+                //for(let i = 0; i<res)
+
+                responseData.forEach(monitor => {
+                    const [url, state, monitor_interval] = monitor;
+                    console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state);
+                    console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                    serviceList.innerHTML +=createMonitor(url,
+                        monitor_interval,
+                        state
+                    );
+                    updateCheckedLabel();
+                });
 
             }
         } catch (error) {
-            console.error('An error occurred:', error.message);
+            console.error('An error occurred with somthings:', error.message);
         }
     }
 
@@ -825,14 +836,19 @@
             const checkedBoxesLabel = document.getElementById('select-all-services-label');
             const checkAllServices = document.getElementById("select-all-services");
             let sum = 0;
-            console.log(checkBoxEle.length);
+           // console.log(checkBoxEle.length);
             for (let i=0; i<checkBoxEle.length; i++){
                 if( checkBoxEle[i].checked) sum+=1;
             }
 
             checkedBoxesLabel.innerHTML = `${sum} / ${checkBoxEle.length}`;
 
-            if(sum == checkBoxEle.length) checkAllServices.checked =true;
+            if(sum == checkBoxEle.length) 
+            {
+                checkAllServices.checked =true;
+            }else{
+                checkAllServices.checked =false;
+            }
                     
         }
 

@@ -29,7 +29,7 @@ $router = new Router();
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
 
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
-    $router->addRoute('GET', '/MonitorsControllers', [new MonitorsController(), 'show']);
+    $router->addRoute('GET', '/api/monitors', [new MonitorsController(), 'getMonitors']);
 
 
     $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);

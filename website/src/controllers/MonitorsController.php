@@ -83,6 +83,18 @@ class MonitorsController
 
     }
 
+    public function getMonitors(){
+        $monitors = MonitorsModel:: all();
+        //header('Content_Type: application/json');
+        if($monitors){
+            echo json_encode($monitors);
+        }else{
+            
+            echo json_encode(["status" => "error", "message" => "No monitors found hhhhhhhh"]);
+        }
+        
+    }
+
     public function edit()
     {
         $user = new UsersModel();

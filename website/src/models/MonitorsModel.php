@@ -2,6 +2,8 @@
 namespace App\Models;
 
 use App\Database;
+use PDO;
+use PDOException;
 
 class MonitorsModel {
 
@@ -68,10 +70,39 @@ class MonitorsModel {
 
 
     public function show($id){
-        $con = $this->connection;
+        $con = $this->connection;$pdo = $this->connection->getConnection();
 
         $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
 
+    }
+
+    public static function all(){
+        
+        try {
+            $con = new Database();
+            $pon = $con->getConnection();
+            $stmt = $pon->prepare("SELECT * FROM monitors");
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $myResult = array();
+
+            foreach($result as $row)
+            {
+                //echo json_encode({$row["url"] , $row["state"] , $row["monitor_interval"]});
+                $myResult [] = array($row["url"],$row["state"] ,  $row["monitor_interval"]);
+
+               // echo json_encode("URL: " . $row["url"] . " - State: ". $row["state"] . " - Frequnecy: " . $row["monitor_interval"]);
+            
+            }
+            return $myResult;
+           
+
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error al insertar en la base de datos: " . $e->getMessage();
+            return false;
+        }
     }
 
     public function update($id){
