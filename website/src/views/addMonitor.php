@@ -315,10 +315,11 @@
     function addURL(){
         let url = document.getElementById('new-url');
         let frequency = document.querySelector('input[name="time"]:checked');
-        let frequencyValue= Number(frequency.value);
+        
        //console.log(`Formulario enviado ${ url.value} , ${frequencyValue.value }`);
        
         if(validateURLForm(url, frequency)){
+            let frequencyValue= Number(frequency.value);
             save({
                 url: url.value,
                 monitor_interval : frequencyValue

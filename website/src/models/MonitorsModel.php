@@ -90,7 +90,7 @@ class MonitorsModel {
             foreach($result as $row)
             {
                 //echo json_encode({$row["url"] , $row["state"] , $row["monitor_interval"]});
-                $myResult [] = array($row["url"],$row["state"] ,  $row["monitor_interval"]);
+                $myResult [] = array($row["url"],$row["state"] ,  $row["monitor_interval"],$row["id"]);
 
                // echo json_encode("URL: " . $row["url"] . " - State: ". $row["state"] . " - Frequnecy: " . $row["monitor_interval"]);
             

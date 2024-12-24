@@ -87,7 +87,7 @@ class MonitorsController
             echo json_encode($monitors);
         }else{
             
-            echo json_encode(["status" => "error", "message" => "No monitors found hhhhhhhh"]);
+            echo json_encode(["status" => "error", "message" => "No monitors found"]);
         }
         
     }

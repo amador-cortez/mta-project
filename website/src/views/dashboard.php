@@ -485,32 +485,31 @@
 
 
     <script>
+        const checkBoxEle=document.getElementsByName('select-service');
+        const checkAllServices = document.getElementById("select-all-services");
+        const checkedBoxesLabel = document.getElementById('select-all-services-label');
+       const serviceList = document.getElementById("service-list");
 
-    function redireccionarMonitor(){
-        window.location.href = "monitor";
-    }
+        function redireccionarMonitor(){
+            window.location.href = "monitor";
+        }
+            window.addEventListener("load", function(event){
+                console.log('I have loaded')
+                readAllMonitors();
+            })
 
-        window.addEventListener("load", function(event){
-            console.log('holaaaaaaaaaaaaaaaaaa')
-        })
 
-
-        async function read(data) {
+        async function readAllMonitors() {
         try {
 
             console.log("test")
             // Make the POST request
-            const response = await fetch("http://mta-project.local/dashboard", {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
-                },
-                body:  new URLSearchParams(data) // Convert `data` to JSON
-            });
+            const response = await fetch("/api/monitors");
+            console.log("quiero llegar aqui");
 
             // Check if the response is okay
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
             }
 
             // Parse the response as text and then JSON
@@ -537,19 +536,20 @@
                 //for(let i = 0; i<res)
 
                 responseData.forEach(monitor => {
-                    const [url, state, monitor_interval] = monitor;
-                    console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state);
+                    const [url, state, monitor_interval,id] = monitor;
+                    console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
                     console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
                     serviceList.innerHTML +=createMonitor(url,
                         monitor_interval,
-                        state
+                        state,
+                        id
                     );
                     updateCheckedLabel();
                 });
 
             }
         } catch (error) {
-            console.error('An error occurred with somthings:', error.message);
+            console.error('An error occurred with something:', error.message);
         }
     }
 
@@ -965,7 +965,7 @@
 
             if(correctFrequency && correctURL)
             {
-                url.value = "";
+                url.innerHTML = "";
                 validMessage.innerHTML="";
                 frequencyMessage.innerHTML="";
                 return true;
