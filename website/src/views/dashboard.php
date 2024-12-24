@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="../../../public/js/scripts.js"></script>
-
+  
 
     <style>
         :root {
@@ -497,6 +496,60 @@
                 console.log('I have loaded')
                 readAllMonitors();
             })
+            async function getOneMonitor() {
+                try {
+
+                    console.log("test")
+                    // Make the POST request
+                    let id =1;
+                    const response = await fetch(`/api/getMonitor?id=${id}`);
+                    console.log("quiero llegar aqui");
+
+                    // Check if the response is okay
+                    if (!response.ok) {
+                        throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
+                    }
+
+                    // Parse the response as text and then JSON
+                    const responseText = await response.text();
+                    console.log(response);
+                    let responseData;
+                    try {
+                        responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
+                        console.log(responseData);
+                        //console.log(JSON.parse(responseData));
+                    } catch (error) {
+                        throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
+                    }
+
+                    // Check for a successful response
+                    console.log("ahora voy aca");
+                    if (responseData.status === "No monitors found") {
+                        console.log("No motitors found");
+                    } else {
+                        console.log("he entrado aqui 5");
+                        console.log(responseData);
+                        console.log(typeof responseData);
+                        console.log(responseData.length);
+                        //for(let i = 0; i<res)
+
+                        responseData.forEach(monitor => {
+                            const [url, state, monitor_interval,id] = monitor;
+                            console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
+                            console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                            serviceList.innerHTML +=createMonitor(url,
+                                monitor_interval,
+                                state,
+                                id
+                            );
+                            updateCheckedLabel();
+                        });
+
+                    }
+                } catch (error) {
+                    console.error('An error occurred with something:', error.message);
+                }
+            }
 
 
         async function readAllMonitors() {
@@ -758,7 +811,7 @@
         }
 
 
-        const createMonitor = (url, frequency,active) => {
+        const createMonitor = (url, frequency,active,id) => {
             console.log("entered create monitor");
             //const {urlName, link, date} = serviceData;
             //const {link, domainName} = serviceData;
@@ -787,14 +840,12 @@
                                 </div>
                                 <div class="right rows">
                                     <p  class="left">${frequency} min </p>
-                                    <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" ></i></a>
+                                    <a href = "/editMonitor?id=${id}" ><i class="fa-regular fa-pen-to-square fa-2x" data-id=${id} ></i></a>
                                     <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
                                 </div>
                             </li>`;
             return service;
             
-            //urlsContainer.append(service);
-            //console.log(urlsContainer.lastChild);
         }
 
         function getDomainName(url){

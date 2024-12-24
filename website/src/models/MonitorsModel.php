@@ -104,6 +104,28 @@ class MonitorsModel {
             return false;
         }
     }
+    public static function getMonitor($id){
+        
+        try {
+            $con = new Database();
+            $pon = $con->getConnection();
+            $stmt = $pon->prepare("SELECT * FROM monitors WHERE id = :id");
+            $stmt->execute(['id' => $id]); 
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            /*$stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC); */
+
+            return $result;
+           
+
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error al insertar en la base de datos: " . $e->getMessage();
+            return false;
+        }
+    }
 
     public function update($id){
         $con = $this->connection;

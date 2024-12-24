@@ -15,6 +15,10 @@ class MonitorsController
     {
         include __DIR__ . '/../views/addMonitor.php';
     }
+    public function editMonitor()
+    {
+        include __DIR__ . '/../views/editMonitor.php';
+    }
 
     public function create()
     {
@@ -92,11 +96,24 @@ class MonitorsController
         
     }
 
-    public function edit()
+    public function oneMonitor()
     {
-        $user = new UsersModel();
-        $result = $user->edit($id);
+        $id = $_GET["id"] ?? null; 
+        if (!$id) {
+            echo json_encode(["status" => "No ID provided"]);
+            return;
+        }
+
+       // $monitor = new MonitorsModel(); // Corregir el nombre de la clase
+        $monitorData = MonitorsModel::getMonitor($id);
+
+        if ($monitorData) {
+            echo json_encode($monitorData); // Retorna el monitor como JSON
+        } else {
+            echo json_encode(["status" => "Monitor not found"]);
+        }
     }
+
     public function update()
     {
         if (!empty($_POST)){          

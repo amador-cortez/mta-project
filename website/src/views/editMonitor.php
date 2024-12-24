@@ -1,3 +1,14 @@
+<?php
+// Comprobar si $monitorData está definido antes de usarlo
+if (isset($monitorData) && is_array($monitorData)) {
+    $url = htmlspecialchars($monitorData['url']);
+    $frequency = $monitorData['frequency'];
+} else {
+    // Manejar el error si $monitorData no está definido
+    echo "Datos del monitor no encontrados.";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,14 +183,15 @@
                     <h1 class=" middle">Editar servicio de monitoreo.</h1>
                 
                     <h2>Modificar URL:</h2><p id = "valid-url"></p>
-                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search"></input><i class="fa-solid fa-x" onclick="resetURL()"></i>
+                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search" value="<?= htmlspecialchars($monitorData['url']) ?>"></input>
+                    <i class="fa-solid fa-x" onclick="resetURL()"></i>
                     
                     
                     <h2>Modificar frecuencia de las comprobaciones:</h2>
                     <p id = "valid-frequency"></p>
-                    <input type = "radio" id = "min5" name = "time" value="5"><label for = "min5" checked > 5 min</label><br>
-                    <input type = "radio" id = "min10" name = "time" value="10"><label for = "min10"> 10 min</label><br>
-                    <input type = "radio" id = "min15" name = "time" value="15"><label for = "min15"> 15 min</label><br>
+                    <input type = "radio" id = "min5" name = "time" value="5" <?= ($monitorData['monitor_interval'] == 5) ? 'checked' : '' ?> ><label for = "min5"> 5 min</label><br>
+                    <input type = "radio" id = "min10" name = "time" value="10" <?= ($monitorData['monitor_interval'== 10]) ? 'checked' :'' ?>><label for = "min10" > 10 min</label><br>
+                    <input type = "radio" id = "min15" name = "time" value="15"<?= ($monitorData['monitor_interval'== 10]) ? 'checked' :'' ?>><label for = "min15" > 15 min</label><br>
 
                     <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="updateURL()">Guardar Cambios</button>
                 
@@ -193,10 +205,6 @@
             </div>
 
         </div>
-        
-        
-    
-        
     </body>
     <script>
         function redireccionarDashboard() {
