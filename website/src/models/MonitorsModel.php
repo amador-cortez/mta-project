@@ -26,25 +26,21 @@ class MonitorsModel {
         $this->updated_at = date('Y-m-d H:i:s'); // Fecha de actualización
         $this->user_id = $user_id;
 
-        // Inicializa la conexión a la base de datos
         $this->connection = new Database();
     }
 
     public function create() {
-        // Método vacío por ahora (implementa si es necesario)
     }
 
     public function store() {
         try {
             $pdo = $this->connection->getConnection();
 
-            // Consulta SQL corregida
             $stmt = $pdo->prepare(
                 'INSERT INTO monitors (url, state, user_id, timedown, timeup, monitor_interval, created_at, updated_at) 
                 VALUES (:url, :state, :user_id, :timedown, :timeup, :monitor_interval, :created_at, :updated_at)'
             );
 
-            // Ejecutar la consulta con los datos
             $stmt->execute([
                 'url' => $this->url,
                 'state' => $this->state,
@@ -56,12 +52,10 @@ class MonitorsModel {
                 'updated_at' => $this->updated_at
             ]);
 
-            // Devuelve la cantidad de filas afectadas
             return $stmt->rowCount();
 
         } catch (\PDOException $e) {
-            // Manejo de errores
-            echo "Error al insertar en la base de datos: " . $e->getMessage();
+|            echo "Error al insertar en la base de datos: " . $e->getMessage();
             return false;
         }
     }
@@ -85,9 +79,32 @@ class MonitorsModel {
         $con = $this->connection;
 
         $sql = $con->prepare("DELETE from monitors WHERE id=:id");
-
-
     }
+
+    public function urls($user_id) {
+        $con = $this->connection->getConnection(); 
+        $sql = $con->prepare("SELECT * FROM monitors WHERE user_id = :user_id");
+        $sql->execute(['user_id' => $user_id]);
+        return $sql->fetchAll(); 
+    }
+    
+    
+
+    public function monitor($url, $monitor_interval)
+    {
+        if ($url == NULL) return false;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $monitor_interval);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $monitor_interval);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+
+        return $httpcode >= 200 && $httpcode < 300;
+    }
+
 }
 
 

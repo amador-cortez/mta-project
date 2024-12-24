@@ -75,7 +75,6 @@ class MonitorsController
             echo "No se encontro la URL";
         }
 
-
     }
 
     public function edit()
@@ -129,19 +128,59 @@ class MonitorsController
         $data = htmlspecialchars($data);
         return $data;
     }
+    public function testMonitor() {
+        echo "TEST DE PRUEBA EN MONITORSCONTROLLER <br>";
+    
+        $monitor_interval = 10;
+        $user_id = $_SESSION['id'];  
 
-    public function monitor($url, $monitor_interval){
-        if ($url==NULL) return false;
-        $ch= curl_init($url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $monitor_interval);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $monitor_interval);
-        curl_setopt($ch, CURL_RETURNTRANSFER, true);
-        $data = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+    
+        $state = 1; 
+    
+        $monitorModel = new MonitorsModel(null, $state, $monitor_interval, $user_id);
+    
+        $result = $monitorModel->urls($user_id);
+    
+    
+        foreach ($result as $monitor) {
+            $url = $monitor['url'];
+            $monitor_interval = $monitor['monitor_interval'];
 
-        return $httpcode >= 200 && $httpcode <300;
+            $monitorModel = new MonitorsModel($url, $state, $monitor_interval, $user_id);
+    
+            $isUp = $monitorModel->monitor($url, $monitor_interval, $user_id, $state);
+    
+            if ($isUp) {
+                echo "La URL $url está activa y funcionando correctamente.<br>";
+            } else {
+                echo "La URL $url no está disponible.<br>";
+            }
+        }
+    }
+    
+    
+    
+    
 
+
+    public function getURL(){
+        $user_id = $_SESSION['id'];
+        $user = new MonitorsModel();
+        $result = $user->urls($user_id);
+
+        echo json_encode($reuslt);
+    }
+
+    public function getMonitors(){
+        $monitors = MonitorsModel:: all();
+        //header('Content_Type: application/json');
+        if($monitors){
+            echo json_encode($monitors);
+        }else{
+            
+            echo json_encode(["status" => "error", "message" => "No monitors found hhhhhhhh"]);
+        }
+        
     }
 
 }
