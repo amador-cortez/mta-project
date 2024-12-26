@@ -1,13 +1,13 @@
 <?php
 // Comprobar si $monitorData está definido antes de usarlo
-if (isset($monitorData) && is_array($monitorData)) {
+/*if (isset($monitorData) && is_array($monitorData)) {
     $url = htmlspecialchars($monitorData['url']);
     $frequency = $monitorData['frequency'];
 } else {
     // Manejar el error si $monitorData no está definido
     echo "Datos del monitor no encontrados.";
     exit;
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@ if (isset($monitorData) && is_array($monitorData)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="css/styles.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="../../../public/js/scripts.js"></script>
+    <!--<script src="../../../public/js/scripts.js"></script>-->
 
     
     <style>
@@ -178,7 +178,7 @@ if (isset($monitorData) && is_array($monitorData)) {
             <div class = "main-content left">
                 
                 
-                <a href = "dashboard.html" id = "return-dashboard" class="btnRegresar" onclick="confirm('Seguro que quiere dejar de editar?')"><i class="fa-solid fa-arrow-left"></i> Regresar</a>
+                <a href = "#" id = "return-dashboard" class="btnRegresar" onclick="redireccionarDashboard()"><i class="fa-solid fa-arrow-left"></i> Regresar</a>
                 <form id = "add-monitor" class = "formCenter">
                     <h1 class=" middle">Editar servicio de monitoreo.</h1>
                 
@@ -189,11 +189,15 @@ if (isset($monitorData) && is_array($monitorData)) {
                     
                     <h2>Modificar frecuencia de las comprobaciones:</h2>
                     <p id = "valid-frequency"></p>
-                    <input type = "radio" id = "min5" name = "time" value="5" <?= ($monitorData['monitor_interval'] == 5) ? 'checked' : '' ?> ><label for = "min5"> 5 min</label><br>
+                    <input type = "radio" id = "min5" name = "time" value="5"><label for = "min5"> 5 min</label><br>
+                    <input type = "radio" id = "min10" name = "time" value="10" ><label for = "min10" > 10 min</label><br>
+                    <input type = "radio" id = "min15" name = "time" value="15"><label for = "min15" > 15 min</label><br>
+                   
+                    <!--<input type = "radio" id = "min5" name = "time" value="5" <?= ($monitorData['monitor_interval'] == 5) ? 'checked' : '' ?> ><label for = "min5"> 5 min</label><br>
                     <input type = "radio" id = "min10" name = "time" value="10" <?= ($monitorData['monitor_interval'== 10]) ? 'checked' :'' ?>><label for = "min10" > 10 min</label><br>
                     <input type = "radio" id = "min15" name = "time" value="15"<?= ($monitorData['monitor_interval'== 10]) ? 'checked' :'' ?>><label for = "min15" > 15 min</label><br>
-
-                    <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="updateURL()">Guardar Cambios</button>
+                    -->
+                    <button id = "btn-agregar-url" type = "button" class="btnNew " onclick="edit()">Guardar Cambios</button>
                 
                 </form>
             </div>
@@ -207,45 +211,38 @@ if (isset($monitorData) && is_array($monitorData)) {
         </div>
     </body>
     <script>
+        const currentURL =  new URLSearchParams(window.location.search);;
+        console.log(currentURL);
+        const thisID = currentURL.get('id');
+        console.log(thisID);
+
+        const url = document.getElementById('new-url');
+        const frequency = document.querySelector('input[name="time"]'); 
+
+        
         function redireccionarDashboard() {
-            window.location.href = "dashboard";
+            if(confirm('Seguro que quiere dejar de editar?')){
+                
+                 window.location.href = "dashboard";
+            }
         }
         window.addEventListener("load",function(event){
             console.log("I have loaded");
-            
-            fillForm();
+            getOneMonitor();
             
         })
 
-        /*function addURL(){
-            let new_url = document.getElementById("new-url").value;
-            let valid_frequency = document.getElementById("valid-frequency").value;
-            console.log("Formulario enviado", { new_url, valid_frequency });
-            console.log("unppppppppppppppppppp")
+        
 
-            save({
-                url: new_url, 
-                monitor_interval : valid_frequency
-            })
+        async function getOneMonitor() {
 
-        }*/
-
-        async function save(data) {
             try {
-
-                //console.log(data);
-                // Make the POST request
-                const response = await fetch("http://localhost:8080/monitor", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded' // Adjust if `data` is not JSON
-                    },
-                    body:  new URLSearchParams(data) // Convert `data` to JSON
-                });
+                // Make the GET request
+                const response = await fetch(`/api/getMonitor?id=${thisID}`);
 
                 // Check if the response is okay
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                    throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
                 }
 
                 // Parse the response as text and then JSON
@@ -253,56 +250,101 @@ if (isset($monitorData) && is_array($monitorData)) {
                 console.log(response);
                 let responseData;
                 try {
-                    responseData = responseText;
-                    console.log(JSON.parse(responseData));
+                    responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
+                    console.log(responseData);
                 } catch (error) {
                     throw new Error(`Failed to parse JSON. Response: ${responseText}`);
                 }
 
                 // Check for a successful response
-                if (responseData.status === "success") {
-                    console.log("AHOLALALAL");
+                if (responseData.status === "Monitor not found" || response.Data === "No ID provided") {
+                    console.log("We have failed");
                 } else {
-                    console.log("pon otra cosa");
+                    //console.log(responseData);
+                    //console.log(typeof responseData);
+                    //console.log(responseData.length);
+                    //for(let i = 0; i<res)
+                    responseData.forEach(monitor => {
+                            const [url, monitor_interval,id] = monitor;
+                           // console.log('Url: '+url+", Frequency: "+monitor_interval+ ", id:" +id);
+                            //console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval);
+                            
+                            fillForm(url,monitor_interval);
+                        });
+
 
                 }
             } catch (error) {
                 console.error('An error occurred:', error.message);
             }
         }
-        //ADD NEW MONITOR
 
-        function addURL(){
-            let url = document.getElementById('new-url');
-            let frequency = document.querySelector('input[name="time"]:checked');
-            let frequencyValue= Number(frequency.value);
-        //console.log(`Formulario enviado ${ url.value} , ${frequencyValue.value }`);
-        
+        function edit(){
+            const url = document.getElementById('new-url');
+            const frequency = document.querySelector('input[name="time"]:checked'); 
+            
             if(validateURLForm(url, frequency)){
-                save({
+                //Actualizar la base de datos
+                let frequencyValue= Number(frequency.value);
+                console.log(url.value)
+                console.log(frequencyValue)
+                editMonitor({
                     url: url.value,
-                    monitor_interval : frequencyValue
-                })
-            alert("Se ha agregado exitosamente!");
-            resetURL();
+                    monitor_interval: frequencyValue
+                    
+                });
+               //fillForm();
+                
             }
         }
 
+        async function editMonitor(data)
+        {
+            try{
+                console.log(data);
+                const response = await fetch(`/api/editMonitor?id=${thisID}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams(data)
+                });
+
+                if(!response.ok){
+                    throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
+                }
+
+                const responseText = await response.text();
+                let responseD;
+                try{
+                    responseD = JSON.parse(responseText);
+                }catch(error){
+                    throw new Error(`Failed to parse JSON. Response: ${responseText}`);
+                }
+
+                if(responseD.status === "Monitor not found"){
+                    console.log("We have failed");
+                }else{
+                    console.log("It worked!")
+                    alert("Los cambios se hah guardado exitosamente!");
+                
+                   // getOneMonitor();
+
+                }
+
+            }catch(error){
+                console.error("An error occurred", error.message);
+            }
+
+        }
+
+
         //EDIT MONITOR
 
-        function fillForm(){
-            const url = document.getElementById('new-url');
-            const frequency = document.querySelector('input[name="time"]'); 
-
-            //Modificar url y frequency, obetener valores de la base de datos primero
-            //y mostrar en formulario prellnado
-            const urlOriginal = "URL DE LA BASE DE DATOS";
-            const frequencyOriginal = 5;
-
-
+        function fillForm(urlOriginal,frequencyOriginal){
+           
             url.value = urlOriginal;
             document.getElementById("min"+frequencyOriginal).checked =true;
-
         }
 
         function resetURL(){
@@ -310,16 +352,7 @@ if (isset($monitorData) && is_array($monitorData)) {
             url.value = ""
 
         }
-        function updateURL(){
-            const url = document.getElementById('new-url');
-            const frequency = document.querySelector('input[name="time"]:checked'); 
-            
-            if(validateURLForm(url, frequency)){
-                //Actualizar la base de datos
-                alert("Los cambios se hah guardado exitosamente!");
-                fillForm();
-            }
-        }
+        
 
         function validateURLForm(url, frequency){
             const validMessage = document.getElementById('valid-url');

@@ -85,7 +85,8 @@ class MonitorsController
     }
 
     public function getMonitors(){
-        $monitors = MonitorsModel:: all();
+        $user_id = $_SESSION['id'];
+        $monitors = MonitorsModel:: all($user_id);
         //header('Content_Type: application/json');
         if($monitors){
             echo json_encode($monitors);
@@ -98,11 +99,14 @@ class MonitorsController
 
     public function oneMonitor()
     {
-        $id = $_GET["id"] ?? null; 
+        $id = $_GET['id'] ?? null;
+
         if (!$id) {
+            // Handle the case where the ID is not provided
             echo json_encode(["status" => "No ID provided"]);
             return;
         }
+
 
        // $monitor = new MonitorsModel(); // Corregir el nombre de la clase
         $monitorData = MonitorsModel::getMonitor($id);
@@ -111,6 +115,31 @@ class MonitorsController
             echo json_encode($monitorData); // Retorna el monitor como JSON
         } else {
             echo json_encode(["status" => "Monitor not found"]);
+        }
+    }
+
+    public function edit(){
+        if(!empty($_POST['url']) && !empty($_POST['monitor_interval'])){
+            
+            $id = $_GET['id'] ?? null;
+            if(!$id){
+                echo json_encode(["status" => "No ID provided"]);
+            }
+            
+            $url = $_POST['url'];
+            $monitor_interval = $_POST['monitor_interval'];
+
+             // Verifica si la URL es válida antes de almacenarla
+             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+                echo json_encode(["status" => "error", "message" => "Invalid URL"]);
+                return;
+            }
+
+            $monitor = MonitorsModel :: edit($url, $monitor_interval, $id);
+            echo json_encode(["status" => "success"]);
+
+        }else{
+            echo json_encode(["status" => "error", "message" => "Missing data"]);
         }
     }
 
@@ -142,15 +171,21 @@ class MonitorsController
         }    
     }
 
-    public function delete()
+    public function deleteMonitor()
     {
-        $user = new UsersModel();
-        $result = $user->delete($id);
+        $id = $_GET['id'] ?? null;
 
-        if($url){
-            echo ($url);
-        }else{
-            echo "No se encontro la URL";
+        if(!$id){
+            echo json_encode(["status" => "No ID provided"]);
+            return;
+        }
+
+        $monitor = MonitorsModel :: delete($id);
+        if($monitor){
+            echo json_encode(["status" => "success"]);
+        } 
+        else{
+            echo json_encode(["status" => "Monitor not found"]);
         }
     }
 

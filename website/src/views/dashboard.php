@@ -434,7 +434,11 @@
                 
                 <!--MONITORING URLS-->
                 <div class = "scroll-div">
-                    <ul id="service-list" class = "service-list-css">                    
+                    <div class = "alert">
+                        <p id = "actionMessage"></p>
+                    </div>
+                    <ul id="service-list" class = "service-list-css">  
+
 
                     </ul>
 
@@ -496,69 +500,14 @@
                 console.log('I have loaded')
                 readAllMonitors();
             })
-            async function getOneMonitor() {
-                try {
-
-                    console.log("test")
-                    // Make the POST request
-                    let id =1;
-                    const response = await fetch(`/api/getMonitor?id=${id}`);
-                    console.log("quiero llegar aqui");
-
-                    // Check if the response is okay
-                    if (!response.ok) {
-                        throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
-                    }
-
-                    // Parse the response as text and then JSON
-                    const responseText = await response.text();
-                    console.log(response);
-                    let responseData;
-                    try {
-                        responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
-                        console.log(responseData);
-                        //console.log(JSON.parse(responseData));
-                    } catch (error) {
-                        throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
-                    }
-
-                    // Check for a successful response
-                    console.log("ahora voy aca");
-                    if (responseData.status === "No monitors found") {
-                        console.log("No motitors found");
-                    } else {
-                        console.log("he entrado aqui 5");
-                        console.log(responseData);
-                        console.log(typeof responseData);
-                        console.log(responseData.length);
-                        //for(let i = 0; i<res)
-
-                        responseData.forEach(monitor => {
-                            const [url, state, monitor_interval,id] = monitor;
-                            console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
-                            console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
-                            serviceList.innerHTML +=createMonitor(url,
-                                monitor_interval,
-                                state,
-                                id
-                            );
-                            updateCheckedLabel();
-                        });
-
-                    }
-                } catch (error) {
-                    console.error('An error occurred with something:', error.message);
-                }
-            }
+            
 
 
         async function readAllMonitors() {
         try {
 
-            console.log("test")
-            // Make the POST request
+            // Make the GET request
             const response = await fetch("/api/monitors");
-            console.log("quiero llegar aqui");
 
             // Check if the response is okay
             if (!response.ok) {
@@ -571,27 +520,29 @@
             let responseData;
             try {
                 responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
-                console.log(responseData);
                 //console.log(JSON.parse(responseData));
             } catch (error) {
                 throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
             }
 
             // Check for a successful response
-            console.log("ahora voy aca");
             if (responseData.status === "No monitors found") {
                 console.log("No motitors found");
             } else {
+                /*
                 console.log("he entrado aqui 5");
                 console.log(responseData);
                 console.log(typeof responseData);
-                console.log(responseData.length);
+                console.log(responseData.length);*/
                 //for(let i = 0; i<res)
+
+                serviceList.innerHTML = "";
 
                 responseData.forEach(monitor => {
                     const [url, state, monitor_interval,id] = monitor;
-                    console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
-                    console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                    //console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
+                    //console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                    
                     serviceList.innerHTML +=createMonitor(url,
                         monitor_interval,
                         state,
@@ -841,7 +792,7 @@
                                 <div class="right rows">
                                     <p  class="left">${frequency} min </p>
                                     <a href = "/editMonitor?id=${id}" ><i class="fa-regular fa-pen-to-square fa-2x" data-id=${id} ></i></a>
-                                    <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
+                                    <i class="fa-solid fa-trash fa-2x" onclick="deleteMonitor(${id})" ></i>
                                 </div>
                             </li>`;
             return service;
@@ -926,6 +877,44 @@
             }
         }
 
+        async function deleteMonitor(id)
+        {
+            if(confirm("Seguro que desea eliminar este monitor?")){
+                try{
+                    const response = await fetch( `/api/deleteMonitor?id=${id}`);
+
+                    if(!response.ok){
+                        throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
+                    }
+
+                    const responseText = await response.text();
+                    console.log(response);
+                    let responseData;
+                    try{
+                        responseData = JSON.parse(responseText);
+                    }catch(error){
+                        throw new Error(`Failed to parse JSON. Response: here ${responseText}`)
+                    }
+
+                    if(responseData.status === "success"){
+                        //alert()
+                        console.log("Yap")
+                        readAllMonitors();
+                    // deleteSelectedService();''
+
+
+                    }else{
+                        console.log("What do you mean it doesnt  work??:(");
+                    }
+
+                }catch(error){
+                    console.error("An error occured: ", error.message)
+                }
+            }
+            
+
+        }
+
         function deleteSelectedService(){
             const services = document.querySelectorAll('#service-list li');
             console.log(services);
@@ -936,6 +925,7 @@
             }
             let index;
             for(let i = 0; i<services.length; i++){
+
                 services[i].onclick = function(){
                     index = tab.indexOf(this.innerHTML);
                     console.log("INDEX = " + index);
