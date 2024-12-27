@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\MonitorsModel;
+use App\Models\MonitorIntervalModel;
 use function App\Controllers\Auth\sanitizeInput;
 
 class MonitorsController
@@ -82,6 +83,7 @@ class MonitorsController
         $user = new UsersModel();
         $result = $user->edit($id);
     }
+
     public function update()
     {
         if (!empty($_POST)){          
@@ -128,34 +130,53 @@ class MonitorsController
         $data = htmlspecialchars($data);
         return $data;
     }
-    public function testMonitor() {
-        echo "TEST DE PRUEBA EN MONITORSCONTROLLER <br>";
-    
-        $monitor_interval = 10;
-        $user_id = $_SESSION['id'];  
 
+
+    public function testMonitor() {
+
+        $monitor5 = new MonitorIntervalModel();
+        $monitor5 -> Monitor5();
+
+        $monitor10 = new MonitorIntervalModel();
+        $monitor10-> Monitor10();
+
+        $monitor15 = new MonitorIntervalModel();
+        $monitor15-> Monitor15();
+
+
+        /*echo "TEST DE PRUEBA EN MONITORSCONTROLLER <br>";
     
-        $state = 1; 
-    
-        $monitorModel = new MonitorsModel(null, $state, $monitor_interval, $user_id);
+        $monitor_interval = '';
+        $user_id = $_SESSION['id'];  
+        $state = ''; 
+        $url = '';
+        $monitorModel = new MonitorsModel($url, $state, $monitor_interval, $user_id);
+   
+
+        $alert = new AlertsController();
     
         $result = $monitorModel->urls($user_id);
-    
-    
-        foreach ($result as $monitor) {
+
+        foreach($result as $monitor){
+            $id = $monitor['id'];
             $url = $monitor['url'];
             $monitor_interval = $monitor['monitor_interval'];
+           // $state = $monitor['state'];
+            //$user_id = $monitor['user_id'];
 
-            $monitorModel = new MonitorsModel($url, $state, $monitor_interval, $user_id);
-    
+            //echo "Monitor ID: $id, URL: $url, Intervalo: $monitor_interval, Estado: $state, Usuario: $user_id<br>";
+            echo "Monitor ID: $id, URL: $url, Intervalo: $monitor_interval<br><br>";
             $isUp = $monitorModel->monitor($url, $monitor_interval, $user_id, $state);
-    
-            if ($isUp) {
-                echo "La URL $url está activa y funcionando correctamente.<br>";
-            } else {
-                echo "La URL $url no está disponible.<br>";
-            }
-        }
+
+                if ($isUp) {
+                    echo "La URL $url está activa y funcionando correctamente.<br>";
+                    //$alert->send();
+
+                } else {
+                    echo "La URL $url no está disponible.<br>";
+                }*/
+
+        
     }
     
     

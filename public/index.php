@@ -8,6 +8,8 @@ require_once __DIR__ . '/../website/src/Router.php';
 use App\Controllers\Auth\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\MonitorsController;
+use App\Controllers\MonitorController;
+use App\Controllers\AlertsController;
 use App\Router;
 
 $router = new Router();
@@ -26,9 +28,10 @@ if (isset($_SESSION['id'])) {
     });
 
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
-    $router->addRoute('GET', '/dashboard/testMonitor', [new MonitorsController(), 'testMonitor']);    
+    $router->addRoute('GET', '/dashboard/testMonitor', [new MonitorController(), 'testMonitor']);    
     $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);
     $router->addRoute('POST', '/monitor', [new MonitorsController(), 'addURL']);
+    $router->addRoute('GET', '/alert', [new AlertsController(), 'send']);
 
 } else {
     $router->addRoute('GET', '/register', [new UserController(), 'create']);

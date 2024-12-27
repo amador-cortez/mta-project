@@ -1,4 +1,4 @@
-<?php  
+<?php
 namespace App\Models;
 
 use App\Database;
@@ -54,58 +54,76 @@ class MonitorsModel {
 
             return $stmt->rowCount();
 
-        } catch (\PDOException $e) {
-|            echo "Error al insertar en la base de datos: " . $e->getMessage();
+        } catch (PDOException $e) {
+           echo "Error al insertar en la base de datos: " . $e->getMessage();
             return false;
         }
     }
 
+    public function show($id) {
+        $pdo = $this->connection->getConnection();
 
-    public function show($id){
-        $con = $this->connection;
+        $sql = $pdo->prepare("SELECT * FROM monitors WHERE id = :id");
+        $sql->execute(['id' => $id]);
 
-        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
-
+        return $sql->fetch();
     }
 
-    public function update($id){
-        $con = $this->connection;
+    public function update($id, $state) {
+        $pdo = $this->connection->getConnection();
+        //echo ($id);
+        //echo($state);
 
-        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
+        $timeDown = date('Y-m-d H:i:s');  
 
+        $sql = $pdo->prepare("UPDATE monitors SET updated_at = NOW() WHERE id = :id");
+        $sql->execute(['id' => $id]);
     }
 
-    public function delete($id){
-        $con = $this->connection;
+    public function updateDown($id, $state) {
+        $pdo = $this->connection->getConnection();
 
-        $sql = $con->prepare("DELETE from monitors WHERE id=:id");
+        $timeDown = date('Y-m-d H:i:s'); 
+
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, timedown = :timedown WHERE id = :id");
+        
+        $sql->execute([
+            'state' => $state,       
+            'timedown' => $timeDown, 
+            'id' => $id             
+        ]);
+    }
+    
+
+    public function delete($id) {
+        $pdo = $this->connection->getConnection();
+
+        $sql = $pdo->prepare("DELETE FROM monitors WHERE id = :id");
+        $sql->execute(['id' => $id]);
     }
 
     public function urls($user_id) {
-        $con = $this->connection->getConnection(); 
-        $sql = $con->prepare("SELECT * FROM monitors WHERE user_id = :user_id");
+        $pdo = $this->connection->getConnection(); 
+
+        $sql = $pdo->prepare("SELECT * FROM monitors WHERE user_id = :user_id");
         $sql->execute(['user_id' => $user_id]);
+
         return $sql->fetchAll(); 
     }
-    
-    
 
-    public function monitor($url, $monitor_interval)
-    {
+    public function monitor($url, $monitor_interval) {
         if ($url == NULL) return false;
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_TIMEOUT, $monitor_interval);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $monitor_interval);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
         $data = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
+        curl_close($ch);
 
         return $httpcode >= 200 && $httpcode < 300;
     }
-
 }
-
-
-?>
