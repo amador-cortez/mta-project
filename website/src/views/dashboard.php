@@ -130,16 +130,14 @@
         .split-two{
             margin: 0px;
             border-radius: 0;
-        }
-
-        .split-two{
             border: none;
         }
+
         .card-service:hover{
             background-color: whitesmoke;
         }
         .card-service{
-            width: 80%;
+            width: 90%;
             margin-top: 5px;
             display: flex;
             flex-direction:row;
@@ -175,16 +173,16 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content:space-evenly;
+            justify-content:space-between;
             justify-content: start;
-            margin-left:0px;
+            
         }
 
         /*Search*/
        
 
         .search{
-            width: 100%;
+            width: 40%;
         }
 
         .search input{
@@ -197,6 +195,7 @@
             border-radius: 0.25em;
             border: 1px solid #caced1;
             cursor: pointer;
+            margin:auto;
         }
         
         .search i{
@@ -213,6 +212,8 @@
             font-size: 18px;
             cursor: pointer;
             margin: 15px;
+            margin-left: 10px;
+            margin-right: 25px;
         }
         .search-display {
             text-align: center;
@@ -225,7 +226,7 @@
             background-color: white;
             border-radius: 0.25em;
             border: 1px solid #caced1;
-            margin:  0 20px 20px;
+            margin-right: 20px;
   
         }
 
@@ -247,16 +248,14 @@
         /*Filter*/
         .container{
             
-            max-width: 320px;
-            width: 100%;
-            margin: 0 auto 30px;
+            width: auto;
 
         }
         .select-btn{
             display: flex;
             
             align-items: center;
-            height: 50px;
+            height: 55px;
             justify-content: space-between;
             padding: 0 16px;
             border-radius: 8px;
@@ -296,7 +295,7 @@
             position: absolute;
             width: 200px;
             font-size: 16px;
-            margin: 15px 80px 0 ;
+            margin: 15px 0 0 130px;
             border-radius: 8px;
             padding: 16px;
             background-color: white;
@@ -382,11 +381,18 @@
             padding-top: 25px;
             padding-left: 25px;
             font-size:20px;
+            margin-right: 25px;
          }
-         .select-service-box i{
-            opacity: 0.8;
+         .disabled{
+            opacity: 0.3;
+            margin: 0 20px;
          }
-
+         .permit{
+            opacity: 1;
+         }
+         .permit i:hover{
+            color: var(--blue-color);
+         }
          
          @media(max-width:750px){
             .card-service{
@@ -423,20 +429,21 @@
                 </div >
 
                 <!--ACTION BAR-->
-                <div class = "split-two">
+                <div class = "rows split-two">
+
                     <div class ="left select-service-box" onload="updateCheckedLabel()">
                         <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
-                       <!-- <i class="fa-solid fa-trash fa-2x"></i>-->
+                        <i class="fa-solid fa-trash fa-2x disabled"></i>
                     </div>
                     
-                    <div class ="right rows">
+                    <div class = "rows right"> 
 
-                        <form class = "search rows">
+                        <div class = "search rows">
                             <input type="text" id = "search-url-bar" placeholder = "Buscar por nombre or url"  onkeyup="search()"/>
                             <!--<i class="fa-solid fa-magnifying-glass"></i></input>-->
                             <span class="checkbox"><i class="fa-solid fa-x" onclick="resetSearch()"></i></span>
                             
-                        </form>
+                        </div>
                        
                         <div>
                             <select id = "order-by" name = "order-by" class="selector" onchange="orderBy()">
@@ -444,17 +451,11 @@
                                 <option value="inactive-first" >Inactivos primero</option>
                                 <option value="a-z">A - Z</option>   
                                 <option value="z-a">Z - A</option>  
-
-                                <!--
-                                <option value="down-first" selected>Caidas primero</option>  
-                                <option value="up-first" >Funcionando primero</option> 
-                                <option value="paused-first">Pausadas primero</option>      
-                                <option value="a-z">A-Z</option>   
-                                <option value="newest first">Mas reciente primero</option>   
-                                -->
                             </select>
                         </div>
+
                         <div class="container">
+
                             <div class="select-btn open" onclick="openFilters()">
                                 <span class = "btn-text">Seleccionar Filtro</span>
                                 <span class = "arrow-dwn">
@@ -475,19 +476,11 @@
                                     <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
                                     <span class="item-text">Seleccionar Todo</span>
                                 </li>
-                                
                             </ul>
+
                         </div>
-                        
-                        <!--
-                        <input type="checkbox" id = "filter-up" >Funcionando</input>
-                        <input type="checkbox" id = "filter-down" >Caidas</input>
-                        <input type="checkbox" id = "filter-paused" >Pausadas</input>
-                        <input type="checkbox" id = "filter-not-started" >Sin empezar</input>
-                        -->
+
                     </div>
-                </div>
-                <div class = "search-display">
                 </div>
                 
                 <!--MONITORING URLS-->
@@ -681,10 +674,11 @@
 
         const search = () => {
             const searchBar = document.getElementById("search-url-bar").value.toUpperCase();
-            console.log("enteres today");
+            
             const serviceListName = document.getElementById("service-list");
             const services = document.querySelectorAll('.card-service');
             const sname = serviceListName.getElementsByTagName("h3");
+
             let sum = 0;
             for(let i = 0; i< sname.length; i++){
                 let match = services[i].getElementsByTagName('h3')[0];
@@ -707,6 +701,7 @@
                 hideMessage();
             }
         }
+        
         function showMessage(msg){
 
             actionMessage.innerHTML = msg;
@@ -726,19 +721,15 @@
             
             switch(order){
                 case "active-first":
-                    console.log("Activo");
                     orderLabel("Activo");
                     break;
                 case "inactive-first":
-                    console.log("Inactivo");
                     orderLabel("Inactivo");
                     break;
                 case "a-z":
-                    console.log("A - Z");
                     orderType("A - Z");
                     break;
                 case "z-a":
-                    console.log("Z - A");
                     orderType("Z - A");
                     break;
             }
@@ -754,13 +745,12 @@
             let newOrderedServices = [];
             let temp = [];
 
-            console.log(`${order}`+2);
             for(let i = 0; i< slabel.length; i++){
                 let match = services[i].getElementsByTagName('label')[0];
-                console.log(`Match: ${match}`)
+          
                 if(match){
                     let textValue = match.textContent || match.innerHTML;
-                    console.log(`${order} order`);
+                    
                     if(textValue == order){
                         newOrderedServices.push(services[i]);
                     }else{
@@ -772,20 +762,17 @@
             for(let i = 0; i< temp.length; i++){
                 newOrderedServices.push(temp[i]); 
             }
-            console.log("Final New:");
-            console.log(`New order length: ${newOrderedServices.length}`);
 
             for(let i = 0; i< newOrderedServices.length; i++){
                 serviceListName.innerHTML += "<li class = 'card-service' >"+newOrderedServices[i].innerHTML +"</li>";
             }
-            console.log("after");
         }
+
         function orderType (order) {
             const serviceListName = document.getElementById("service-list");
             const services = document.querySelectorAll('.card-service');
 
             const ogOrder = []
-            console.log(`${order}`+2);
             for(let i = 0; i< services.length; i++){
                 let objTemp = {
                 "serviceInfo": services[i],
@@ -793,11 +780,6 @@
                 }
                 ogOrder.push(objTemp);
             }
-            /*
-            for(let i=0;i<ogOrder.length;i++){
-                console.log(ogOrder[i].name.innerHTML);
-                console.log(i);
-            }*/
 
             if(order == "A - Z"){
                 ogOrder.sort((a,b) => a.name.innerHTML.localeCompare(b.name.innerHTML));
@@ -807,13 +789,10 @@
             }
 
             serviceListName.innerHTML ="";
-            /*console.log("Final New:");
-            console.log(`New order length: ${ogOrder.length}`);*/
 
             for(let i = 0; i< ogOrder.length; i++){
                 serviceListName.innerHTML += "<li class = 'card-service' >"+ogOrder[i].serviceInfo.innerHTML  +"</li>";
             }
-            console.log("after");
         }
 
         //FILTER
@@ -825,37 +804,44 @@
             items = document.querySelectorAll(".item");
             items.forEach(item => {
                 item.addEventListener("click", () =>{
-                    let a = item.classList.toggle("checked");
+                    let added = item.classList.toggle("checked");
             
                     let checked = document.querySelectorAll(".checked"),
                     btnText = document.querySelector(".btn-text"),
                     itemText = item.querySelector(".item-text");
-
-                    console.log(itemText.innerHTML)
-                    if(checked ){
-                        if(checked.length >= (items.length-1))
-                        {
-                            resetServiceList();
-                            if(!items[items.length-1].classList.contains("checked"))items[items.length-1].classList.add("checked");
-                            
-                        }else{
-                            if(items[items.length-1].classList.contains("checked"))items[items.length-1].classList.remove("checked");
-                            
-
-                            if(a)
-                            {//autorefresh
+                    
+                    if(checked.length == 0){
+                        resetServiceList();
+                    }else{
+                        checked.forEach(i=>{
+                            let text = i.querySelector(".item-text");
+                            if(checked.length == 1)
+                            {
+                                btnText.innerText = `${text.innerHTML}`;
+                                FilterBy(text.innerHTML);
+                                /*
+                                if(text.innerHTML == "Seleccionar Todo"){
+                                    if(added){
+                                        items.forEach(status =>{
+                                            status.classList.add("checked");
+                                        });
+                                    }
+                                }*/
                                 
-                                btnText.innerText = `${itemText.innerHTML}`;
-                                FilterBy(itemText.innerHTML);
-                            }
-                        }
+                            }else if(checked.length == 2){
+                                if(text.innerHTML != itemText.innerHTML){
+                                    i.classList.remove("checked")
+                                }else{
+                                    btnText.innerText = `${text.innerHTML}`;
+                                    FilterBy(text.innerHTML);
+                                }
+                            } 
+                        });
                         
                     }
+                   
                 })
             });
-            
-
-            
         }
 
         const FilterBy = (type) =>{
@@ -878,7 +864,7 @@
             const slabel = serviceListName.getElementsByTagName("label");
             let sum = 0;
 
-            console.log(`${filter}`+2);
+           // console.log(`${filter}`+2);
             for(let i = 0; i< slabel.length; i++){
                 let match = services[i].getElementsByTagName('label')[0];
                 if(match){
