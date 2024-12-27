@@ -32,6 +32,7 @@ if (isset($_SESSION['id'])) {
 
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
     $router->addRoute('GET', '/api/monitors', [new MonitorsController(), 'getMonitors']);
+   // $router->addRoute('GET', '/api/monitorStatus', [new MonitorsController(), 'checkStatus']);
 
 
     $router->addRoute('GET', '/editMonitor', [new MonitorsController(), 'editMonitor']);

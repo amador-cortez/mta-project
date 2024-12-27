@@ -383,6 +383,9 @@
             padding-left: 25px;
             font-size:20px;
          }
+         .select-service-box i{
+            opacity: 0.8;
+         }
 
          
          @media(max-width:750px){
@@ -423,7 +426,7 @@
                 <div class = "split-two">
                     <div class ="left select-service-box" onload="updateCheckedLabel()">
                         <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
-
+                       <!-- <i class="fa-solid fa-trash fa-2x"></i>-->
                     </div>
                     
                     <div class ="right rows">
@@ -566,7 +569,6 @@
             window.addEventListener("load", function(event){
                 console.log('I have loaded')
                 readAllMonitors();
-                updateGeneralStatus();
             })
         
         function updateGeneralStatus(up, down, total){
@@ -578,77 +580,102 @@
 
         }
 
+        
 
         async function readAllMonitors() {
-        try {
+            const pollingInterval = 60000;// 1 min in milliseconds (60,000)
+            //const pollingInterval =10000; // 5 sec in milsec
+            const currentTime = new Date(Date.now())
 
-            // Make the GET request
-            const response = await fetch("/api/monitors");
-
-            // Check if the response is okay
-            if (!response.ok) {
-                throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
-            }
-
-            // Parse the response as text and then JSON
-            const responseText = await response.text();
-           // console.log(response);
-            let responseData;
             try {
-                responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
-                //console.log(JSON.parse(responseData));
-            } catch (error) {
-                throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
-            }
 
-            // Check for a successful response
-            if (responseData.status === "No monitors found") {
-                console.log("No motitors found");
-            } else {
-                /*
-                console.log("he entrado aqui 5");
-                console.log(responseData);
-                console.log(typeof responseData);
-                console.log(responseData.length);*/
-                //for(let i = 0; i<res)
+                // Make the GET request
+                const response = await fetch("/api/monitors");
 
-                /* numServicesUp =
-            numServicesDown 
-            numMonitors */
+                // Check if the response is okay
+                if (!response.ok) {
+                    throw new Error(`DB error! Status: ${response.status} - ${response.statusText}`);
+                }
 
-                serviceList.innerHTML = "";
-                let sumServicesUp = 0;
-                let sumServicesDown = 0;
-                let totalMonitors = 0;
-                
+                // Parse the response as text and then JSON
+                const responseText = await response.text();
+            // console.log(response);
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
+                    //console.log(JSON.parse(responseData));
+                } catch (error) {
+                    throw new Error(`Failed to parse JSON. hi Response: ${responseText}`);
+                }
 
-                responseData.forEach(monitor => {
-                    const [url, state, monitor_interval,id] = monitor;
-                    //console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
-                    //console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                // Check for a successful response
+                if (responseData.status === "No monitors found") {
+                    console.log("No motitors found");
+                    //showMessage("No monitors found");
+                } else {
+                // hideMessage();
+                    serviceList.innerHTML = "";
+                    let sumServicesUp = 0;
+                    let sumServicesDown = 0;
+                    let totalMonitors = 0;
+
+                    const dateTime = formatDate(currentTime);
+                    let dt = dateTime.split(",");
+                    let date = dt[0];
+                    let time = dt[1];
+
+                    responseData.forEach(monitor => {
+                        const [url, state, monitor_interval,id] = monitor;
+                        //console.log('Url: '+url+", Frequency: "+monitor_interval+ ", state: "+state+", id:" +id);
+                        //console.log('Typeof Url: '+typeof url+", Typeof Frequency: "+ typeof monitor_interval+ ", Typeof state: " + typeof state);
+                        
+                        serviceList.innerHTML +=createMonitor(url,
+                            monitor_interval,
+                            state,
+                            id,
+                            date, 
+                            time
+                        );
+
+                        if(state ==1){
+                            sumServicesUp ++;
+                        }else{
+                            sumServicesDown++;
+                        }
+                        totalMonitors++;
+
+                        updateCheckedLabel();
+                    });
+                    updateGeneralStatus(sumServicesUp,sumServicesDown, totalMonitors);
                     
-                    serviceList.innerHTML +=createMonitor(url,
-                        monitor_interval,
-                        state,
-                        id
-                    );
-
-                    if(state ==1){
-                        sumServicesUp ++;
-                    }else{
-                        sumServicesDown++;
-                    }
-                    totalMonitors++;
-
-                    updateCheckedLabel();
-                });
-                updateGeneralStatus(sumServicesUp,sumServicesDown, totalMonitors)
-
+                    
+                    setTimeout(readAllMonitors,pollingInterval);
+               
+                }
+            } catch (error) {
+                console.error('An error occurred with something:', error.message);
             }
-        } catch (error) {
-            console.error('An error occurred with something:', error.message);
         }
-    }
+
+        function formatDate(currentTime){
+            const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+
+            const dateTime = currentTime.toLocaleString().split(",");
+
+            //console.log(dateTime);
+            //console.log("Time: " +dateTime[1]);
+           // let date = dateTime[0];
+            let  date= dateTime[0].split("/");
+
+            let monthSpn = months[Number(date[0])-1];
+
+            let fullDate = date[1] + "/" + monthSpn + "/" + date[2];
+
+           // console.log("Full date: " + fullDate);
+            
+
+            return fullDate +","+ dateTime[1];
+        }
 
         //Search
 
@@ -879,8 +906,8 @@
         }
 
 
-        const createMonitor = (url, frequency,active,id) => {
-            console.log("entered create monitor");
+        const createMonitor = (url, frequency,active,id, date, time) => {
+            //console.log("entered create monitor");
             //const {urlName, link, date} = serviceData;
             //const {link, domainName} = serviceData;
             const domainName = getDomainName(url);
@@ -902,7 +929,8 @@
                                          <div class="right">
                                             <h3> ${domainName}</h3> 
                                             <div class = "under">
-                                                <p>Última comprobación (fecha y hora).</p>
+                                                <p>Fecha: ${date}</p>
+                                                <p>Hora: ${time}</p>
                                             </div>
                                         </div>
                                         
