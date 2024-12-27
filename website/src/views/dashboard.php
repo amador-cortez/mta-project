@@ -8,6 +8,10 @@
   
 
     <style>
+        /*position, absolute, relativs, sticky
+        Fixed NO
+        Siempre relative
+        Absolute hasta arriabd e la pantalla*/ 
         :root {
             --blue-color: #457b9d;
         }
@@ -69,11 +73,17 @@
         .right{
             display: inline-block;
 
+
+        }
+        .left{
+            /*justify-content: space-between;
+            justify-content:end;*/
         }
         .right{
             float: right;
             /*flex: 1;*/
         }
+        
 
         .main-content, .statistics{
             display: inline-block;
@@ -130,7 +140,16 @@
         }
         .card-service{
             width: 80%;
-            margin-top: 10px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction:row;
+            justify-content: space-between;
+
+        }
+
+        .status{
+            display: flex;
+            justify-content: start;
         }
         
         .card-service i{
@@ -142,6 +161,11 @@
             padding: 5px 10px;
             
         }
+        .service-status{
+            display:flex;
+            flex: row;
+            justify-content: start;
+        }
 
 
 
@@ -150,6 +174,10 @@
         .rows{
             display: flex;
             flex-direction: row;
+            align-items: center;
+            justify-content:space-evenly;
+            justify-content: start;
+            margin-left:0px;
         }
 
         /*Search*/
@@ -162,7 +190,6 @@
         .search input{
             background-color: whitesmoke;
             color: black;
-            padding: 10px;
             height:18px;
             padding: 16px 20px 20px 20px;
             
@@ -201,6 +228,7 @@
             margin:  0 20px 20px;
   
         }
+
        
         
         .selector:hover{
@@ -267,6 +295,7 @@
         .list-items{
             position: absolute;
             width: 200px;
+            font-size: 16px;
             margin: 15px 80px 0 ;
             border-radius: 8px;
             padding: 16px;
@@ -333,13 +362,39 @@
 
             
          }
+
+         .alerting{
+            color: green;
+            justify-content:center;
+            font-size: 18px;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 16px;
+         }
          /*
          .scroll-div{
             overflow-y: scroll;
             margin: 30px;
          }
          */
+         .select-service-box{
+            padding:16px;
+            padding-top: 25px;
+            padding-left: 25px;
+            font-size:20px;
+         }
+
          
+         @media(max-width:750px){
+            .card-service{
+                flex-direction:column;
+                width: 50%;
+            }
+            /*
+            .rows{
+                flex-direction:column;
+            }*/
+         }
          
 
 
@@ -352,7 +407,7 @@
         <div class="sidebar">
             <!--<img src = "#" alt = "Logo-Opcional"></img>-->
             <h1 class="middle" style="color: #457b9d; ">MTA</h1>
-            <a href = "dashboard.html">Monitoreo</a>
+            <a href = "#" onclick="redireccionarDashboard()" >Monitoreo</a>
             <a href = "/logout">Cerrar Sesion</a>
         </div>
 
@@ -366,7 +421,7 @@
 
                 <!--ACTION BAR-->
                 <div class = "split-two">
-                    <div class ="left" onload="updateCheckedLabel()">
+                    <div class ="left select-service-box" onload="updateCheckedLabel()">
                         <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
 
                     </div>
@@ -434,7 +489,8 @@
                 
                 <!--MONITORING URLS-->
                 <div class = "scroll-div">
-                    <div class = "alert">
+                    <div id= "feedback" class = "middle">
+                        
                         <p id = "actionMessage"></p>
                     </div>
                     <ul id="service-list" class = "service-list-css">  
@@ -457,11 +513,11 @@
         
                     <h3 class = "over" id = "number-services-up">2</h3>
                     <p class = "under">Funcionando</p>
-        
+                    <!--
                     <h3 class = "over" id = "number-services-paused">0</h3>
                     <p class = "under">Pausados</p>
-        
-                    <p class="middle" id = number-used-monitors>Usando 2 de 50 monitores </p>
+                    -->
+                    <p class="middle" id = "number-used-monitors">Usando 2 de 50 monitores </p>
         
                 </div>
         
@@ -491,7 +547,18 @@
         const checkBoxEle=document.getElementsByName('select-service');
         const checkAllServices = document.getElementById("select-all-services");
         const checkedBoxesLabel = document.getElementById('select-all-services-label');
-       const serviceList = document.getElementById("service-list");
+        const serviceList = document.getElementById("service-list");
+
+        const actionMessage = document.getElementById("actionMessage");
+        const alertDiv = document.getElementById("feedback");
+
+        const numServicesUp =document.getElementById("number-services-up");
+        const numServicesDown = document.getElementById("number-services-down");
+        const numMonitors = document.getElementById("number-used-monitors");
+        function redireccionarDashboard() {
+            window.location.href = "dashboard";
+        }
+
 
         function redireccionarMonitor(){
             window.location.href = "monitor";
@@ -499,8 +566,17 @@
             window.addEventListener("load", function(event){
                 console.log('I have loaded')
                 readAllMonitors();
+                updateGeneralStatus();
             })
+        
+        function updateGeneralStatus(up, down, total){
+
             
+            numServicesUp.innerHTML = up;
+            numServicesDown.innerHTML = down;
+            numMonitors.innerHTML = "Usando "+total+ " de 50  monitores ";
+
+        }
 
 
         async function readAllMonitors() {
@@ -516,7 +592,7 @@
 
             // Parse the response as text and then JSON
             const responseText = await response.text();
-            console.log(response);
+           // console.log(response);
             let responseData;
             try {
                 responseData = JSON.parse(responseText); // Asegurarse de parsear el JSON correctamente
@@ -536,7 +612,15 @@
                 console.log(responseData.length);*/
                 //for(let i = 0; i<res)
 
+                /* numServicesUp =
+            numServicesDown 
+            numMonitors */
+
                 serviceList.innerHTML = "";
+                let sumServicesUp = 0;
+                let sumServicesDown = 0;
+                let totalMonitors = 0;
+                
 
                 responseData.forEach(monitor => {
                     const [url, state, monitor_interval,id] = monitor;
@@ -548,8 +632,17 @@
                         state,
                         id
                     );
+
+                    if(state ==1){
+                        sumServicesUp ++;
+                    }else{
+                        sumServicesDown++;
+                    }
+                    totalMonitors++;
+
                     updateCheckedLabel();
                 });
+                updateGeneralStatus(sumServicesUp,sumServicesDown, totalMonitors)
 
             }
         } catch (error) {
@@ -579,7 +672,25 @@
                         
                     }
                 }
-            }   
+            }  
+            if(sum == services.length){
+                showMessage("No se encontraron monitores con este nombre.");
+               // acitionMessage.style.color = whitesmoke;
+            } else{
+                hideMessage();
+            }
+        }
+        function showMessage(msg){
+
+            actionMessage.innerHTML = msg;
+            alertDiv.classList.add("alerting");
+            console.log(alertDiv.classList);
+            
+        }
+        function hideMessage(){
+            actionMessage.innerHTML = "";
+            alertDiv.classList.remove("alerting");
+            console.log(alertDiv.classsList);
         }
 
         //ORDER
@@ -692,12 +803,18 @@
                     let checked = document.querySelectorAll(".checked"),
                     btnText = document.querySelector(".btn-text"),
                     itemText = item.querySelector(".item-text");
+
+                    console.log(itemText.innerHTML)
                     if(checked ){
                         if(checked.length >= (items.length-1))
                         {
                             resetServiceList();
+                            if(!items[items.length-1].classList.contains("checked"))items[items.length-1].classList.add("checked");
                             
                         }else{
+                            if(items[items.length-1].classList.contains("checked"))items[items.length-1].classList.remove("checked");
+                            
+
                             if(a)
                             {//autorefresh
                                 
@@ -770,25 +887,28 @@
             let activo;
             if(active == 1) {activo = "Activo"}else{
                 activo = "Inactivo"
+
             }
 
             const service  = `<li class = "card-service" >
-                                <div class=" left">
-                                    <div class=" rows">
+                                <div class=" service-status">
+                                    <div class=" rows ">
                                         <div class="left">
                                             
                                             <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
                                             <label  for = "select-sevice2" style="margin-right: 50px;">${activo}</label> 
                                         
                                         </div>
-                                        <div class="right">
+                                         <div class="right">
                                             <h3> ${domainName}</h3> 
                                             <div class = "under">
                                                 <p>Última comprobación (fecha y hora).</p>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
+                               
                                 <div class="right rows">
                                     <p  class="left">${frequency} min </p>
                                     <a href = "/editMonitor?id=${id}" ><i class="fa-regular fa-pen-to-square fa-2x" data-id=${id} ></i></a>
@@ -815,6 +935,8 @@
 
         function resetSearch(){
             document.getElementById("search-url-bar").value = "";
+            hideMessage();
+            readAllMonitors();
         }
 
         //cHECKBOXES
@@ -900,6 +1022,15 @@
                         //alert()
                         console.log("Yap")
                         readAllMonitors();
+
+                        //actionMessage.innerHTML = "Se ha eliminardo exitosamente un monitor!";
+                        showMessage("Se ha eliminardo exitosamente un monitor!");
+                        
+                        setTimeout(() => {
+                            hideMessage()
+                        }, 3000);
+
+                        
                     // deleteSelectedService();''
 
 
@@ -914,6 +1045,8 @@
             
 
         }
+
+        //YA NO SE OCUPAAAA
 
         function deleteSelectedService(){
             const services = document.querySelectorAll('#service-list li');

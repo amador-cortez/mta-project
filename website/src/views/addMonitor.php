@@ -206,10 +206,10 @@
     </head>
     <body >
 
-        <div class="sidebar">
+    <div class="sidebar">
             <!--<img src = "#" alt = "Logo-Opcional"></img>-->
             <h1 class="middle" style="color: #457b9d; ">MTA</h1>
-            <a href = "dashboard.html">Monitoreo</a>
+            <a href = "#" onclick="redireccionarDashboard()" >Monitoreo</a>
             <a href = "/logout">Cerrar Sesion</a>
         </div>
 
