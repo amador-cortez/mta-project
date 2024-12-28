@@ -1,16 +1,9 @@
 <?php
-
-require 'MonitorIntervalModel.php'; 
-
+require_once __DIR__ . '/website/src/autoload.php';
+use App\Models\MonitorIntervalModel;
 $monitorModel = new MonitorIntervalModel();
 
 
-$function = $argv[1];
-
-switch($function){
-    case 'monitor5':
-        echo "Ejecutando monitor 5 \n";
-        $monitorModel->Monitor5();
-        break;
-
-}
+$interval = (int) $argv[1];
+$monitor = new MonitorIntervalModel();
+$monitor->monitor($interval);

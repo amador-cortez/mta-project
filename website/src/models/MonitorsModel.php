@@ -1,9 +1,12 @@
 <?php
 namespace App\Models;
 
+date_default_timezone_set('America/Tijuana');
+
 use App\Database;
 
 class MonitorsModel {
+
 
     public string $url;
     public string $state;
@@ -60,13 +63,13 @@ class MonitorsModel {
         }
     }
 
-    public function show($id) {
+    public function show() {
         $pdo = $this->connection->getConnection();
 
-        $sql = $pdo->prepare("SELECT * FROM monitors WHERE id = :id");
-        $sql->execute(['id' => $id]);
+        $sql = $pdo->prepare("SELECT * FROM monitors ");
+        $sql->execute();
 
-        return $sql->fetch();
+        return $sql->fetchAll(); // Devuelve un array asociativo de todas las filas
     }
 
     public function update($id, $state) {
@@ -76,8 +79,11 @@ class MonitorsModel {
 
         $timeDown = date('Y-m-d H:i:s');  
 
-        $sql = $pdo->prepare("UPDATE monitors SET updated_at = NOW() WHERE id = :id");
-        $sql->execute(['id' => $id]);
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, updated_at = NOW() WHERE id = :id");
+        $success = $sql->execute([
+            'id' => $id,
+            'state' => $state
+        ]);
     }
 
     public function updateDown($id, $state) {

@@ -8,13 +8,8 @@ class MonitorController
 {
     public function testMonitor() {
         $monitor5 = new MonitorIntervalModel();
-        $monitor5 -> Monitor5();
+        $monitor5 -> monitor(5);
 
-        $monitor10 = new MonitorIntervalModel();
-        $monitor10-> Monitor10();
-
-        $monitor15 = new MonitorIntervalModel();
-        $monitor15-> Monitor15();
         
 
 

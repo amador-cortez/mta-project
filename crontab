@@ -1,0 +1,5 @@
+PATH=/usr/local/bin:/usr/bin:/bin
+
+*/5 * * * * php /var/www/html/cron_jobs.php 5 >> /var/log/cron_output.log 2>&1   # Monitor5 cada 5 minutos
+*/10 * * * * php /var/www/html/cron_jobs.php 10 >> /var/log/cron_output.log 2>&1  # Monitor10 cada 10 minutos
+*/15 * * * * php /var/www/html/cron_jobs.php 15 >> /var/log/cron_output.log 2>&1  # Monitor15 cada 15 minutos

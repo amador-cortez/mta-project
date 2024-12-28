@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\MonitorsModel;
 use App\Models\MonitorIntervalModel;
 use function App\Controllers\Auth\sanitizeInput;
+date_default_timezone_set('America/Tijuana');
 
 class MonitorsController
 {

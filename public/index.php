@@ -28,7 +28,6 @@ if (isset($_SESSION['id'])) {
     });
 
     $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
-    $router->addRoute('GET', '/dashboard/testMonitor', [new MonitorController(), 'testMonitor']);    
     $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);
     $router->addRoute('POST', '/monitor', [new MonitorsController(), 'addURL']);
     $router->addRoute('GET', '/alert', [new AlertsController(), 'send']);
@@ -39,6 +38,7 @@ if (isset($_SESSION['id'])) {
 
     $router->addRoute('GET', '/login', [new AuthController(), 'login']);
     $router->addRoute('POST', '/login', [new AuthController(), 'authentication']);
+    $router->addRoute('GET', '/testMonitor', [new MonitorController(), 'testMonitor']);    
 
     $router->addRoute('GET', '/dashboard', function() {
         header("Location: /login"); 

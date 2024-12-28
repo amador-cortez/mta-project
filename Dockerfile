@@ -10,7 +10,9 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     zip \
-    unzip
+    unzip \
+    cron
+
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
@@ -44,28 +46,11 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port 80
 EXPOSE 80
 
-# Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y \
-    cron \
-    vim \
-    && rm -rf /var/lib/apt/lists/*
 
-# Crear directorio para los scripts
-WORKDIR /var/www/cron
-
-# Copiar scripts
-COPY cron-jobs/ .
-COPY entrypoint.sh /entrypoint.sh
-
-# Dar permisos de ejecución
-RUN chmod +x /entrypoint.sh
-RUN chmod +x *.php
-
-# Configurar crontab
 COPY crontab /etc/cron.d/crontab
+RUN echo "" >> /etc/cron.d/crontab  # Asegura una nueva línea al final 
 RUN chmod 0644 /etc/cron.d/crontab
 RUN crontab /etc/cron.d/crontab
 
-# Punto de entrada
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["cron", "-f"]
+
+CMD service cron start && apache2-foreground

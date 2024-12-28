@@ -1,10 +1,11 @@
 <?php
 namespace App\Models;
+date_default_timezone_set('America/Tijuana');
+
 #una vez que se haya validado la informacion obtenida de los campos, se viene a esta session en donde se hara movimientos en la base de datos
 use App\Database;
 class UsersModel
 {
-
     public string $username;
     public string $password;
     public string $email;
