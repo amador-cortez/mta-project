@@ -66,13 +66,14 @@ class MonitorsModel {
     }
 
 
-    public function show($id){
-        $con = $this->connection;$pdo = $this->connection->getConnection();
+
     public function show() {
         $pdo = $this->connection->getConnection();
 
-        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
+        $sql = $pdo->prepare("SELECT * FROM monitors");
+        $sql->execute();
 
+        return $sql->fetchAll(); // Devuelve un array asociativo de todas las filas
     }
 
     public static function all($user_id){
@@ -157,13 +158,28 @@ class MonitorsModel {
 
     public function update($id, $state) {
         $pdo = $this->connection->getConnection();
-        //echo ($id);
-        //echo($state);
 
         $timeDown = date('Y-m-d H:i:s');  
 
-        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, updated_at = NOW() WHERE id = :id");
+        $success = $sql->execute([
+            'id' => $id,
+            'state' => $state
+        ]);
+    }
 
+    public function updateDown($id, $state) {
+        $pdo = $this->connection->getConnection();
+
+        $timeDown = date('Y-m-d H:i:s'); 
+
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, timedown = :timedown WHERE id = :id");
+        
+        $sql->execute([
+            'state' => $state,       
+            'timedown' => $timeDown, 
+            'id' => $id             
+        ]);
     }
 
     public static function delete($id){
@@ -213,7 +229,6 @@ class MonitorsModel {
 }
 
             
-}
 
 
 ?>

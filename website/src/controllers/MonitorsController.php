@@ -209,39 +209,6 @@ class MonitorsController
         $monitor15 = new MonitorIntervalModel();
         $monitor15-> Monitor15();
 
-
-        /*echo "TEST DE PRUEBA EN MONITORSCONTROLLER <br>";
-    
-        $monitor_interval = '';
-        $user_id = $_SESSION['id'];  
-        $state = ''; 
-        $url = '';
-        $monitorModel = new MonitorsModel($url, $state, $monitor_interval, $user_id);
-   
-
-        $alert = new AlertsController();
-    
-        $result = $monitorModel->urls($user_id);
-
-        foreach($result as $monitor){
-            $id = $monitor['id'];
-            $url = $monitor['url'];
-            $monitor_interval = $monitor['monitor_interval'];
-           // $state = $monitor['state'];
-            //$user_id = $monitor['user_id'];
-
-            //echo "Monitor ID: $id, URL: $url, Intervalo: $monitor_interval, Estado: $state, Usuario: $user_id<br>";
-            echo "Monitor ID: $id, URL: $url, Intervalo: $monitor_interval<br><br>";
-            $isUp = $monitorModel->monitor($url, $monitor_interval, $user_id, $state);
-
-                if ($isUp) {
-                    echo "La URL $url está activa y funcionando correctamente.<br>";
-                    //$alert->send();
-
-                } else {
-                    echo "La URL $url no está disponible.<br>";
-                }*/
-
         
     }
     
@@ -258,16 +225,5 @@ class MonitorsController
         echo json_encode($reuslt);
     }
 
-    public function getMonitors(){
-        $monitors = MonitorsModel:: all();
-        //header('Content_Type: application/json');
-        if($monitors){
-            echo json_encode($monitors);
-        }else{
-            
-            echo json_encode(["status" => "error", "message" => "No monitors found hhhhhhhh"]);
-        }
-        
-    }
 
 }

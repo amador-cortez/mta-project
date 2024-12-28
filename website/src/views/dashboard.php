@@ -662,7 +662,8 @@
 
             let monthSpn = months[Number(date[0])-1];
 
-            let fullDate = date[1] + "/" + monthSpn + "/" + date[2];
+           // let fullDate = date[1] + "/" + monthSpn + "/" + date[2];
+           let fullDate = date[1] + "/" + date[0] + "/" + date[2];
 
            // console.log("Full date: " + fullDate);
             
