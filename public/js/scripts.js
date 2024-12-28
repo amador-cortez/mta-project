@@ -1,18 +1,35 @@
 const checkBoxEle=document.getElementsByName('select-service');
 const checkAllServices = document.getElementById("select-all-services");
 const checkedBoxesLabel = document.getElementById('select-all-services-label');
-
+/*
+checkAllServices.addEventListener("load", () =>{
+    updateCheckedLabel();
+});
+checkAllServices.addEventListener("change", () =>{
+    updateCheckedLabel();
+});*/
 
 //const searchBar = document.getElementById("search-url-bar");
 const lists = document.querySelectorAll('#url-lists li');
 const searchIcon = document.querySelector('.fa-magnifying-glass');
 const xIcon = document.querySelector('.fa-xmark');
 
+window.addEventListener("load",function(event){
+    console.log("I have loaded");
+    
+    const serviceList = document.getElementById("service-list");
+    serviceList.innerHTML +=createMonitor("https://app.slack.com/client/T0850L44FPS/D08491Z34CV",15,false);
+    serviceList.innerHTML +=createMonitor("https://w3collective.com/get-domain-name-url-javascript/",5,true);
+    serviceList.innerHTML +=createMonitor("https://app.slack.com/client/T0850L44FPS/D08491Z34CV",10,false);
+    
+    console.log(serviceList)
+})
 
 //Search
 
 const search = () => {
     const searchBar = document.getElementById("search-url-bar").value.toUpperCase();
+    console.log("enteres today");
     const serviceListName = document.getElementById("service-list");
     const services = document.querySelectorAll('.card-service');
     const sname = serviceListName.getElementsByTagName("h3");
@@ -138,17 +155,30 @@ function openFilters(){
     items = document.querySelectorAll(".item");
     items.forEach(item => {
         item.addEventListener("click", () =>{
-            item.classList.toggle("checked");
+            let a = item.classList.toggle("checked");
     
             let checked = document.querySelectorAll(".checked"),
             btnText = document.querySelector(".btn-text"),
             itemText = item.querySelector(".item-text");
-            if(checked && checked.length >0){
-                btnText.innerText = `${itemText.innerHTML}`;
-                FilterBy(itemText.innerHTML);
+            if(checked ){
+                if(checked.length >= (items.length-1))
+                {
+                    resetServiceList();
+                    
+                }else{
+                    if(a)
+                    {//autorefresh
+                        
+                        btnText.innerText = `${itemText.innerHTML}`;
+                        FilterBy(itemText.innerHTML);
+                    }
+                }
+                
             }
         })
     });
+    
+
     
 }
 
@@ -200,33 +230,55 @@ const resetServiceList = () => {
 }
 
 
-const createMonitor = (serviceData) => {
-    console.log("enterde create monitor");
+const createMonitor = (url, frequency,active) => {
+    console.log("entered create monitor");
     //const {urlName, link, date} = serviceData;
-    const {link, domainName} = serviceData;
-    //const domainName = getDomainName(link);
+    //const {link, domainName} = serviceData;
+    const domainName = getDomainName(url);
+    let activo;
+    if(active) {activo = "Activo"}else{
+        activo = "Inactivo"
+    }
 
-    const service = document.createElement("LI");
-
-    service.className = "card-service";
-    service.innerHTML = '<div class=" left"> <div class="rows"> <div class="left"> '+
-    '<input type="checkbox" name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">'+
-    '<label  style="margin-right: 50px;">Activo</label> </div> ' +
-     '<div class="right">'+
-        '<h3> '+domainName+' #</h3> '+
-        '<div class = "under">'+
-            '<p id = "last-date-check">Última comprobación (fecha y hora).</p>'+
-       ' </div> </div> </div> </div> ' + 
-    '<div class="right rows">'+
-    '<p id = "check-time-frecuency" class="left">Frecuencia de las comprobaciones</p>'+
-    '<a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" for ="second-service" ></i></a>'+
-    '<i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i> </div> ';
-
-    urlsContainer.append(service);
-    console.log(urlsContainer.lastChild);
+    const service  = `<li class = "card-service" >
+                        <div class=" left">
+                            <div class=" rows">
+                                <div class="left">
+                                    
+                                    <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
+                                    <label  for = "select-sevice2" style="margin-right: 50px;">${activo}</label> 
+                                
+                                </div>
+                                <div class="right">
+                                    <h3> ${domainName}</h3> 
+                                    <div class = "under">
+                                        <p>Última comprobación (fecha y hora).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right rows">
+                            <p  class="left">${frequency} min </p>
+                            <a href = "editMonitor.html" ><i class="fa-regular fa-pen-to-square fa-2x" ></i></a>
+                            <i class="fa-solid fa-trash fa-2x" onclick="deleteSelectedService()" ></i>
+                        </div>
+                    </li>`;
+    return service;
+    
+    //urlsContainer.append(service);
+    //console.log(urlsContainer.lastChild);
   }
 
+  function getDomainName(url){
+    try {
+        let urlObject =(new URL(url)) ;
+        return urlObject.hostname;
+    } catch (error) {
+        console.error("Invalid URL:", error);
+        return null;
+    }
 
+  }
 
 //DASHBOARD
 
@@ -304,19 +356,16 @@ function deleteSelectedService(){
             console.log("INDEX = " + index);
             var confirmDelete = confirm("Seguro que quiere eleiminar este servicio de monitoreo?");
             if(confirmDelete){
-                
                 this.classList.remove("card-service");
                 this.innerHTML = " ";
                 this.parentNode.removeChild(this);
-                console.log(services);
-                
+                console.log(services);  
             }
             
         };
     }
     
  }
-
 
 
 
@@ -327,7 +376,10 @@ function addURL(){
     const frequency = document.querySelector('input[name="time"]:checked'); 
     
     if(validateURLForm(url, frequency)){
-
+        console.log(frequency.value);
+        const serviceList = document.getElementById('service-list');
+        //createMonitor(url, frequency,true);
+        //serviceList.innerHTML+=createMonitor(url,frecuency, status);
         alert("Se ha agregado exitosamente!");
     }
 
@@ -366,6 +418,7 @@ function updateURL(){
         fillForm();
     }
 }
+//AGREGAR URL
 
 function validateURLForm(url, frequency){
     const validMessage = document.getElementById('valid-url');
@@ -404,7 +457,7 @@ function checkURL(url , validMessage){
         '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
         '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
 
-    if(urlPattern.test(url) || url == "" || url == null){
+    if(urlPattern.test(url)){
         
         validMessage.innerHTML = "URL Valido."
         validMessage.style.color = "green";
@@ -418,4 +471,19 @@ function checkURL(url , validMessage){
 
         return false;
     } 
+}
+
+async function urlExists(url){
+    try{
+        const response = await fetch(url);
+        if(!response.ok){
+            console.log("URL Does not exist");
+            return false;
+        }
+        return true;
+    }catch(error){
+        console.log("Error checkign URL");
+        return false;
+    }
+
 }

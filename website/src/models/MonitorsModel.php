@@ -4,6 +4,8 @@ namespace App\Models;
 date_default_timezone_set('America/Tijuana');
 
 use App\Database;
+use PDO;
+use PDOException;
 
 class MonitorsModel {
 
@@ -63,13 +65,94 @@ class MonitorsModel {
         }
     }
 
+
+    public function show($id){
+        $con = $this->connection;$pdo = $this->connection->getConnection();
     public function show() {
         $pdo = $this->connection->getConnection();
 
-        $sql = $pdo->prepare("SELECT * FROM monitors ");
-        $sql->execute();
+        $sql= $con->prepare("SELECT *FROM monitors WHERE id=:id");
 
-        return $sql->fetchAll(); // Devuelve un array asociativo de todas las filas
+    }
+
+    public static function all($user_id){
+        
+        try {
+            $con = new Database();
+            $pon = $con->getConnection();
+            $stmt = $pon->prepare("SELECT * FROM monitors WHERE user_id = :user_id");
+            $stmt->execute(['user_id' => $user_id]);
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $myResult = array();
+
+            foreach($result as $row)
+            {
+                //echo json_encode({$row["url"] , $row["state"] , $row["monitor_interval"]});
+                $myResult [] = array($row["url"],$row["state"] ,  $row["monitor_interval"],$row["id"]);
+
+               // echo json_encode("URL: " . $row["url"] . " - State: ". $row["state"] . " - Frequnecy: " . $row["monitor_interval"]);
+            
+            }
+            return $myResult;
+           
+
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error al insertar en la base de datos: " . $e->getMessage();
+            return false;
+        }
+    }
+    public static function getMonitor($id){
+        
+        try {
+            $con = new Database();
+            $pon = $con->getConnection();
+            $stmt = $pon->prepare("SELECT * FROM monitors WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $myResult = array();
+
+            foreach($result as $row)
+            {
+                //echo json_encode({$row["url"] , $row["state"] , $row["monitor_interval"]});
+                $myResult [] = array($row["url"], $row["monitor_interval"], $row["id"]);
+
+               // echo json_encode("URL: " . $row["url"] . " - State: ". $row["state"] . " - Frequnecy: " . $row["monitor_interval"]);
+            
+            }
+            return $myResult;
+           
+
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error al insertar en la base de datos: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function edit($url, $monitor_interval, $id){
+        try{
+
+            $connection = new Database();
+            $con = $connection->getConnection();
+           // $stmt = $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
+            $stmt = $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval WHERE id =:id");
+            $stmt -> execute([
+                'url' => $url,
+                'monitor_interval' => $monitor_interval,
+                'id' => $id
+                
+            ]);
+
+            return true;
+
+        }catch(PDOException $e){
+            echo "Error al editar monitor en la base de datos" . $e->getMessage();
+            return false;
+            
+        }
     }
 
     public function update($id, $state) {
@@ -79,33 +162,28 @@ class MonitorsModel {
 
         $timeDown = date('Y-m-d H:i:s');  
 
-        $sql = $pdo->prepare("UPDATE monitors SET state = :state, updated_at = NOW() WHERE id = :id");
-        $success = $sql->execute([
-            'id' => $id,
-            'state' => $state
-        ]);
+        $sql= $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
+
     }
 
-    public function updateDown($id, $state) {
-        $pdo = $this->connection->getConnection();
+    public static function delete($id){
+        try{
+            $connection = new Database();
+            $con = $connection->getConnection();
 
-        $timeDown = date('Y-m-d H:i:s'); 
+            $stmt =  $con->prepare("DELETE from monitors WHERE id=:id");
+            $stmt -> execute([
+                'id'=> $id
+            ]);
+            return true;
 
-        $sql = $pdo->prepare("UPDATE monitors SET state = :state, timedown = :timedown WHERE id = :id");
-        
-        $sql->execute([
-            'state' => $state,       
-            'timedown' => $timeDown, 
-            'id' => $id             
-        ]);
-    }
-    
+        }catch(PDOException $e){
+            echo "Error al eliminar monitor en la base de datos" . $e->getMessage();
+            return false;
+        }
 
-    public function delete($id) {
-        $pdo = $this->connection->getConnection();
 
-        $sql = $pdo->prepare("DELETE FROM monitors WHERE id = :id");
-        $sql->execute(['id' => $id]);
+
     }
 
     public function urls($user_id) {
@@ -133,3 +211,9 @@ class MonitorsModel {
         return $httpcode >= 200 && $httpcode < 300;
     }
 }
+
+            
+}
+
+
+?>

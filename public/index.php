@@ -20,6 +20,37 @@ if (isset($_SESSION['id'])) {
         exit();
     });
 
+//if(isset($_SESSION['user_id'])) {
+    $router->addRoute('GET', '/', [new UserController(),'index']);
+//}else{
+
+    $router->addRoute('GET', '/register', [new UserController(),'create']);
+    $router->addRoute('POST', '/register', [new UserController(),'store']);
+
+    $router->addRoute('GET', '/login', [new AuthController(),'login']);
+    $router->addRoute('POST', '/login', [new AuthController(),'authentication']);
+
+    $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
+
+    $router->addRoute('GET', '/dashboard', [new MonitorsController(), 'index']);
+    $router->addRoute('GET', '/api/monitors', [new MonitorsController(), 'getMonitors']);
+   // $router->addRoute('GET', '/api/monitorStatus', [new MonitorsController(), 'checkStatus']);
+
+
+    $router->addRoute('GET', '/editMonitor', [new MonitorsController(), 'editMonitor']);
+
+
+    $router->addRoute('GET', '/api/getMonitor', [new MonitorsController(), 'oneMonitor']);
+    $router->addRoute('POST', '/api/editMonitor', [new MonitorsController(), 'edit']);
+
+    $router->addRoute('GET', '/api/deleteMonitor',[new MonitorsController(), 'deleteMonitor']);
+
+
+    $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);
+    $router->addRoute('POST', '/monitor', [new MonitorsController(), 'addURL']);
+
+    #$router->addRoute('GET')
+    #$router->addRoute('GET', '/send', [new AlertController(), 'send'])
    $router->addRoute('GET', '/logout', function() {
         session_unset();  // Elimina todas las variables de sesión
         session_destroy();  // Destruye la sesión

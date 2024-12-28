@@ -85,6 +85,8 @@
 
         
 
+        
+
         .search{
             width: 100%;
         }
@@ -96,10 +98,57 @@
             height:18px;
             padding: 16px 20px 20px 20px;
             
+            padding: 10px;
+            height:18px;
+            padding: 16px 20px 20px 20px;
+            
             font-size: 16px;
             border-radius: 0.25em;
             border: 1px solid #caced1;
             cursor: pointer;
+        }
+        
+        .search i{
+           /* position: absolute;
+           transform: translateY(100%);
+           */
+            
+            color: #222;
+            
+            
+        }
+        
+        .search .fa-x{
+            font-size: 18px;
+            cursor: pointer;
+            margin: 15px;
+        }
+        .search-display {
+            text-align: center;
+        }
+        .item .checkbox{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 16px;
+            width: 16px;
+            border-radius: 4px;
+            margin-right: 12px;
+            border: 1.5px solid #c0c0c0;
+            transition: all 0.3s ease-in-out;
+        }
+        .item.checked .checkbox{
+            background-color: var(--blue-color);
+            border-color: #4070f4;
+        }
+        .item.checked .check-icon{
+            transform: scale(1);
+        }
+        .checkbox .check-icon{
+            color: white;
+            font-size: 11px;
+            transform: scale(0);
+            transition: all 0.2s ease-in-out;
         }
         
         .search i{
@@ -206,11 +255,11 @@
     </head>
     <body >
 
-        <div class="sidebar">
+    <div class="sidebar">
             <!--<img src = "#" alt = "Logo-Opcional"></img>-->
             <h1 class="middle" style="color: #457b9d; ">MTA</h1>
-            <a href = "dashboard.html">Monitoreo</a>
-            <a href = "index.html">Cerrar Sesion</a>
+            <a href = "#" onclick="redireccionarDashboard()" >Monitoreo</a>
+            <a href = "/logout">Cerrar Sesion</a>
         </div>
 
         <div class="distribution">
@@ -315,14 +364,17 @@
     function addURL(){
         let url = document.getElementById('new-url');
         let frequency = document.querySelector('input[name="time"]:checked');
-        let frequencyValue= Number(frequency.value);
+        
        //console.log(`Formulario enviado ${ url.value} , ${frequencyValue.value }`);
        
         if(validateURLForm(url, frequency)){
+            let frequencyValue= Number(frequency.value);
             save({
                 url: url.value,
                 monitor_interval : frequencyValue
             })
+           alert("Se ha agregado exitosamente!");
+           resetURL();
            alert("Se ha agregado exitosamente!");
            resetURL();
         }
