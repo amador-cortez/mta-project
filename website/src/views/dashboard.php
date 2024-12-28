@@ -390,7 +390,7 @@
          .permit{
             opacity: 1;
          }
-         .permit i:hover{
+         .permit:hover{
             color: var(--blue-color);
          }
          
@@ -433,7 +433,7 @@
 
                     <div class ="left select-service-box" onload="updateCheckedLabel()">
                         <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
-                        <i class="fa-solid fa-trash fa-2x disabled"></i>
+                        <i id = "deleteAllAvailable"class="fa-solid fa-trash fa-2x disabled"></i>
                     </div>
                     
                     <div class = "rows right"> 
@@ -551,6 +551,7 @@
         const numServicesUp =document.getElementById("number-services-up");
         const numServicesDown = document.getElementById("number-services-down");
         const numMonitors = document.getElementById("number-used-monitors");
+        
         function redireccionarDashboard() {
             window.location.href = "dashboard";
         }
@@ -604,9 +605,12 @@
                 // Check for a successful response
                 if (responseData.status === "No monitors found") {
                     console.log("No motitors found");
-                    //showMessage("No monitors found");
+                    serviceList.innerHTML = "";
+                    showMessage("No monitors found", "red");
+                    updateCheckedLabel();
+
                 } else {
-                // hideMessage();
+                    hideMessage();
                     serviceList.innerHTML = "";
                     let sumServicesUp = 0;
                     let sumServicesDown = 0;
@@ -655,17 +659,11 @@
 
             const dateTime = currentTime.toLocaleString().split(",");
 
-            //console.log(dateTime);
-            //console.log("Time: " +dateTime[1]);
-           // let date = dateTime[0];
             let  date= dateTime[0].split("/");
 
             let monthSpn = months[Number(date[0])-1];
 
             let fullDate = date[1] + "/" + monthSpn + "/" + date[2];
-
-           // console.log("Full date: " + fullDate);
-            
 
             return fullDate +","+ dateTime[1];
         }
@@ -695,24 +693,25 @@
                 }
             }  
             if(sum == services.length){
-                showMessage("No se encontraron monitores con este nombre.");
+                showMessage("No se encontraron monitores con este nombre.", "red");
                // acitionMessage.style.color = whitesmoke;
             } else{
                 hideMessage();
             }
         }
-        
-        function showMessage(msg){
+
+        function showMessage(msg, color){
 
             actionMessage.innerHTML = msg;
+            actionMessage.style.color = color;
             alertDiv.classList.add("alerting");
-            console.log(alertDiv.classList);
+           // console.log(alertDiv.classList);
             
         }
         function hideMessage(){
             actionMessage.innerHTML = "";
             alertDiv.classList.remove("alerting");
-            console.log(alertDiv.classsList);
+          //  console.log(alertDiv.classsList);
         }
 
         //ORDER
@@ -982,12 +981,29 @@
             const checkAllServices = document.getElementById("select-all-services");
             const checkedBoxesLabel = document.getElementById('select-all-services-label');
 
+
+            const deleteEverything = document.getElementById("deleteAllAvailable");
+
             for (let i=0; i<checkBoxEle.length; i++){
                 checkBoxEle[i].checked = checkAllServices.checked;
             }
             
-            if(checkAllServices.checked) checkedBoxesLabel.innerHTML = `${checkBoxEle.length} / ${checkBoxEle.length}`;
-            else checkedBoxesLabel.innerHTML = `0 / ${checkBoxEle.length}`;
+            if(checkAllServices.checked) {
+                checkedBoxesLabel.innerHTML = `${checkBoxEle.length} / ${checkBoxEle.length}`;
+
+                deleteEverything.classList.add('permit');
+                deleteEverything.addEventListener("click", ()=>{
+                    if(confirm("Sewguro qeu uqiere eliminar todos sus montiroes?")){
+                        deleteAll();
+                    }
+                    
+                });
+            }
+            else{
+                deleteEverything.classList.remove('permit');
+                checkedBoxesLabel.innerHTML = `0 / ${checkBoxEle.length}`;
+
+            } 
 
         }
 
@@ -1010,6 +1026,34 @@
                 // this.
                     
                 };
+            }
+        }
+        async function deleteAll(){
+            try{
+                const response = await fetch('/api/deleteAll');
+
+                if(!response.ok){
+                    throw new Error("HTTP Error");
+                }
+
+                const responseText = await response.text();
+                let responseData;
+
+                try{
+                    responseData = JSON.parse(responseText);
+                }catch(error){
+                    throw new Error("Failed to parse JSON. "+ responseText);
+                }
+
+                if(responseData.status === "success"){
+                    console.log("eVERYTHING SHOULD HAVE BEEN DELETED");
+                    readAllMonitors();
+                }else{
+                    showMessage("fAILED","red");
+                }
+
+            }catch(error){
+                console.error("An error occurred: " + error.message);
             }
         }
 
@@ -1035,14 +1079,15 @@
                     if(responseData.status === "success"){
                         //alert()
                         console.log("Yap")
-                        readAllMonitors();
+                        
 
                         //actionMessage.innerHTML = "Se ha eliminardo exitosamente un monitor!";
-                        showMessage("Se ha eliminardo exitosamente un monitor!");
+                        showMessage("Se ha eliminardo exitosamente un monitor!", "green");
                         
                         setTimeout(() => {
                             hideMessage()
-                        }, 3000);
+                        }, 5000);
+                        readAllMonitors();
 
                         
                     // deleteSelectedService();''

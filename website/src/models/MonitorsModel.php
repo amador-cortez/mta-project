@@ -179,8 +179,23 @@ class MonitorsModel {
             return false;
         }
         
+    }
 
+    public static function deleteAll($user_id){
+        try{
+            $connection = new Database();
+            $con = $connection->getConnection();
 
+            $stmt = $con->prepare("DELETE from monitors WHERE user_id =:user_id");
+            $stmt -> execute([
+                'user_id' => $user_id 
+            ]);
+
+            return true;
+        }catch(PDOException $e){
+            echo "Error al eliminar montores del usuario en labase de datos" . $e->getMessage();
+            return false;
+        }
     }
 }
 

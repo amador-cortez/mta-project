@@ -92,7 +92,7 @@ class MonitorsController
             echo json_encode($monitors);
         }else{
             
-            echo json_encode(["status" => "error", "message" => "No monitors found"]);
+            echo json_encode(["status" => "No monitors found"]);
         }
         
     }
@@ -186,6 +186,18 @@ class MonitorsController
         } 
         else{
             echo json_encode(["status" => "Monitor not found"]);
+        }
+    }
+
+    public function deleteAll(){
+        $user_id = $_SESSION['id'];
+
+        $monitor = MonitorsModel :: deleteAll($user_id);
+
+        if($monitor){
+            echo json_encode(["status" => "success"]);
+        }else{
+            echo json_encode(["status"=> "User not found maybe"]);
         }
     }
 

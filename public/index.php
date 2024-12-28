@@ -42,6 +42,7 @@ if (isset($_SESSION['id'])) {
     $router->addRoute('POST', '/api/editMonitor', [new MonitorsController(), 'edit']);
 
     $router->addRoute('GET', '/api/deleteMonitor',[new MonitorsController(), 'deleteMonitor']);
+    $router->addRoute('GET', '/api/deleteAll', [new MonitorsController(), 'deleteAll']);
 
 
     $router->addRoute('GET', '/monitor', [new MonitorsController(), 'addMonitor']);
