@@ -137,7 +137,7 @@
             background-color: whitesmoke;
         }
         .card-service{
-            width: 90%;
+            width: 80%;
             margin-top: 5px;
             display: flex;
             flex-direction:row;
