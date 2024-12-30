@@ -159,12 +159,14 @@ class MonitorsModel {
     public function update($id, $state) {
         $pdo = $this->connection->getConnection();
 
-        $timeDown = date('Y-m-d H:i:s');  
+        $timeUpdate = date('Y-m-d H:i:s');  
 
-        $sql = $pdo->prepare("UPDATE monitors SET state = :state, updated_at = NOW() WHERE id = :id");
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, updated_at = :updated_at WHERE id = :id");
         $success = $sql->execute([
             'id' => $id,
-            'state' => $state
+            'state' => $state,
+            'updated_at' => $timeUpdate, 
+
         ]);
     }
 
@@ -172,13 +174,16 @@ class MonitorsModel {
         $pdo = $this->connection->getConnection();
 
         $timeDown = date('Y-m-d H:i:s'); 
+        $timeUpdate = date('Y-m-d H:i:s');  
 
-        $sql = $pdo->prepare("UPDATE monitors SET state = :state, timedown = :timedown WHERE id = :id");
+        $sql = $pdo->prepare("UPDATE monitors SET state = :state, timedown = :timedown, updated_at = :updated_at  WHERE id = :id");
         
         $sql->execute([
             'state' => $state,       
             'timedown' => $timeDown, 
-            'id' => $id             
+            'id' => $id,
+            'updated_at' => $timeUpdate, 
+            
         ]);
     }
 

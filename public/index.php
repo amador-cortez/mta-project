@@ -12,6 +12,7 @@ use App\Controllers\MonitorController;
 use App\Controllers\AlertsController;
 use App\Router;
 
+
 $router = new Router();
 
 if (isset($_SESSION['id'])) {
@@ -64,6 +65,8 @@ if (isset($_SESSION['id'])) {
     $router->addRoute('GET', '/alert', [new AlertsController(), 'send']);
 
 } else {
+    $router->addRoute('GET', '/', [new AuthController(), 'login']);
+
     $router->addRoute('GET', '/register', [new UserController(), 'create']);
     $router->addRoute('POST', '/register', [new UserController(), 'store']);
 

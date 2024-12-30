@@ -105,7 +105,7 @@
 
                 <h1 class = "middle">Sign Up</h1>
                 
-                <label>Nombre de Usuhhhhhhhhario </label>
+                <label>Nombre de Usuario </label>
                 <input id = "uname" type = "text" placeholder = "Nombre de usuario" required></input>
                 <p id = "mensajeUser" > </p>
 
@@ -200,7 +200,7 @@
 
         // Check for a successful response
         if (JSON.parse(responseData).status =="success") {
-
+            alert("Usario creado Exitosamente! Sera redirigido al login.")
             redireccionarLogin(); 
         } else {
              

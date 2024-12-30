@@ -375,8 +375,6 @@
             })
            alert("Se ha agregado exitosamente!");
            resetURL();
-           alert("Se ha agregado exitosamente!");
-           resetURL();
         }
     }
 

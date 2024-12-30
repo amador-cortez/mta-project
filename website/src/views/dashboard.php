@@ -137,7 +137,7 @@
             background-color: whitesmoke;
         }
         .card-service{
-            width: 90%;
+            width: 80%;
             margin-top: 5px;
             display: flex;
             flex-direction:row;
@@ -433,7 +433,7 @@
 
                     <div class ="left select-service-box" onload="updateCheckedLabel()">
                         <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
-                        <i class="fa-solid fa-trash fa-2x disabled"></i>
+                       <!-- <i class="fa-solid fa-trash fa-2x disabled"></i>-->
                     </div>
                     
                     <div class = "rows right"> 
@@ -503,17 +503,17 @@
         
                 <div class="lateral-cards middle">
                     <h2>Estado Actual</h2>
-                    
+        
+                    <h3 class = "over" id = "number-services-up">0</h3>
+                    <p class = "under">Funcionando</p>
+
                     <h3 class = "over" id = "number-services-down">0</h3>
                     <p class = "under">Caida</p>
-        
-                    <h3 class = "over" id = "number-services-up">2</h3>
-                    <p class = "under">Funcionando</p>
                     <!--
                     <h3 class = "over" id = "number-services-paused">0</h3>
                     <p class = "under">Pausados</p>
                     -->
-                    <p class="middle" id = "number-used-monitors">Usando 2 de 50 monitores </p>
+                    <p class="middle" id = "number-used-monitors">Usando 0 de 50 monitores </p>
         
                 </div>
         
@@ -570,6 +570,7 @@
             numServicesUp.innerHTML = up;
             numServicesDown.innerHTML = down;
             numMonitors.innerHTML = "Usando "+total+ " de 50  monitores ";
+
 
         }
 
@@ -1016,7 +1017,7 @@
 
         async function deleteMonitor(id)
         {
-            if(confirm("Seguro que desea eliminar este monitor?")){
+            
                 try{
                     const response = await fetch( `/api/deleteMonitor?id=${id}`);
 
@@ -1056,7 +1057,7 @@
                 }catch(error){
                     console.error("An error occured: ", error.message)
                 }
-            }
+            
             
 
         }

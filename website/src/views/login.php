@@ -175,19 +175,58 @@
             window.location.href = "dashboard";
         }
     
-    function checkFormLogin(){
-        let email = document.getElementById("email").value;
-        let ogPassword = document.getElementById("ogPassword").value;
-        console.log("unppppppppppppppppppp")
-        console.log("Formulario enviado", { email, password: ogPassword });
-
-        save({
-            email: email, 
-            password : ogPassword
-        })
+   function checkFormLogin(){
+        let ogPassword = document.getElementById("ogPassword");
+        let email = document.getElementById("email");
+        let mensajeIdEmail = document.getElementById("mensajeEmail");
+        let mensajeIdPswd = document.getElementById("mensajePswd");
+        correctEmail = checkEmail(email, mensajeIdEmail);
+        correctPswd = checkPassword(ogPassword, mensajeIdPswd);
+        if(correctEmail && correctPswd){
+            let email = document.getElementById("email").value;
+            let ogPassword = document.getElementById("ogPassword").value;
+            save({
+                email: email,
+                password : ogPassword
+            })
+        }
     }
-
-        
+    function checkEmail(email, mensajeId){
+        let validEmail =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(email.value == "" || email.value == null)
+        {
+            mostrarMensaje(mensajeId, "Favor de Ingresar Email");
+            return false;
+        }
+        else if(!validEmail.test(email.value) ){
+            mostrarMensaje(mensajeId, "Email invalido. Favor de ingresar Email de nuevo");
+            return false;
+        }else {
+            mensajeId.innerHTML  = "";
+            return true;}
+    }
+    function checkPassword(ogPassword, mensajeId){
+        let levels = {
+            1: "Very Weak",
+            2: "Weak",
+            3: "Medium",
+            4: "Strong",
+        };
+        const check = [/[a-z]/,/[A-Z]/,/\d/,/[@.#$!%^&*.?]/]
+        if (ogPassword.value == "" || ogPassword.value == null){
+            mostrarMensaje(mensajeId, "Favor de ingresar contrasena");
+            return false;
+        }
+        else {
+            mensajeId.innerHTML = "";
+            return true;
+        }
+    }
+    function mostrarMensaje(mensajeId, mensaje){
+        mensajeId.style.color = "red";
+        mensajeId.innerHTML = mensaje;
+        mensajeId.classList.add("middle");
+    }
     async function save(data) {
     try {
         // Hacer la solicitud POST
@@ -198,21 +237,17 @@
             },
             body: new URLSearchParams(data)
         });
-
         // Comprobar si la respuesta es correcta
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
         }
-
         // Obtener la respuesta como texto
         const responseText = await response.text();
         console.log("Response Text: ", responseText); // Log de la respuesta para depurar
-
         // Intentar parsear la respuesta como JSON
         try {
             const responseData = JSON.parse(responseText);
             console.log("Parsed Response:", responseData);
-
             // Verificar si la autenticación fue exitosa
             if (responseData.success) {
                 // Si es exitosa, redirigir al dashboard
@@ -220,14 +255,23 @@
             } else {
                 // Si falla, mostrar el mensaje de error
                 console.log("Failed to login: ", responseData.message);
+                alert("Email o contrasena incorrecta.");
             }
         } catch (error) {
             throw new Error(`Failed to parse JSON. Response: ${responseText}`);
         }
     } catch (error) {
         console.error('An error occurred:', error.message);
+        alert("Email o contrasena incorrecta.");
     }
 }
+
+
+
+
+
+
+
 
 
     </script>
