@@ -133,15 +133,14 @@ class MonitorsModel {
         }
     }
 
-    public static function edit($url, $monitor_interval, $id){
+    public static function edit($monitor_interval, $id){
         try{
 
             $connection = new Database();
             $con = $connection->getConnection();
            // $stmt = $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval, update_at=:update_at = NOW() WHERE id =:id");
-            $stmt = $con->prepare("UPDATE monitors SET url = :url, monitor_interval = :monitor_interval WHERE id =:id");
+            $stmt = $con->prepare("UPDATE monitors SET monitor_interval = :monitor_interval WHERE id =:id");
             $stmt -> execute([
-                'url' => $url,
                 'monitor_interval' => $monitor_interval,
                 'id' => $id
                 

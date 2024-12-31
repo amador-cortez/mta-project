@@ -431,10 +431,10 @@
                 <!--ACTION BAR-->
                 <div class = "rows split-two">
 
-                    <div class ="left select-service-box" onload="updateCheckedLabel()">
-                        <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
+                   <!--  <div class ="left select-service-box" onload="updateCheckedLabel()">
+                       <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
                         <i id = "deleteAllAvailable"class="fa-solid fa-trash fa-2x disabled"></i>
-                    </div>
+                    </div> -->
                     
                     <div class = "rows right"> 
 
@@ -516,7 +516,7 @@
                     <p class="middle" id = "number-used-monitors">Usando 2 de 50 monitores </p>
         
                 </div>
-        
+        <!--
                 <div class="lateral-cards middle">
                     <h2>Last Hours</h2>
                     <div class = "grid-four">
@@ -530,7 +530,7 @@
                         <p class = "under">Dias sin incidentes</p>
                     </div>
                 </div>
-        
+        -->
             </div>
 
         </main>
@@ -907,8 +907,8 @@
                                     <div class=" rows ">
                                         <div class="left">
                                             
-                                            <input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">
-                                            <label  for = "select-sevice2" style="margin-right: 50px;">${activo}</label> 
+                                            <!--<input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">-->
+                                            <label style="margin-right: 50px;">${activo}</label> 
                                         
                                         </div>
                                          <div class="right">

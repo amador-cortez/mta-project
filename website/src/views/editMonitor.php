@@ -182,9 +182,9 @@
                 <form id = "add-monitor" class = "formCenter">
                     <h1 class=" middle">Editar servicio de monitoreo.</h1>
                 
-                    <h2>Modificar URL:</h2><p id = "valid-url"></p>
-                    <input type="text" id = "new-url" placeholder = "Url a monitorear" class="search" value="<?= htmlspecialchars($monitorData['url']) ?>"></input>
-                    <i class="fa-solid fa-x" onclick="resetURL()"></i>
+                    <h2>URL seleccionada:</h2><p id = "valid-url"></p>
+                    <input type="text" id = "new-url" readonly="readonly" class="search" value="<?= htmlspecialchars($monitorData['url']) ?>"></input>
+                   <!-- <i class="fa-solid fa-x" onclick="resetURL()"></i> -->
                     
                     
                     <h2>Modificar frecuencia de las comprobaciones:</h2>
@@ -289,7 +289,7 @@
                 console.log(url.value)
                 console.log(frequencyValue)
                 editMonitor({
-                    url: url.value,
+                   // url: url.value,
                     monitor_interval: frequencyValue
                     
                 });

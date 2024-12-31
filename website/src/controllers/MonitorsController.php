@@ -119,23 +119,19 @@ class MonitorsController
     }
 
     public function edit(){
-        if(!empty($_POST['url']) && !empty($_POST['monitor_interval'])){
+        if(!empty($_POST['monitor_interval'])){
             
             $id = $_GET['id'] ?? null;
             if(!$id){
                 echo json_encode(["status" => "No ID provided"]);
             }
             
-            $url = $_POST['url'];
+           // $url = $_POST['url'];
             $monitor_interval = $_POST['monitor_interval'];
 
-             // Verifica si la URL es válida antes de almacenarla
-             if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-                echo json_encode(["status" => "error", "message" => "Invalid URL"]);
-                return;
-            }
+             
 
-            $monitor = MonitorsModel :: edit($url, $monitor_interval, $id);
+            $monitor = MonitorsModel :: edit($monitor_interval, $id);
             echo json_encode(["status" => "success"]);
 
         }else{
