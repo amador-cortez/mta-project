@@ -406,7 +406,7 @@
             return true;
         } else{
             
-            validMessage.innerHTML = "URL Invalido. Favor de tratar de nuevo."
+            validMessage.innerHTML = "URL Inválido. Favor de tratar de nuevo."
             validMessage.style.color = "red";
             console.log("Incorrect");
 

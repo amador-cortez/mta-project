@@ -221,7 +221,7 @@
 
         
         function redireccionarDashboard() {
-            if(confirm('Seguro que quiere dejar de editar?')){
+            if(confirm('¿Está seguro que quiere dejar de editar?')){
                 
                  window.location.href = "dashboard";
             }
@@ -326,7 +326,7 @@
                     console.log("We have failed");
                 }else{
                     console.log("It worked!")
-                    alert("Los cambios se hah guardado exitosamente!");
+                    alert("Los cambios se han guardado exitosamente!");
                 
                    // getOneMonitor();
 

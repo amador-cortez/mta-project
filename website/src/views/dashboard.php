@@ -142,7 +142,15 @@
             display: flex;
             flex-direction:row;
             justify-content: space-between;
+            border-color: #2dc653;
 
+        }
+
+        .alert-color{
+            border-color: #c71f37;
+        }
+        .alert-color:hover{
+            border-color: #b21e35;
         }
 
         .status{
@@ -431,29 +439,40 @@
                 <!--ACTION BAR-->
                 <div class = "rows split-two">
 
-                   <!--  <div class ="left select-service-box" onload="updateCheckedLabel()">
-                       <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" > <label id ="select-all-services-label" for = "select-all-services"></label>
-                        <i id = "deleteAllAvailable"class="fa-solid fa-trash fa-2x disabled"></i>
-                    </div> -->
+                   <div class ="left select-service-box hiddenMsg" onload="updateCheckedLabel()">
+                        <input type="checkbox" id = "select-all-services" onchange="selectAllServices()" class = "hiddenMsg"> <label id ="select-all-services-label" for = "select-all-services" class = "hiddenMsg"></label>
+                        <i id = "deleteAllAvailable"class="fa-solid fa-trash fa-2x disabled hiddenMsg"></i>
+                    </div>
                     
                     <div class = "rows right"> 
 
                         <div class = "search rows">
                             <input type="text" id = "search-url-bar" placeholder = "Buscar por nombre or url"  onkeyup="search()"/>
                             <!--<i class="fa-solid fa-magnifying-glass"></i></input>-->
-                            <span class="checkbox"><i class="fa-solid fa-x" onclick="resetSearch()"></i></span>
+                            <span class="checkbox "><i class="fa-solid fa-x" onclick="resetSearch()"></i></span>
                             
                         </div>
                        
-                        <div>
+                        <div >
+                            <label class = "middle">Ordenar por: </label>
                             <select id = "order-by" name = "order-by" class="selector" onchange="orderBy()">
-                                <option value="active-first" selected>Activos primero</option>  
+                                <option value="none" selected>Seleccionar Orden</option>  
+                                <option value="active-first">Activos primero</option>  
                                 <option value="inactive-first" >Inactivos primero</option>
                                 <option value="a-z">A - Z</option>   
                                 <option value="z-a">Z - A</option>  
                             </select>
                         </div>
 
+                        <div>
+                            <label>Filtrar por: </label>
+                            <select id = "filter-by" name = "filter-by" class="selector" onchange="filterBy()">
+                                <option value="all" selected>Seleccionar Todo</option> 
+                                <option value="active" >Activos</option>  
+                                <option value="inactive" >Inactivos</option> 
+                            </select>
+                        </div>
+<!--
                         <div class="container">
 
                             <div class="select-btn open" onclick="openFilters()">
@@ -478,7 +497,7 @@
                                 </li>
                             </ul>
 
-                        </div>
+                        </div>-->
 
                     </div>
                 </div>
@@ -518,7 +537,7 @@
                 </div>
         <!--
                 <div class="lateral-cards middle">
-                    <h2>Last Hours</h2>
+                    <h2>Últimas horas</h2>
                     <div class = "grid-four">
                         <h3 class = "over" id = "porcentage-uptime">0</h3>
                         <p class = "under">Porcentaje de funcionamiento</p>
@@ -527,10 +546,10 @@
                         <p class = "under">Incidentes</p>
         
                         <h3 class = "over" id = "no-incident-days">1 d</h3>
-                        <p class = "under">Dias sin incidentes</p>
+                        <p class = "under">Días sin incidentes</p>
                     </div>
-                </div>
-        -->
+                </div>-->
+        
             </div>
 
         </main>
@@ -731,6 +750,10 @@
                 case "z-a":
                     orderType("Z - A");
                     break;
+                case "none":
+                    resetServiceList();
+                    break;
+
             }
 
             
@@ -856,6 +879,24 @@
                     break;
             }
         }
+
+        const filterBy = () =>{
+            const type = document.getElementById("filter-by").value;
+            
+            switch(type){
+                case "active":
+                    filterLabel("Activo");
+                    break;
+                case "inactive":
+                    filterLabel("Inactivo");
+                    break;
+                case "all":
+                    resetServiceList();
+                    break;
+            }
+
+            
+        }
         const filterLabel = (filter) => {
             //const searchBar = document.getElementById("search-url-bar").value.toUpperCase();
             const serviceListName = document.getElementById("service-list");
@@ -897,17 +938,21 @@
             //const {link, domainName} = serviceData;
             const domainName = getDomainName(url);
             let activo;
-            if(active == 1) {activo = "Activo"}else{
-                activo = "Inactivo"
+            let thisClass;
+            if(active == 1) {activo = "Activo";
+                thisClass="";
+            }else{
+                activo = "Inactivo";
+                thisClass = "alert-color";
 
             }
 
-            const service  = `<li class = "card-service" >
+            const service  = `<li class = "card-service ${thisClass}" >
                                 <div class=" service-status">
                                     <div class=" rows ">
                                         <div class="left">
                                             
-                                            <!--<input type="checkbox"  name = "select-service" class="select-checkBox " onchange="updateCheckedLabel()">-->
+                                            <input type="checkbox"  name = "select-service" class="select-checkBox hiddenMsg " onchange="updateCheckedLabel()">
                                             <label style="margin-right: 50px;">${activo}</label> 
                                         
                                         </div>
@@ -993,7 +1038,7 @@
 
                 deleteEverything.classList.add('permit');
                 deleteEverything.addEventListener("click", ()=>{
-                    if(confirm("Sewguro qeu uqiere eliminar todos sus montiroes?")){
+                    if(confirm("¿Está seguro que eliminar todos sus montiroes?")){
                         deleteAll();
                     }
                     
@@ -1059,7 +1104,7 @@
 
         async function deleteMonitor(id)
         {
-            if(confirm("Seguro que desea eliminar este monitor?")){
+            if(confirm("¿Está seguro que desea eliminar este monitor?")){
                 try{
                     const response = await fetch( `/api/deleteMonitor?id=${id}`);
 
@@ -1082,7 +1127,7 @@
                         
 
                         //actionMessage.innerHTML = "Se ha eliminardo exitosamente un monitor!";
-                        showMessage("Se ha eliminardo exitosamente un monitor!", "green");
+                        showMessage("Se ha eliminado exitosamente el monitor!", "green");
                         
                         setTimeout(() => {
                             hideMessage()
@@ -1121,7 +1166,7 @@
                 services[i].onclick = function(){
                     index = tab.indexOf(this.innerHTML);
                     console.log("INDEX = " + index);
-                    var confirmDelete = confirm("Seguro que quiere eleiminar este servicio de monitoreo?");
+                    var confirmDelete = confirm("¿Está seguro que quiere eliminar este servicio de monitoreo?");
                     if(confirmDelete){
                         this.classList.remove("card-service");
                         this.innerHTML = " ";
@@ -1181,7 +1226,7 @@
             
             if(validateURLForm(url, frequency)){
                 //Actualizar la base de datos
-                alert("Los cambios se hah guardado exitosamente!");
+                alert("Los cambios se han guardado exitosamente!");
                 fillForm();
             }
         }

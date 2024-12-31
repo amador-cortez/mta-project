@@ -273,14 +273,14 @@
             } else {
                 // Si falla, mostrar el mensaje de error
                 console.log("Failed to login: ", responseData.message);
-                alert("Email o contrasena incorrecta.");
+                alert("Email o contraseña incorrecta.");
             }
         } catch (error) {
             throw new Error(`Failed to parse JSON. Response: ${responseText}`);
         }
     } catch (error) {
         console.error('An error occurred:', error.message);
-        alert("Email o contrasena incorrecta.");
+        alert("Email o contraseña incorrecta.");
     }
 }
     

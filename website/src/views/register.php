@@ -117,8 +117,8 @@
                 <input id="ogPassword" type = "password" placeholder = "Contraseña" required></input>
                 
 
-                <label>Confirmacion Password</label>
-                <input id = "confPassword" type = "password" placeholder = "Confirmacion de contraseña" required></input>
+                <label>Confirmación Password</label>
+                <input id = "confPassword" type = "password" placeholder = "Confirmación de contraseña" required></input>
                 <p id = "mensajePswd" > </p>
 
                 <button id = "thank-you-modal-button" type = "button" onclick = "checkFormRegister()" class = "btnSubmit">Sign Up</button>
@@ -258,7 +258,7 @@
             return false;
         }
         else if(!validEmail.test(email.value) ){
-            mostrarMensaje(mensajeId, "Email invalido. Favor de ingresar Email de nuevo");
+            mostrarMensaje(mensajeId, "Email inválido. Favor de ingresar Email de nuevo");
             return false;
         }else {
             mensajeId.innerHTML  = "";
@@ -298,11 +298,11 @@
     function checkSamePassword(ogPassword, confPassword, mensajeId){
         //e.preventDefault();
         if (ogPassword.value == "" || ogPassword.value == null || confPassword.value == "" || confPassword.value == null){
-            mostrarMensaje(mensajeId, "Favor de ingresar y confirmar contrasena");
+            mostrarMensaje(mensajeId, "Favor de ingresar y confirmar contraseña");
             return false;
         }
         else if(ogPassword.value != confPassword.value){
-            mostrarMensaje(mensajeId, "Contrasenas no coinciden");
+            mostrarMensaje(mensajeId, "Contraseñas no coinciden");
             return false;
         }else{
             console.log("passwords match");
