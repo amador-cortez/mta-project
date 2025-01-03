@@ -1,46 +1,44 @@
 <?php 
-
 namespace App\Models;
 date_default_timezone_set('America/Tijuana');
 use App\models\MonitorsModel;
-class MonitorIntervalModel{
+use App\Notifications\whatsapp;
 
-    public function monitor($interval){
-    echo "TEST DE PRUEBA MONITOR <br> </br>";
-    
-    $monitorModel = new MonitorsModel('','','','');
-    $result = $monitorModel->show();
+class MonitorIntervalModel {
 
-    foreach($result as $monitor){
-        $id = $monitor['id'];
-        $url = $monitor['url'];
-        $monitor_interval = $monitor['monitor_interval'];
-       // $state = $monitor['state'];
-        $user_id = $monitor['user_id'];
+    public function monitor($interval) {
+        echo "TEST DE PRUEBA MONITOR <br> </br>";
 
-        $isUp = $monitorModel->monitor($url, $monitor_interval);
+        $monitorModel = new MonitorsModel('', '', '', '');
+        $result = $monitorModel->show();
 
-        if($monitor_interval != $interval){
-            continue;
-        }
+        foreach ($result as $monitor) {
+            $id = $monitor['id'];
+            $url = $monitor['url'];
+            $monitor_interval = $monitor['monitor_interval'];
+            $user_id = $monitor['user_id'];
 
-            if ($isUp) {
-                //echo "unoLa URL $url está activa y funcionando correctamente.<br>";
-                $state=1;
-                $id = $monitor['id'];
-
-                $update = $monitorModel->update($id, $state);
-
-            } else {
-                //echo "La URL $url no está disponible.<br>";
-                //$alert->send();
-                $id = $monitor['id'];
-                $state = 0;
-                $updateError = $monitorModel->updateDown($id, $state);
-
+            // Verificar si el monitoreo es del intervalo deseado
+            if ($monitor_interval != $interval) {
+                continue;
             }
 
-        }
+            $isUp = $monitorModel->monitor($url, $monitor_interval);
 
+            if ($isUp) {
+                // Actualizar el estado a activo y resetear notification_sent
+                $state = 1;
+                $monitorModel->update($id, $state);
+            } else {
+               
+                    // Enviar notificación y marcarla como enviada
+                    $state = 0;
+                    $whats = new whatsapp();
+                    $response = $whats->sendMessage($url);
+                    var_dump($response);
+                    $monitorModel->updateDown($id, $state);
+                
+            }
+        }
     }
 }

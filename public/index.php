@@ -10,6 +10,7 @@ use App\Controllers\UserController;
 use App\Controllers\MonitorsController;
 use App\Controllers\MonitorController;
 use App\Controllers\AlertsController;
+use App\Controllers\test_whats;
 use App\Router;
 
 
@@ -64,6 +65,9 @@ if (isset($_SESSION['id'])) {
     $router->addRoute('POST', '/monitor', [new MonitorsController(), 'addURL']);
     $router->addRoute('GET', '/alert', [new AlertsController(), 'send']);
 
+    $router->addRoute('GET', '/testWhats', [new test_whats(), 'testSMS']);    
+   
+
 } else {
     $router->addRoute('GET', '/', [new AuthController(), 'login']);
 
@@ -73,6 +77,7 @@ if (isset($_SESSION['id'])) {
     $router->addRoute('GET', '/login', [new AuthController(), 'login']);
     $router->addRoute('POST', '/login', [new AuthController(), 'authentication']);
     $router->addRoute('GET', '/testMonitor', [new MonitorController(), 'testMonitor']);    
+    $router->addRoute('GET', '/testWhats', [new test_whats(), 'testSMS']);    
 
     $router->addRoute('GET', '/dashboard', function() {
         header("Location: /login"); 
